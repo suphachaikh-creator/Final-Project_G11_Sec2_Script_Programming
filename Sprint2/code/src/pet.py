@@ -14,7 +14,7 @@ class Pet:
         """ให้อาหาร เพิ่มความหิวและความสุขเล็กน้อย"""
         self.hunger = min(100, self.hunger + 25)
         self.happiness = min(100, self.happiness + 5)
-        
+
     def play(self):
         """เล่นกับแมว พลังงานและความหิวลดลง แต่ความสุขเพิ่มขึ้น"""
         cost = 10 + (self.stubbornness_score / 10)

@@ -1,5 +1,0 @@
-เล่นเกม
-python src/app.py
-
-ทดสอบ API
-python test_api_connection.py 
