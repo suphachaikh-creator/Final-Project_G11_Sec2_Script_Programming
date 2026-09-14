@@ -2,7 +2,7 @@
 
 > **สปรินต์นี้คือ Front-End App Dev เท่านั้น**
 > ห้ามเขียน business logic จริง ห้ามเรียก API จริง ห้ามบันทึกไฟล์จริง — ใช้ข้อมูลจำลองใน memory
-> งานที่เกินขอบเขตถูกย้ายไปพัฒนาต่อในโฟลเดอร์ [`../../Sprint2/code`](../../Sprint2/code)
+> งานที่เกินขอบเขตถูกยกไปพัฒนาต่อใน Sprint 2 (สัปดาห์ที่ 13)
 
 ## 1. ขอบเขตระบบ (System Scope)
 
@@ -58,6 +58,6 @@ Sprint1/
 
 | งาน | ปลายทาง |
 |---|---|
-| เชื่อม API ดึงข้อมูลสายพันธุ์จริง | Sprint2 — `code/src/api_client.py` |
-| บันทึก/โหลดสถานะเป็นไฟล์ JSON | Sprint2 — `code/src/app_functions.py` |
-| ตรรกะ feed / play / rest และคลาส `Pet` | Sprint2 — `code/src/pet.py` |
+| เชื่อม API ดึงข้อมูลสายพันธุ์จริง | Sprint 2 — `src/api_client.py` |
+| บันทึก/โหลดสถานะเป็นไฟล์ JSON | Sprint 2 — `src/data_store.py` |
+| ตรรกะ feed / play / rest และคลาส `Pet` | Sprint 2 — `src/pet.py` |
