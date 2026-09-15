@@ -1,0 +1,12 @@
+{
+    "money": 283,
+    "inventory": [
+        {
+            "name": "Catfish",
+            "weight": 2.43,
+            "price": 36
+        }
+    ],
+    "bait_level": 1,
+    "rod_level": 1
+}
