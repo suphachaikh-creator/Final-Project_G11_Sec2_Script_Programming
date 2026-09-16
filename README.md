@@ -209,7 +209,7 @@ Daily App , Data Analysis & Management
 
 ## 8. Roles & Responsibilities
 
-ทีมมีสมาชิก 2 คน จึงรับผิดชอบคนละบทบาทหลัก และหมุนเวียนบทบาทรองในแต่ละสปรินต์ตามข้อกำหนดของรายวิชา
+ทีมมีสมาชิก 4 คน 
 
 | บทบาท | ผู้รับผิดชอบ | หน้าที่ |
 |---|---|---|
@@ -250,14 +250,14 @@ Daily App , Data Analysis & Management
 
 | # | เกณฑ์ | สปรินต์ที่จะทำให้สำเร็จ | สถานะ |
 |---|---|---|---|
-| 1 | Code follows PEP 8 (linted & clean) | Sprint 1 | ⬜ |
-| 2 | Tests run (pytest) | Sprint 1 | ⬜ |
-| 3 | CI/CD pipeline จริงบน GitHub Actions | Sprint 1 | ⬜ |
-| 4 | README includes setup + usage instructions | Sprint 1 | ⬜ |
-| 5 | Team roles documented | Sprint 1 | ⬜ |
-| 6 | API works (GET/POST, error handling) | Sprint 2 | ⬜ |
-| 7 | Data persisted correctly (JSON file) | Sprint 2 | ⬜ |
-| 8 | Search / Filter / Sort ทำงานได้ | Sprint 3 | ⬜ |
+| 1 | Code follows PEP 8 (linted & clean) | Sprint 1 |  |
+| 2 | Tests run (pytest) | Sprint 1 |  |
+| 3 | CI/CD pipeline จริงบน GitHub Actions | Sprint 1 | |
+| 4 | README includes setup + usage instructions | Sprint 1 |  |
+| 5 | Team roles documented | Sprint 1 |  |
+| 6 | API works (GET/POST, error handling) | Sprint 2 |  |
+| 7 | Data persisted correctly (JSON file) | Sprint 2 |  |
+| 8 | Search / Filter / Sort ทำงานได้ | Sprint 3 |  |
 
 
 ---
