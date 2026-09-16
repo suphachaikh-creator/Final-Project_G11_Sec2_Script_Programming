@@ -118,8 +118,7 @@ Daily App , Data Analysis & Management
 
 ## 6. Data Persistence Plan
 
-- [x] **File-based (JSON)**
-- [ ] Mini database (SQLite)
+**File-based (JSON)**
 
 **รายละเอียด:** บันทึกสถานะของผู้เล่นลงไฟล์ `save_game.json` โดยเซฟอัตโนมัติทุกครั้งที่จับปลาได้
 หรือทำรายการในร้านค้า ผู้เล่นไม่ต้องกดเซฟเอง
@@ -154,8 +153,7 @@ Daily App , Data Analysis & Management
 
 ## 7. Framework Style
 
-- [ ] Functional (modular pipeline functions)
-- [x] **OOP (classes, objects, encapsulation)**
+**OOP (classes, objects, encapsulation)**
 
 ### เทคโนโลยีของส่วนติดต่อผู้ใช้
 
