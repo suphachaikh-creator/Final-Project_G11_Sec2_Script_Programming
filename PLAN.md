@@ -1,7 +1,7 @@
 # PLAN.md — แผนงานและข้อกำหนดความสำเร็จ
 
 **โปรเจกต์:** HOW_DO_YOU_FISH — เกมจำลองการตกปลา
-**รายวิชา:** CP352301 Script Programming · ภาคปลาย 2569 · Group 11 Section 2
+**รายวิชา:** CP352301 Script Programming · ภาคปลาย 2569 · Group 7 Section 2
 
 ---
 

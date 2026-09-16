@@ -2,7 +2,7 @@
 
 **โปรเจกต์:** HOW_DO_YOU_FISH — เกมจำลองการตกปลา
 **สปรินต์:** Sprint 1 — Front-End App Dev (สัปดาห์ที่ 12)
-**รายวิชา:** CP352301 Script Programming · Group 11 Section 2
+**รายวิชา:** CP352301 Script Programming · Group 7 Section 2
 
 | บทบาท | ผู้รับผิดชอบ |
 |---|---|
