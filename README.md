@@ -39,7 +39,11 @@ HOW DO YOU FISH คือเกมตกปลาแบบ Desktop Application �
 
 ## 4. Domain
 
-Daily App , Data Analysis & Management
+**Daily App , Data Analysis & Management**
+
+•ดึงข้อมูลชนิดปลาจริงจาก Public API แล้วนำมาจัดเก็บเป็นโครงสร้างของตัวเอง
+•มีระบบค้นหา กรองตามกลุ่มปลา และเรียงลำดับตามน้ำหนักหรือราคา
+•สรุปสถิติการจับปลาของผู้เล่นจากประวัติที่บันทึกไว้
 
 ---
 
