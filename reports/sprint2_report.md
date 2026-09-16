@@ -12,6 +12,7 @@
 | Coder — ชั้นเชื่อมต่อและข้อมูล (`worms_api` · `openfisheries_api` · `fish_api` · `save_manager`) | นายยศพล ถิรพงศชาติ 663380568-9 |
 
 **Repository:** https://github.com/suphachaikh-creator/Final-Project_G11_Sec2_Script_Programming
+**บันทึกการเรียนรู้:** [LEARNINGLOG.md](../LEARNINGLOG.md)
 
 ---
 

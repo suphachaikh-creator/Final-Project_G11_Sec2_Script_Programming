@@ -376,9 +376,10 @@ flake8 .
 ├── requirements.txt
 ├── PLAN.md                     แผนงาน · Readiness Check · Prototype Sprint · DoD · บทบาทในทีม
 ├── CHANGELOG.md                บันทึกการเปลี่ยนแปลงรายสปรินต์
+├── LEARNINGLOG.md              บันทึกการเรียนรู้และ Prompt ที่ใช้ร่วมกับ AI
 ├── README.md                   เอกสารฉบับนี้ (Project Pitch + วิธีใช้งาน)
 ├── data/
-│   ├── fish_species.json       ฐานข้อมูลชนิดปลา 18 ชนิด
+│   ├── fish_species.json       ชนิดปลาสำรอง 90 ชนิด (แหล่งน้ำละ 30)
 │   └── save_game.json          ไฟล์เซฟ (สร้างอัตโนมัติ ไม่เก็บเข้า git)
 ├── reports/
 │   ├── sprint1_report.md       รายงาน Sprint 1 (Front-End) + สรุปผลทดสอบ

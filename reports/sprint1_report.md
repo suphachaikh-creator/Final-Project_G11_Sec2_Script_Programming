@@ -12,6 +12,7 @@
 | Coder | นายธนภัทร สมบูรณ์ 663380347-5 |
 
 **Repository:** https://github.com/suphachaikh-creator/Final-Project_G11_Sec2_Script_Programming
+**บันทึกการเรียนรู้:** [LEARNINGLOG.md](../LEARNINGLOG.md)
 
 ---
 
