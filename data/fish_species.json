@@ -1,0 +1,722 @@
+[
+  {
+    "name": "African longfin eel",
+    "scientific_name": "Anguilla mossambica",
+    "location": "freshwater",
+    "family": "Anguillidae",
+    "aphia_id": 217458,
+    "description": "ชื่อวิทยาศาสตร์ Anguilla mossambica · วงศ์ Anguillidae"
+  },
+  {
+    "name": "American eel",
+    "scientific_name": "Anguilla rostrata",
+    "location": "freshwater",
+    "family": "Anguillidae",
+    "aphia_id": 158562,
+    "description": "ชื่อวิทยาศาสตร์ Anguilla rostrata · วงศ์ Anguillidae"
+  },
+  {
+    "name": "Arctic char",
+    "scientific_name": "Salvelinus alpinus",
+    "location": "freshwater",
+    "family": "Salmonidae",
+    "aphia_id": 127188,
+    "description": "ชื่อวิทยาศาสตร์ Salvelinus alpinus · วงศ์ Salmonidae"
+  },
+  {
+    "name": "Atlantic salmon",
+    "scientific_name": "Salmo salar",
+    "location": "freshwater",
+    "family": "Salmonidae",
+    "aphia_id": 127186,
+    "description": "ชื่อวิทยาศาสตร์ Salmo salar · วงศ์ Salmonidae"
+  },
+  {
+    "name": "Australian bass",
+    "scientific_name": "Macquaria australasica",
+    "location": "freshwater",
+    "family": "Percichthyidae",
+    "aphia_id": 991274,
+    "description": "ชื่อวิทยาศาสตร์ Macquaria australasica · วงศ์ Percichthyidae"
+  },
+  {
+    "name": "Balston's pygmy perch",
+    "scientific_name": "Nannatherina balstoni",
+    "location": "freshwater",
+    "family": "Percichthyidae",
+    "aphia_id": 991283,
+    "description": "ชื่อวิทยาศาสตร์ Nannatherina balstoni · วงศ์ Percichthyidae"
+  },
+  {
+    "name": "Barbel",
+    "scientific_name": "Barbus barbus",
+    "location": "freshwater",
+    "family": "Cyprinidae",
+    "aphia_id": 154292,
+    "description": "ชื่อวิทยาศาสตร์ Barbus barbus · วงศ์ Cyprinidae"
+  },
+  {
+    "name": "Barramundi(=Giant seaperch)",
+    "scientific_name": "Lates calcarifer",
+    "location": "freshwater",
+    "family": "Latidae",
+    "aphia_id": 278957,
+    "description": "ชื่อวิทยาศาสตร์ Lates calcarifer · วงศ์ Latidae"
+  },
+  {
+    "name": "Bay anchovy",
+    "scientific_name": "Anchoa mitchilli",
+    "location": "freshwater",
+    "family": "Engraulidae",
+    "aphia_id": 158699,
+    "description": "ชื่อวิทยาศาสตร์ Anchoa mitchilli · วงศ์ Engraulidae"
+  },
+  {
+    "name": "Black bullhead",
+    "scientific_name": "Ameiurus melas",
+    "location": "freshwater",
+    "family": "Ictaluridae",
+    "aphia_id": 154205,
+    "description": "ชื่อวิทยาศาสตร์ Ameiurus melas · วงศ์ Ictaluridae"
+  },
+  {
+    "name": "Blackchin tilapia",
+    "scientific_name": "Sarotherodon melanotheron",
+    "location": "freshwater",
+    "family": "Cichlidae",
+    "aphia_id": 293732,
+    "description": "ชื่อวิทยาศาสตร์ Sarotherodon melanotheron · วงศ์ Cichlidae"
+  },
+  {
+    "name": "Blackspot snapper",
+    "scientific_name": "Lutjanus ehrenbergii",
+    "location": "freshwater",
+    "family": "Lutjanidae",
+    "aphia_id": 218489,
+    "description": "ชื่อวิทยาศาสตร์ Lutjanus ehrenbergii · วงศ์ Lutjanidae"
+  },
+  {
+    "name": "Blacktail shiner",
+    "scientific_name": "Cyprinella venusta",
+    "location": "freshwater",
+    "family": "Cyprinidae",
+    "aphia_id": 1016054,
+    "description": "ชื่อวิทยาศาสตร์ Cyprinella venusta · วงศ์ Cyprinidae"
+  },
+  {
+    "name": "Blacktail snapper",
+    "scientific_name": "Lutjanus fulvus",
+    "location": "freshwater",
+    "family": "Lutjanidae",
+    "aphia_id": 218475,
+    "description": "ชื่อวิทยาศาสตร์ Lutjanus fulvus · วงศ์ Lutjanidae"
+  },
+  {
+    "name": "Blue catfish",
+    "scientific_name": "Ictalurus furcatus",
+    "location": "freshwater",
+    "family": "Ictaluridae",
+    "aphia_id": 275329,
+    "description": "ชื่อวิทยาศาสตร์ Ictalurus furcatus · วงศ์ Ictaluridae"
+  },
+  {
+    "name": "Blue tilapia",
+    "scientific_name": "Oreochromis aureus",
+    "location": "freshwater",
+    "family": "Cichlidae",
+    "aphia_id": 279196,
+    "description": "ชื่อวิทยาศาสตร์ Oreochromis aureus · วงศ์ Cichlidae"
+  },
+  {
+    "name": "Blueback shad",
+    "scientific_name": "Alosa aestivalis",
+    "location": "freshwater",
+    "family": "Alosidae",
+    "aphia_id": 158667,
+    "description": "ชื่อวิทยาศาสตร์ Alosa aestivalis · วงศ์ Alosidae"
+  },
+  {
+    "name": "Bold characodon",
+    "scientific_name": "Characodon audax",
+    "location": "freshwater",
+    "family": "Goodeidae",
+    "aphia_id": 1011873,
+    "description": "ชื่อวิทยาศาสตร์ Characodon audax · วงศ์ Goodeidae"
+  },
+  {
+    "name": "Bonytail",
+    "scientific_name": "Gila elegans",
+    "location": "freshwater",
+    "family": "Cyprinidae",
+    "aphia_id": 1021645,
+    "description": "ชื่อวิทยาศาสตร์ Gila elegans · วงศ์ Cyprinidae"
+  },
+  {
+    "name": "Brook trout",
+    "scientific_name": "Salvelinus fontinalis",
+    "location": "freshwater",
+    "family": "Salmonidae",
+    "aphia_id": 154241,
+    "description": "ชื่อวิทยาศาสตร์ Salvelinus fontinalis · วงศ์ Salmonidae"
+  },
+  {
+    "name": "Brown bullhead",
+    "scientific_name": "Ameiurus nebulosus",
+    "location": "freshwater",
+    "family": "Ictaluridae",
+    "aphia_id": 154370,
+    "description": "ชื่อวิทยาศาสตร์ Ameiurus nebulosus · วงศ์ Ictaluridae"
+  },
+  {
+    "name": "Bull shark",
+    "scientific_name": "Carcharhinus leucas",
+    "location": "freshwater",
+    "family": "Carcharhinidae",
+    "aphia_id": 105792,
+    "description": "ชื่อวิทยาศาสตร์ Carcharhinus leucas · วงศ์ Carcharhinidae"
+  },
+  {
+    "name": "Bull trout",
+    "scientific_name": "Salvelinus confluentus",
+    "location": "freshwater",
+    "family": "Salmonidae",
+    "aphia_id": 274352,
+    "description": "ชื่อวิทยาศาสตร์ Salvelinus confluentus · วงศ์ Salmonidae"
+  },
+  {
+    "name": "Chihuahua chub",
+    "scientific_name": "Gila nigrescens",
+    "location": "freshwater",
+    "family": "Cyprinidae",
+    "aphia_id": 1021597,
+    "description": "ชื่อวิทยาศาสตร์ Gila nigrescens · วงศ์ Cyprinidae"
+  },
+  {
+    "name": "Chinook(=Spring=King)salmon",
+    "scientific_name": "Oncorhynchus tshawytscha",
+    "location": "freshwater",
+    "family": "Salmonidae",
+    "aphia_id": 158075,
+    "description": "ชื่อวิทยาศาสตร์ Oncorhynchus tshawytscha · วงศ์ Salmonidae"
+  },
+  {
+    "name": "Chum(=Keta=Dog)salmon",
+    "scientific_name": "Oncorhynchus keta",
+    "location": "freshwater",
+    "family": "Salmonidae",
+    "aphia_id": 127183,
+    "description": "ชื่อวิทยาศาสตร์ Oncorhynchus keta · วงศ์ Salmonidae"
+  },
+  {
+    "name": "Coho(=Silver)salmon",
+    "scientific_name": "Oncorhynchus kisutch",
+    "location": "freshwater",
+    "family": "Salmonidae",
+    "aphia_id": 127184,
+    "description": "ชื่อวิทยาศาสตร์ Oncorhynchus kisutch · วงศ์ Salmonidae"
+  },
+  {
+    "name": "Common carp",
+    "scientific_name": "Cyprinus carpio",
+    "location": "freshwater",
+    "family": "Cyprinidae",
+    "aphia_id": 154582,
+    "description": "ชื่อวิทยาศาสตร์ Cyprinus carpio · วงศ์ Cyprinidae"
+  },
+  {
+    "name": "Congo sea catfish",
+    "scientific_name": "Cathorops fuerthii",
+    "location": "freshwater",
+    "family": "Ariidae",
+    "aphia_id": 280043,
+    "description": "ชื่อวิทยาศาสตร์ Cathorops fuerthii · วงศ์ Ariidae"
+  },
+  {
+    "name": "Crucian carp",
+    "scientific_name": "Carassius carassius",
+    "location": "freshwater",
+    "family": "Cyprinidae",
+    "aphia_id": 154297,
+    "description": "ชื่อวิทยาศาสตร์ Carassius carassius · วงศ์ Cyprinidae"
+  },
+  {
+    "name": "African basslet",
+    "scientific_name": "Liopropoma africanum",
+    "location": "marine",
+    "family": "Epinephelidae",
+    "aphia_id": 218258,
+    "description": "ชื่อวิทยาศาสตร์ Liopropoma africanum · วงศ์ Epinephelidae"
+  },
+  {
+    "name": "African forktail snapper",
+    "scientific_name": "Apsilus fuscus",
+    "location": "marine",
+    "family": "Lutjanidae",
+    "aphia_id": 212548,
+    "description": "ชื่อวิทยาศาสตร์ Apsilus fuscus · วงศ์ Lutjanidae"
+  },
+  {
+    "name": "African longfin eel",
+    "scientific_name": "Anguilla mossambica",
+    "location": "marine",
+    "family": "Anguillidae",
+    "aphia_id": 217458,
+    "description": "ชื่อวิทยาศาสตร์ Anguilla mossambica · วงศ์ Anguillidae"
+  },
+  {
+    "name": "Albacore",
+    "scientific_name": "Thunnus alalunga",
+    "location": "marine",
+    "family": "Scombridae",
+    "aphia_id": 127026,
+    "description": "ชื่อวิทยาศาสตร์ Thunnus alalunga · วงศ์ Scombridae"
+  },
+  {
+    "name": "Amberstripe scad",
+    "scientific_name": "Decapterus muroadsi",
+    "location": "marine",
+    "family": "Carangidae",
+    "aphia_id": 273279,
+    "description": "ชื่อวิทยาศาสตร์ Decapterus muroadsi · วงศ์ Carangidae"
+  },
+  {
+    "name": "American eel",
+    "scientific_name": "Anguilla rostrata",
+    "location": "marine",
+    "family": "Anguillidae",
+    "aphia_id": 158562,
+    "description": "ชื่อวิทยาศาสตร์ Anguilla rostrata · วงศ์ Anguillidae"
+  },
+  {
+    "name": "Anchoveta(=Peruvian anchovy)",
+    "scientific_name": "Engraulis ringens",
+    "location": "marine",
+    "family": "Engraulidae",
+    "aphia_id": 272287,
+    "description": "ชื่อวิทยาศาสตร์ Engraulis ringens · วงศ์ Engraulidae"
+  },
+  {
+    "name": "Antenna codlet",
+    "scientific_name": "Bregmaceros atlanticus",
+    "location": "marine",
+    "family": "Bregmacerotidae",
+    "aphia_id": 126431,
+    "description": "ชื่อวิทยาศาสตร์ Bregmaceros atlanticus · วงศ์ Bregmacerotidae"
+  },
+  {
+    "name": "Arabian carpetshark",
+    "scientific_name": "Chiloscyllium arabicum",
+    "location": "marine",
+    "family": "Hemiscylliidae",
+    "aphia_id": 277827,
+    "description": "ชื่อวิทยาศาสตร์ Chiloscyllium arabicum · วงศ์ Hemiscylliidae"
+  },
+  {
+    "name": "Arctic char",
+    "scientific_name": "Salvelinus alpinus",
+    "location": "marine",
+    "family": "Salmonidae",
+    "aphia_id": 127188,
+    "description": "ชื่อวิทยาศาสตร์ Salvelinus alpinus · วงศ์ Salmonidae"
+  },
+  {
+    "name": "Areolate grouper",
+    "scientific_name": "Epinephelus areolatus",
+    "location": "marine",
+    "family": "Epinephelidae",
+    "aphia_id": 218204,
+    "description": "ชื่อวิทยาศาสตร์ Epinephelus areolatus · วงศ์ Epinephelidae"
+  },
+  {
+    "name": "Argentine anchovy",
+    "scientific_name": "Engraulis anchoita",
+    "location": "marine",
+    "family": "Engraulidae",
+    "aphia_id": 272284,
+    "description": "ชื่อวิทยาศาสตร์ Engraulis anchoita · วงศ์ Engraulidae"
+  },
+  {
+    "name": "Argentine seabass",
+    "scientific_name": "Acanthistius brasilianus",
+    "location": "marine",
+    "family": "Acanthistiidae",
+    "aphia_id": 278720,
+    "description": "ชื่อวิทยาศาสตร์ Acanthistius brasilianus · วงศ์ Acanthistiidae"
+  },
+  {
+    "name": "Arrow goby",
+    "scientific_name": "Clevelandia ios",
+    "location": "marine",
+    "family": "Gobiidae",
+    "aphia_id": 280215,
+    "description": "ชื่อวิทยาศาสตร์ Clevelandia ios · วงศ์ Gobiidae"
+  },
+  {
+    "name": "Artic cod",
+    "scientific_name": "Arctogadus glacialis",
+    "location": "marine",
+    "family": "Gadidae",
+    "aphia_id": 126432,
+    "description": "ชื่อวิทยาศาสตร์ Arctogadus glacialis · วงศ์ Gadidae"
+  },
+  {
+    "name": "Atka mackerel",
+    "scientific_name": "Pleurogrammus monopterygius",
+    "location": "marine",
+    "family": "Hexagrammidae",
+    "aphia_id": 282289,
+    "description": "ชื่อวิทยาศาสตร์ Pleurogrammus monopterygius · วงศ์ Hexagrammidae"
+  },
+  {
+    "name": "Atlantic bluefin tuna",
+    "scientific_name": "Thunnus thynnus",
+    "location": "marine",
+    "family": "Scombridae",
+    "aphia_id": 127029,
+    "description": "ชื่อวิทยาศาสตร์ Thunnus thynnus · วงศ์ Scombridae"
+  },
+  {
+    "name": "Atlantic cod",
+    "scientific_name": "Gadus morhua",
+    "location": "marine",
+    "family": "Gadidae",
+    "aphia_id": 126436,
+    "description": "ชื่อวิทยาศาสตร์ Gadus morhua · วงศ์ Gadidae"
+  },
+  {
+    "name": "Atlantic herring",
+    "scientific_name": "Clupea harengus",
+    "location": "marine",
+    "family": "Clupeidae",
+    "aphia_id": 126417,
+    "description": "ชื่อวิทยาศาสตร์ Clupea harengus · วงศ์ Clupeidae"
+  },
+  {
+    "name": "Atlantic horse mackerel",
+    "scientific_name": "Trachurus trachurus",
+    "location": "marine",
+    "family": "Carangidae",
+    "aphia_id": 126822,
+    "description": "ชื่อวิทยาศาสตร์ Trachurus trachurus · วงศ์ Carangidae"
+  },
+  {
+    "name": "Atlantic mackerel",
+    "scientific_name": "Scomber scombrus",
+    "location": "marine",
+    "family": "Scombridae",
+    "aphia_id": 127023,
+    "description": "ชื่อวิทยาศาสตร์ Scomber scombrus · วงศ์ Scombridae"
+  },
+  {
+    "name": "Atlantic menhaden",
+    "scientific_name": "Brevoortia tyrannus",
+    "location": "marine",
+    "family": "Alosidae",
+    "aphia_id": 158691,
+    "description": "ชื่อวิทยาศาสตร์ Brevoortia tyrannus · วงศ์ Alosidae"
+  },
+  {
+    "name": "Atlantic pomfret",
+    "scientific_name": "Brama brama",
+    "location": "marine",
+    "family": "Bramidae",
+    "aphia_id": 126783,
+    "description": "ชื่อวิทยาศาสตร์ Brama brama · วงศ์ Bramidae"
+  },
+  {
+    "name": "Atlantic salmon",
+    "scientific_name": "Salmo salar",
+    "location": "marine",
+    "family": "Salmonidae",
+    "aphia_id": 127186,
+    "description": "ชื่อวิทยาศาสตร์ Salmo salar · วงศ์ Salmonidae"
+  },
+  {
+    "name": "Atlantic Spanish mackerel",
+    "scientific_name": "Scomberomorus maculatus",
+    "location": "marine",
+    "family": "Scombridae",
+    "aphia_id": 159342,
+    "description": "ชื่อวิทยาศาสตร์ Scomberomorus maculatus · วงศ์ Scombridae"
+  },
+  {
+    "name": "Atlantic thread herring",
+    "scientific_name": "Opisthonema oglinum",
+    "location": "marine",
+    "family": "Dorosomatidae",
+    "aphia_id": 158695,
+    "description": "ชื่อวิทยาศาสตร์ Opisthonema oglinum · วงศ์ Dorosomatidae"
+  },
+  {
+    "name": "Atlantic wolffish",
+    "scientific_name": "Anarhichas lupus",
+    "location": "marine",
+    "family": "Anarhichadidae",
+    "aphia_id": 126758,
+    "description": "ชื่อวิทยาศาสตร์ Anarhichas lupus · วงศ์ Anarhichadidae"
+  },
+  {
+    "name": "Avocet snipe eel",
+    "scientific_name": "Avocettina infans",
+    "location": "marine",
+    "family": "Nemichthyidae",
+    "aphia_id": 126304,
+    "description": "ชื่อวิทยาศาสตร์ Avocettina infans · วงศ์ Nemichthyidae"
+  },
+  {
+    "name": "Baelama anchovy",
+    "scientific_name": "Thryssa baelama",
+    "location": "marine",
+    "family": "Engraulidae",
+    "aphia_id": 212291,
+    "description": "ชื่อวิทยาศาสตร์ Thryssa baelama · วงศ์ Engraulidae"
+  },
+  {
+    "name": "Bali sardinella",
+    "scientific_name": "Sardinella lemuru",
+    "location": "marine",
+    "family": "Dorosomatidae",
+    "aphia_id": 272273,
+    "description": "ชื่อวิทยาศาสตร์ Sardinella lemuru · วงศ์ Dorosomatidae"
+  },
+  {
+    "name": "African longfin eel",
+    "scientific_name": "Anguilla mossambica",
+    "location": "brackish",
+    "family": "Anguillidae",
+    "aphia_id": 217458,
+    "description": "ชื่อวิทยาศาสตร์ Anguilla mossambica · วงศ์ Anguillidae"
+  },
+  {
+    "name": "American eel",
+    "scientific_name": "Anguilla rostrata",
+    "location": "brackish",
+    "family": "Anguillidae",
+    "aphia_id": 158562,
+    "description": "ชื่อวิทยาศาสตร์ Anguilla rostrata · วงศ์ Anguillidae"
+  },
+  {
+    "name": "Arctic char",
+    "scientific_name": "Salvelinus alpinus",
+    "location": "brackish",
+    "family": "Salmonidae",
+    "aphia_id": 127188,
+    "description": "ชื่อวิทยาศาสตร์ Salvelinus alpinus · วงศ์ Salmonidae"
+  },
+  {
+    "name": "Argentine seabass",
+    "scientific_name": "Acanthistius brasilianus",
+    "location": "brackish",
+    "family": "Acanthistiidae",
+    "aphia_id": 278720,
+    "description": "ชื่อวิทยาศาสตร์ Acanthistius brasilianus · วงศ์ Acanthistiidae"
+  },
+  {
+    "name": "Arrow goby",
+    "scientific_name": "Clevelandia ios",
+    "location": "brackish",
+    "family": "Gobiidae",
+    "aphia_id": 280215,
+    "description": "ชื่อวิทยาศาสตร์ Clevelandia ios · วงศ์ Gobiidae"
+  },
+  {
+    "name": "Atlantic bluefin tuna",
+    "scientific_name": "Thunnus thynnus",
+    "location": "brackish",
+    "family": "Scombridae",
+    "aphia_id": 127029,
+    "description": "ชื่อวิทยาศาสตร์ Thunnus thynnus · วงศ์ Scombridae"
+  },
+  {
+    "name": "Atlantic cod",
+    "scientific_name": "Gadus morhua",
+    "location": "brackish",
+    "family": "Gadidae",
+    "aphia_id": 126436,
+    "description": "ชื่อวิทยาศาสตร์ Gadus morhua · วงศ์ Gadidae"
+  },
+  {
+    "name": "Atlantic herring",
+    "scientific_name": "Clupea harengus",
+    "location": "brackish",
+    "family": "Clupeidae",
+    "aphia_id": 126417,
+    "description": "ชื่อวิทยาศาสตร์ Clupea harengus · วงศ์ Clupeidae"
+  },
+  {
+    "name": "Atlantic mackerel",
+    "scientific_name": "Scomber scombrus",
+    "location": "brackish",
+    "family": "Scombridae",
+    "aphia_id": 127023,
+    "description": "ชื่อวิทยาศาสตร์ Scomber scombrus · วงศ์ Scombridae"
+  },
+  {
+    "name": "Atlantic menhaden",
+    "scientific_name": "Brevoortia tyrannus",
+    "location": "brackish",
+    "family": "Alosidae",
+    "aphia_id": 158691,
+    "description": "ชื่อวิทยาศาสตร์ Brevoortia tyrannus · วงศ์ Alosidae"
+  },
+  {
+    "name": "Atlantic salmon",
+    "scientific_name": "Salmo salar",
+    "location": "brackish",
+    "family": "Salmonidae",
+    "aphia_id": 127186,
+    "description": "ชื่อวิทยาศาสตร์ Salmo salar · วงศ์ Salmonidae"
+  },
+  {
+    "name": "Baelama anchovy",
+    "scientific_name": "Thryssa baelama",
+    "location": "brackish",
+    "family": "Engraulidae",
+    "aphia_id": 212291,
+    "description": "ชื่อวิทยาศาสตร์ Thryssa baelama · วงศ์ Engraulidae"
+  },
+  {
+    "name": "Barramundi(=Giant seaperch)",
+    "scientific_name": "Lates calcarifer",
+    "location": "brackish",
+    "family": "Latidae",
+    "aphia_id": 278957,
+    "description": "ชื่อวิทยาศาสตร์ Lates calcarifer · วงศ์ Latidae"
+  },
+  {
+    "name": "Bay anchovy",
+    "scientific_name": "Anchoa mitchilli",
+    "location": "brackish",
+    "family": "Engraulidae",
+    "aphia_id": 158699,
+    "description": "ชื่อวิทยาศาสตร์ Anchoa mitchilli · วงศ์ Engraulidae"
+  },
+  {
+    "name": "Bigscale anchovy",
+    "scientific_name": "Anchovia macrolepidota",
+    "location": "brackish",
+    "family": "Engraulidae",
+    "aphia_id": 279608,
+    "description": "ชื่อวิทยาศาสตร์ Anchovia macrolepidota · วงศ์ Engraulidae"
+  },
+  {
+    "name": "Blackchin tilapia",
+    "scientific_name": "Sarotherodon melanotheron",
+    "location": "brackish",
+    "family": "Cichlidae",
+    "aphia_id": 293732,
+    "description": "ชื่อวิทยาศาสตร์ Sarotherodon melanotheron · วงศ์ Cichlidae"
+  },
+  {
+    "name": "Blackspot snapper",
+    "scientific_name": "Lutjanus ehrenbergii",
+    "location": "brackish",
+    "family": "Lutjanidae",
+    "aphia_id": 218489,
+    "description": "ชื่อวิทยาศาสตร์ Lutjanus ehrenbergii · วงศ์ Lutjanidae"
+  },
+  {
+    "name": "Blacktail snapper",
+    "scientific_name": "Lutjanus fulvus",
+    "location": "brackish",
+    "family": "Lutjanidae",
+    "aphia_id": 218475,
+    "description": "ชื่อวิทยาศาสตร์ Lutjanus fulvus · วงศ์ Lutjanidae"
+  },
+  {
+    "name": "Blacktip grouper",
+    "scientific_name": "Epinephelus fasciatus",
+    "location": "brackish",
+    "family": "Epinephelidae",
+    "aphia_id": 218207,
+    "description": "ชื่อวิทยาศาสตร์ Epinephelus fasciatus · วงศ์ Epinephelidae"
+  },
+  {
+    "name": "Blacktip reef shark",
+    "scientific_name": "Carcharhinus melanopterus",
+    "location": "brackish",
+    "family": "Carcharhinidae",
+    "aphia_id": 105795,
+    "description": "ชื่อวิทยาศาสตร์ Carcharhinus melanopterus · วงศ์ Carcharhinidae"
+  },
+  {
+    "name": "Blacktip shark",
+    "scientific_name": "Carcharhinus limbatus",
+    "location": "brackish",
+    "family": "Carcharhinidae",
+    "aphia_id": 105793,
+    "description": "ชื่อวิทยาศาสตร์ Carcharhinus limbatus · วงศ์ Carcharhinidae"
+  },
+  {
+    "name": "Blue catfish",
+    "scientific_name": "Ictalurus furcatus",
+    "location": "brackish",
+    "family": "Ictaluridae",
+    "aphia_id": 275329,
+    "description": "ชื่อวิทยาศาสตร์ Ictalurus furcatus · วงศ์ Ictaluridae"
+  },
+  {
+    "name": "Blue tilapia",
+    "scientific_name": "Oreochromis aureus",
+    "location": "brackish",
+    "family": "Cichlidae",
+    "aphia_id": 279196,
+    "description": "ชื่อวิทยาศาสตร์ Oreochromis aureus · วงศ์ Cichlidae"
+  },
+  {
+    "name": "Blueback shad",
+    "scientific_name": "Alosa aestivalis",
+    "location": "brackish",
+    "family": "Alosidae",
+    "aphia_id": 158667,
+    "description": "ชื่อวิทยาศาสตร์ Alosa aestivalis · วงศ์ Alosidae"
+  },
+  {
+    "name": "Broad-striped anchovy",
+    "scientific_name": "Anchoa hepsetus",
+    "location": "brackish",
+    "family": "Engraulidae",
+    "aphia_id": 158698,
+    "description": "ชื่อวิทยาศาสตร์ Anchoa hepsetus · วงศ์ Engraulidae"
+  },
+  {
+    "name": "Brook trout",
+    "scientific_name": "Salvelinus fontinalis",
+    "location": "brackish",
+    "family": "Salmonidae",
+    "aphia_id": 154241,
+    "description": "ชื่อวิทยาศาสตร์ Salvelinus fontinalis · วงศ์ Salmonidae"
+  },
+  {
+    "name": "Brownstripe red snapper",
+    "scientific_name": "Lutjanus vitta",
+    "location": "brackish",
+    "family": "Lutjanidae",
+    "aphia_id": 218483,
+    "description": "ชื่อวิทยาศาสตร์ Lutjanus vitta · วงศ์ Lutjanidae"
+  },
+  {
+    "name": "Bull shark",
+    "scientific_name": "Carcharhinus leucas",
+    "location": "brackish",
+    "family": "Carcharhinidae",
+    "aphia_id": 105792,
+    "description": "ชื่อวิทยาศาสตร์ Carcharhinus leucas · วงศ์ Carcharhinidae"
+  },
+  {
+    "name": "Bull trout",
+    "scientific_name": "Salvelinus confluentus",
+    "location": "brackish",
+    "family": "Salmonidae",
+    "aphia_id": 274352,
+    "description": "ชื่อวิทยาศาสตร์ Salvelinus confluentus · วงศ์ Salmonidae"
+  },
+  {
+    "name": "Bullet tuna",
+    "scientific_name": "Auxis rochei",
+    "location": "brackish",
+    "family": "Scombridae",
+    "aphia_id": 127015,
+    "description": "ชื่อวิทยาศาสตร์ Auxis rochei · วงศ์ Scombridae"
+  }
+]
