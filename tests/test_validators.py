@@ -7,6 +7,7 @@ from src.validators import (
     is_quit_command,
     normalize_command,
     validate_menu_choice,
+    validate_fish_name,
     validate_qte_key,
     validate_search_keyword,
 )
@@ -87,3 +88,27 @@ class TestValidateSearchKeyword:
     def test_rejects_too_long(self):
         with pytest.raises(ValueError):
             validate_search_keyword("x" * 31)
+
+
+class TestValidateFishName:
+    """ตรวจชื่อเล่นที่ผู้เล่นตั้งให้ปลา"""
+
+    def test_accepts_a_normal_name(self):
+        assert validate_fish_name("เจ้าอ้วน") == "เจ้าอ้วน"
+
+    def test_trims_surrounding_spaces(self):
+        assert validate_fish_name("  Big Carp  ") == "Big Carp"
+
+    @pytest.mark.parametrize("raw", ["", "   ", "\t"])
+    def test_rejects_blank(self, raw):
+        with pytest.raises(ValueError):
+            validate_fish_name(raw)
+
+    def test_rejects_a_name_that_is_too_long(self):
+        with pytest.raises(ValueError):
+            validate_fish_name("x" * 25)
+
+    def test_rejects_newlines(self):
+        """ชื่อถูกเขียนลงไฟล์ JSON และแสดงในตารางบรรทัดเดียว"""
+        with pytest.raises(ValueError):
+            validate_fish_name("ปลา\nสองบรรทัด")

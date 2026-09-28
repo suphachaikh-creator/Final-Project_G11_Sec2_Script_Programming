@@ -19,11 +19,13 @@ LOCATIONS = (FRESHWATER, MARINE, BRACKISH)
 class Fish:
     """ปลาที่ผู้เล่นจับได้หนึ่งตัว"""
 
-    def __init__(self, name, location, weight_kg, price):
+    def __init__(self, name, location, weight_kg, price, keep=False):
         self.name = name
         self.location = location
         self.weight_kg = weight_kg
         self.price = price
+        # ปลาที่ทำเครื่องหมายเก็บไว้จะขายไม่ได้จนกว่าจะยกเลิกเครื่องหมาย
+        self.keep = keep
 
     @staticmethod
     def roll_weight(bait_level, rng=None):
@@ -54,6 +56,7 @@ class Fish:
             "location": self.location,
             "weight_kg": self.weight_kg,
             "price": self.price,
+            "keep": self.keep,
         }
 
     @classmethod
@@ -64,6 +67,7 @@ class Fish:
             location=data.get("location", FRESHWATER),
             weight_kg=data.get("weight_kg", 0.0),
             price=data.get("price", 0),
+            keep=bool(data.get("keep", False)),
         )
 
     def __repr__(self):

@@ -3,7 +3,11 @@
 import pytest
 
 from src.fish import FRESHWATER, MARINE, Fish
-from src.game_state import START_MONEY, GameState, NotEnoughMoneyError
+import time
+
+from src.game_state import (START_MONEY, FishNotFoundError,
+                            FishProtectedError, GameState,
+                            NotEnoughMoneyError)
 
 
 class FixedRandom:
@@ -154,3 +158,244 @@ class TestSerialization:
         assert state.money == START_MONEY
         assert state.inventory == []
         assert state.bait_level == 1
+
+
+class TestSellOne:
+    """ขายปลาทีละตัว"""
+
+    def test_returns_the_price_of_that_fish(self):
+        state = GameState(money=0, inventory=[make_fish(price=40),
+                                              make_fish(price=70)])
+        assert state.sell_fish(state.inventory[0]) == 40
+
+    def test_adds_the_money(self):
+        state = GameState(money=10, inventory=[make_fish(price=40)])
+        state.sell_fish(state.inventory[0])
+        assert state.money == 50
+
+    def test_removes_only_that_fish(self):
+        state = GameState(inventory=[make_fish(price=40), make_fish(price=70)])
+        keep = state.inventory[1]
+        state.sell_fish(state.inventory[0])
+        assert state.inventory == [keep]
+
+    def test_identical_fish_are_told_apart(self):
+        """ปลาชื่อและราคาเหมือนกันสองตัว ขายไปตัวเดียวต้องเหลืออีกตัว"""
+        first, second = make_fish(), make_fish()
+        state = GameState(inventory=[first, second])
+        state.sell_fish(first)
+        assert state.inventory == [second]
+
+    def test_selling_a_fish_that_is_not_in_the_bag(self):
+        state = GameState(inventory=[make_fish()])
+        with pytest.raises(ValueError):
+            state.sell_fish(make_fish())
+
+    def test_selling_from_an_empty_bag(self):
+        with pytest.raises(ValueError):
+            GameState().sell_fish(make_fish())
+
+
+class TestSellSpecies:
+    """ขายปลายกชนิด"""
+
+    def bag(self):
+        return GameState(money=0, inventory=[
+            make_fish("Carp", price=40),
+            make_fish("Tuna", price=90),
+            make_fish("Carp", price=60),
+        ])
+
+    def test_counts_how_many_of_a_species(self):
+        assert self.bag().count_species("Carp") == 2
+
+    def test_counts_zero_for_a_species_not_in_the_bag(self):
+        assert self.bag().count_species("Shark") == 0
+
+    def test_returns_count_and_total(self):
+        assert self.bag().sell_species("Carp") == (2, 100)
+
+    def test_removes_every_fish_of_that_species(self):
+        state = self.bag()
+        state.sell_species("Carp")
+        assert [fish.name for fish in state.inventory] == ["Tuna"]
+
+    def test_keeps_other_species_untouched(self):
+        state = self.bag()
+        state.sell_species("Carp")
+        assert state.inventory[0].price == 90
+
+    def test_adds_the_total_to_the_money(self):
+        state = self.bag()
+        state.sell_species("Carp")
+        assert state.money == 100
+
+    def test_selling_a_species_that_is_not_in_the_bag(self):
+        with pytest.raises(ValueError):
+            self.bag().sell_species("Shark")
+
+    def test_selling_everything_one_species_at_a_time(self):
+        """ขายยกชนิดจนหมดต้องได้เงินเท่ากับขายทั้งกระเป๋ารวดเดียว"""
+        state = self.bag()
+        state.sell_species("Carp")
+        state.sell_species("Tuna")
+        assert state.money == 190
+        assert state.inventory == []
+
+
+class TestUpdateFish:
+    """แก้ไขข้อมูลปลา — ส่วน U ของ CRUD"""
+
+    def bag(self):
+        return GameState(money=0, inventory=[
+            make_fish("Carp", price=40), make_fish("Tuna", price=90)])
+
+    def test_rename_changes_the_name(self):
+        state = self.bag()
+        assert state.rename_fish(state.inventory[0], "เจ้าอ้วน") == "เจ้าอ้วน"
+        assert state.inventory[0].name == "เจ้าอ้วน"
+
+    def test_rename_trims_spaces(self):
+        state = self.bag()
+        assert state.rename_fish(state.inventory[0], "  เจ้าอ้วน  ") == "เจ้าอ้วน"
+
+    def test_rename_rejects_blank_name(self):
+        state = self.bag()
+        with pytest.raises(ValueError):
+            state.rename_fish(state.inventory[0], "   ")
+
+    def test_rename_does_not_touch_other_fish(self):
+        state = self.bag()
+        state.rename_fish(state.inventory[0], "เจ้าอ้วน")
+        assert state.inventory[1].name == "Tuna"
+
+    def test_rename_a_fish_that_is_not_in_the_bag(self):
+        with pytest.raises(FishNotFoundError):
+            self.bag().rename_fish(make_fish(), "เจ้าอ้วน")
+
+    def test_set_keep_marks_the_fish(self):
+        state = self.bag()
+        assert state.set_keep(state.inventory[0], True) is True
+        assert state.inventory[0].keep is True
+
+    def test_toggle_keep_flips_the_flag(self):
+        state = self.bag()
+        fish = state.inventory[0]
+        assert state.toggle_keep(fish) is True
+        assert state.toggle_keep(fish) is False
+
+    def test_kept_fish_lists_only_marked_ones(self):
+        state = self.bag()
+        state.toggle_keep(state.inventory[1])
+        assert [f.name for f in state.kept_fish()] == ["Tuna"]
+
+    def test_keeping_a_fish_that_is_not_in_the_bag(self):
+        with pytest.raises(FishNotFoundError):
+            self.bag().set_keep(make_fish(), True)
+
+
+class TestKeepProtectsFromSelling:
+    """ปลาที่ทำเครื่องหมายเก็บไว้ต้องไม่ถูกขายไม่ว่าทางไหน"""
+
+    def bag(self):
+        state = GameState(money=0, inventory=[
+            make_fish("Carp", price=40), make_fish("Tuna", price=90),
+            make_fish("Carp", price=60)])
+        state.toggle_keep(state.inventory[1])
+        return state
+
+    def test_sell_fish_refuses_a_kept_fish(self):
+        state = self.bag()
+        with pytest.raises(FishProtectedError):
+            state.sell_fish(state.inventory[1])
+        assert state.money == 0
+
+    def test_sell_all_skips_kept_fish(self):
+        state = self.bag()
+        assert state.sell_all() == 100
+        assert [f.name for f in state.inventory] == ["Tuna"]
+
+    def test_sell_species_skips_kept_fish(self):
+        state = GameState(money=0, inventory=[
+            make_fish("Carp", price=40), make_fish("Carp", price=60)])
+        state.toggle_keep(state.inventory[0])
+        assert state.sell_species("Carp") == (1, 60)
+        assert len(state.inventory) == 1
+
+    def test_unkeeping_lets_it_be_sold_again(self):
+        state = self.bag()
+        kept = state.inventory[1]
+        state.toggle_keep(kept)
+        assert state.sell_fish(kept) == 90
+
+
+class TestCustomExceptions:
+    """ข้อกำหนดของสปรินต์: ลบรายการที่ไม่มีในระบบต้องโยน Custom Exception"""
+
+    def test_selling_a_missing_fish_raises_the_custom_error(self):
+        with pytest.raises(FishNotFoundError):
+            GameState().sell_fish(make_fish())
+
+    def test_selling_a_missing_species_raises_the_custom_error(self):
+        with pytest.raises(FishNotFoundError):
+            GameState().sell_species("Shark")
+
+    def test_custom_errors_are_still_value_errors(self):
+        """สืบทอดจาก ValueError โค้ดเดิมที่ดัก ValueError จึงยังทำงานได้"""
+        assert issubclass(FishNotFoundError, ValueError)
+        assert issubclass(FishProtectedError, ValueError)
+
+    def test_error_message_names_the_fish(self):
+        try:
+            GameState().sell_fish(make_fish("Carp"))
+        except FishNotFoundError as error:
+            assert "Carp" in str(error)
+
+
+class TestPerformanceOnLargeData:
+    """ประสิทธิภาพของอัลกอริทึมกับชุดข้อมูลขนาดใหญ่ (TC-P01 ถึง TC-P03)"""
+
+    def big_bag(self, size=1000):
+        import random
+        rng = random.Random(42)
+        names = ["Carp", "Tuna", "Salmon", "Mullet", "Perch", "Herring"]
+        fish = [Fish(rng.choice(names), rng.choice([FRESHWATER, MARINE]),
+                     round(rng.uniform(0.5, 9.9), 2), rng.randint(10, 300))
+                for _ in range(size)]
+        return GameState(inventory=fish)
+
+    def test_sorting_1000_items_is_fast(self):
+        state = self.big_bag()
+        start = time.perf_counter()
+        ordered = state.sort_inventory("weight")
+        elapsed = (time.perf_counter() - start) * 1000
+        assert len(ordered) == 1000
+        assert elapsed < 50, f"เรียง 1000 รายการใช้ {elapsed:.1f} ms เกิน 50 ms"
+
+    def test_sorting_keeps_every_item(self):
+        state = self.big_bag()
+        for key in ("name", "weight", "price"):
+            assert len(state.sort_inventory(key)) == 1000
+
+    def test_searching_1000_items_is_fast(self):
+        state = self.big_bag()
+        start = time.perf_counter()
+        found = state.search_inventory("carp")
+        elapsed = (time.perf_counter() - start) * 1000
+        assert found and all("carp" in f.name.lower() for f in found)
+        assert elapsed < 50, f"ค้นหา 1000 รายการใช้ {elapsed:.1f} ms เกิน 50 ms"
+
+    def test_summary_on_1000_items_is_fast(self):
+        state = self.big_bag()
+        start = time.perf_counter()
+        stats = state.summary()
+        elapsed = (time.perf_counter() - start) * 1000
+        assert stats["count"] == 1000
+        assert elapsed < 50, f"สรุปสถิติใช้ {elapsed:.1f} ms เกิน 50 ms"
+
+    def test_sorting_is_stable_across_runs(self):
+        """เรียงชุดเดิมสองครั้งต้องได้ลำดับเดิมเป๊ะ"""
+        state = self.big_bag()
+        first = [f.price for f in state.sort_inventory("price")]
+        second = [f.price for f in state.sort_inventory("price")]
+        assert first == second

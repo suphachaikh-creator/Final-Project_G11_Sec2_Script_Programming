@@ -30,7 +30,7 @@
 |---|---|---|---|---|
 | Sprint 1 | v0.1.0 | 12 | Front-End App Dev | เสร็จแล้ว |
 | Sprint 2 | v0.2.0 | 13 | Back-End App Dev | เสร็จแล้ว |
-| Sprint 3 | v0.3.0 | 14 | Full-Stack App Dev | วางแผนไว้ |
+| Sprint 3 | v0.3.0 | 14 | Full-Stack App Dev | เสร็จแล้ว |
 | Final Sprint | v1.0.0 | 15 | DevOps, CI/CD & AI Integration | วางแผนไว้ |
 
 **การหมุนเวียนบทบาท** — บทบาท Planner และ Debugger/QA หมุนครบทั้งสี่คนพอดีใน 4 สปรินต์
@@ -73,14 +73,14 @@
 | **API Key / Config** | พร้อม | ทั้ง WoRMS และ Open Fisheries เปิดให้เรียกฟรี ไม่ต้องใช้ API Key |
 | **Initial Code Structure** | พร้อม | `src/` · `tests/` · `data/` · `reports/` · `tools/` · `.github/workflows/` |
 | **CI Pipeline** | พร้อม | `.github/workflows/ci.yml` รัน `flake8` และ `pytest` ทุก push และ pull request |
-| **Test Suite** | พร้อม | 135 เคส รันแบบออฟไลน์ทั้งหมด เสร็จใน 0.54 วินาที |
+| **Test Suite** | พร้อม | 272 เคส รันแบบออฟไลน์ทั้งหมด เสร็จในเสี้ยววินาที |
 | **Seed Data** | พร้อม | `data/fish_species.json` 90 รายการ (แหล่งน้ำละ 30) มีชื่อสามัญครบ 100% |
 | **Save Data Location** | พร้อม | `data/save_game.json` สร้างอัตโนมัติ และถูก gitignore ไว้ไม่ให้ปนเข้า repo |
 | **License & Contributor Docs** | ยังไม่พร้อม | ยังไม่มี `LICENSE` (แนะนำ MIT) และ `CONTRIBUTING.md` |
-| **UML Class Diagram** | ยังไม่พร้อม | ต้องทำก่อนนำเสนอ เพราะเป็นส่วนที่ 1 ของการนำเสนอ (20%) |
+| **UML Class Diagram** | พร้อม | [หัวข้อ 10](#10-uml-class-diagram) ของเอกสารนี้ — 3 แผนผัง Mermaid แยกตามชั้น (โดเมน · เชื่อมต่อข้อมูล · หน้าจอ) GitHub แสดงผลได้ในตัว |
 | **Test Coverage Report** | ยังไม่พร้อม | ยังไม่ได้เพิ่มขั้นตอนวัด coverage เข้า CI |
 
-**สรุป:** พร้อม 9 จาก 12 รายการ — ที่เหลือเป็นงานเอกสารและ DevOps ซึ่งอยู่ในแผน Final Sprint
+**สรุป:** พร้อม 10 จาก 12 รายการ — ที่เหลือเป็นงานเอกสารและ DevOps ซึ่งอยู่ในแผน Final Sprint
 
 ---
 
@@ -126,7 +126,7 @@
 |---|---|---|
 | Integration | `src/cli.py` เชื่อม `FishAPI` · `SaveManager` · `GameState` เข้าด้วยกัน | เสร็จ |
 | End-to-End Run | เล่นจริงหนึ่งรอบ: เลือกสถานที่ → ตกปลา → ขาย → อัปเกรด → เซฟ → โหลด | ผ่าน |
-| Quality Gate | `flake8 .` ต้องได้ 0 issues และ `pytest -q` ต้องผ่านทั้งหมด | 0 issues · 89 passed |
+| Quality Gate | `flake8 .` ต้องได้ 0 issues และ `pytest -q` ต้องผ่านทั้งหมด | 0 issues · 272 passed |
 | Wrap-up & Commit | commit โค้ด เทสต์ และเอกสาร ให้อยู่ในสถานะที่ทำซ้ำได้ | รอ commit |
 
 ### References — endpoint ที่ใช้จริง
@@ -218,7 +218,9 @@
 
 **เป้าหมาย:** เปลี่ยนส่วนติดต่อผู้ใช้เป็น Desktop GUI และรวมทุกชั้นเข้าด้วยกันให้สมบูรณ์
 
-**ไฟล์ที่จะสร้าง:** `src/gui/app.py` · `src/gui/frames.py` · `tests/test_gui_logic.py`
+**ไฟล์ที่จะสร้าง:** `src/gui/app.py` · `src/gui/frames.py` · `src/gui/presenter.py` ·
+`src/gui/theme.py` · `src/gui/widgets.py` · `src/gui/species_loader.py` ·
+`tests/test_gui_logic.py` · `tests/test_species_loader.py`
 
 ### บทบาทในสปรินต์นี้
 
@@ -227,7 +229,7 @@
 | Planner | ภาวัต | ออกแบบผังหน้าจอทั้ง 4 Frame และเขียน DoD ของ Sprint 3 ก่อนเริ่มเขียนโค้ด |
 | Coder | ศุภชัย | `src/gui/app.py` — โครง `FishingApp` การสลับหน้าจอ และการเปลี่ยนตัวจับเวลาไปใช้ `root.after()` |
 | Coder | ยศพล | `src/gui/frames.py` — ตาราง `ttk.Treeview` พร้อมช่องค้นหา ตัวกรอง และการคลิกหัวคอลัมน์เพื่อเรียง |
-| Debugger / QA | ธนภัทร | `tests/test_gui_logic.py` ตรวจว่าเทสต์เดิม 135 เคสยังผ่าน และคุมไม่ให้ตรรกะรั่วเข้าไปในชั้นหน้าจอ |
+| Debugger / QA | ธนภัทร | `tests/test_gui_logic.py` ตรวจว่าเทสต์เดิม 135 เคสยังผ่าน คุมไม่ให้ตรรกะรั่วเข้าไปในชั้นหน้าจอ และเพิ่มเทสต์ประสิทธิภาพกับข้อมูล 1,000 รายการ |
 
 ### งานที่ต้องทำ
 
@@ -238,6 +240,12 @@
 | ตารางคลังสินค้า | ใช้ `ttk.Treeview` คลิกหัวคอลัมน์เพื่อเรียงลำดับ พร้อมช่องค้นหาและตัวกรอง |
 | สถิติเชิงลึก | คำนวณจาก `GameState.summary()` มาแสดงในหน้าคลังสินค้า (API ทั้งสองตัวเป็นแบบอ่านอย่างเดียว ไม่มี endpoint สถิติ) |
 | รักษาโหมด CLI | คง `src/cli.py` ไว้เป็นโหมดสำรองสำหรับเครื่องที่เปิดหน้าต่างไม่ได้ |
+| ออกแบบหน้าตา | ชุดสีทะเลลึกใน `theme.py` และวิดเจ็ตที่วาดเองใน `widgets.py` ใช้ธีม `clam` เป็นฐาน ไม่เพิ่มไลบรารีภายนอก |
+| โหลดข้อมูลเบื้องหลัง | `species_loader.py` ดึงชนิดปลาไว้ล่วงหน้าในเธรดแยก การจับปลาจึงไม่รอเครือข่าย |
+| ขายปลา 3 แบบ | ทีละตัว · ยกชนิด · ทั้งกระเป๋า เพิ่มเป็นกฎของเกมใน `game_state.py` |
+| แก้ไขข้อมูลให้ครบ CRUD | ตั้งชื่อเล่นให้ปลา และทำเครื่องหมายเก็บไว้ไม่ขาย |
+| Custom Exception | `FishNotFoundError` · `FishProtectedError` แทนการโยน `ValueError` ลอยๆ |
+| บันทึกทันทีที่เปลี่ยน | `FishingApp.autosave()` เรียกทุกจุดที่สถานะเปลี่ยน ไม่ใช่รอตอนปิดหน้าต่าง |
 
 ### Definition of Done
 
@@ -250,7 +258,12 @@
 | 3.5 | ปิดหน้าต่างระหว่างเล่นต้องบันทึกเกมก่อนออก | `test_gui_logic` |
 | 3.6 | **ชุดทดสอบต้องไม่สร้าง `tk.Tk()`** เพื่อให้รันบนเครื่อง CI ที่ไม่มีจอได้ | CI ต้องผ่าน |
 | 3.7 | เล่นตอนกระเป๋าเต็ม เซฟระหว่างเซิร์ฟเวอร์ล่ม และไฟล์เซฟรุ่นเก่า ต้องไม่ crash | เทสต์ Edge Cases |
-| 3.8 | ชุดทดสอบเดิมทั้ง 135 เคสต้องยังผ่านหลังแปลงเป็น GUI | `pytest` |
+| 3.8 | ชุดทดสอบเดิมทั้ง 135 เคสต้องยังผ่านหลังแปลงเป็น GUI | `pytest` — ผ่าน |
+| 3.9 | ขายปลาได้ทั้งทีละตัว ยกชนิด และทั้งกระเป๋า โดยปลาชื่อซ้ำกันต้องไม่ขายผิดตัว | `test_game_state` · `test_gui_logic` |
+| 3.10 | แก้ไขข้อมูลปลาได้ — ตั้งชื่อเล่น และเก็บไว้ไม่ขาย ครบ CRUD | `test_game_state` · `test_gui_logic` |
+| 3.11 | **อ้างถึงปลาที่ไม่มีในกระเป๋าต้องโยน Custom Exception** ไม่ใช่ `ValueError` ลอยๆ | `test_game_state` |
+| 3.12 | ข้อมูลในหน่วยความจำต้องตรงกับไฟล์เซฟตลอดเวลา ไม่ใช่รอบันทึกตอนปิดโปรแกรม | smoke test อ่านไฟล์เซฟระหว่างเล่น |
+| 3.13 | **เรียง ค้นหา และสรุปสถิติบนข้อมูล 1,000 รายการ ต้องเสร็จภายใน 50 ms** | `test_game_state::TestPerformanceOnLargeData` |
 
 ---
 
@@ -307,6 +320,8 @@ src/cli.py                 Application Layer — การไหลของเ�
    +--> src/game_state.py  Domain Layer        (เงิน กระเป๋า เลเวล และกฎการซื้อขาย)
    +--> src/fish.py        Domain Layer        (ปลาหนึ่งตัว + กฎน้ำหนักและราคา)
    +--> src/minigame.py    Domain Layer        (QTE — ตัวจับเวลาฉีดเข้ามาได้)
+   +--> src/gui/           Presentation Layer  (Tkinter — 4 หน้าจอ + presenter)
+   |      species_loader.py  โหลดข้อมูลปลาเบื้องหลัง ไม่ให้หน้าต่างค้าง
    +--> src/worms_api.py   Integration Layer   (WoRMS — แหล่งน้ำ + อนุกรมวิธาน)
    +--> src/openfisheries_api.py  Integration  (Open Fisheries — ชื่อสามัญ)
    +--> src/fish_api.py    Integration Layer   (ประสานสอง API + แคช + ระบบสำรอง)
@@ -324,7 +339,291 @@ src/cli.py                 Application Layer — การไหลของเ�
 
 ---
 
-## 10. กลยุทธ์การทดสอบ
+## 10. UML Class Diagram
+
+แผนผังนี้สร้างจากโค้ดจริงในเวอร์ชันปัจจุบัน GitHub แสดงผล Mermaid ได้ในตัว
+
+### 10.1 ชั้นโดเมนและตรรกะ
+
+```mermaid
+classDiagram
+    direction LR
+
+    class GameState {
+        +money: int
+        +inventory: list~Fish~
+        +bait_level: int
+        +rod_level: int
+        +can_afford(cost)
+        +add_fish(fish)
+        +require_fish(fish)
+        +rename_fish(fish, new_name)
+        +set_keep(fish, keep)
+        +toggle_keep(fish)
+        +kept_fish()
+        +sell_fish(fish)
+        +sell_species(name)
+        +sell_all()
+        +count_species(name)
+        +search_inventory(keyword)
+        +filter_inventory(location)
+        +sort_inventory(key, descending)
+        +summary()
+        +to_dict()
+        +from_dict(data)$
+    }
+
+    class Fish {
+        +name: str
+        +location: str
+        +weight_kg: float
+        +price: int
+        +keep: bool
+        +roll_weight(bait_level, rng)$
+        +price_for(weight_kg, bait_level)$
+        +catch(name, location, bait_level, rng)$
+        +to_dict()
+        +from_dict(data)$
+    }
+
+    class QTEMinigame {
+        -rng
+        -clock
+        +targets: list
+        +time_limit: float
+        +hit_count: int
+        +start()
+        +submit(key)
+        +time_left()
+        +is_timed_out()
+        +result()
+    }
+
+    class NotEnoughMoneyError {
+        <<Exception>>
+    }
+    class FishNotFoundError {
+        <<Exception>>
+    }
+    class FishProtectedError {
+        <<Exception>>
+    }
+
+    GameState o-- Fish : ถือปลาในกระเป๋า
+    GameState ..> NotEnoughMoneyError : เงินไม่พอ
+    GameState ..> FishNotFoundError : อ้างถึงปลาที่ไม่มี
+    GameState ..> FishProtectedError : ขายปลาที่เก็บไว้
+    ValueError <|-- FishNotFoundError
+    ValueError <|-- FishProtectedError
+```
+
+### 10.2 ชั้นเชื่อมต่อข้อมูลและไฟล์
+
+```mermaid
+classDiagram
+    direction TB
+
+    class FishAPI {
+        -worms: WormsAPI
+        -openfisheries: OpenFisheriesAPI
+        +last_error: str
+        +using_fallback: bool
+        +fetch_species(location)
+        +random_species(location, rng)
+        +local_species(location)$
+    }
+    class WormsAPI {
+        -http
+        +search_by_vernacular(word)
+        +fetch_fish_records()
+    }
+    class OpenFisheriesAPI {
+        -http
+        +fetch_common_names()
+    }
+    class SpeciesLoader {
+        -api: FishAPI
+        -spawn
+        +start()
+        +is_ready(location)
+        +status_text()
+        +random_species(location, rng)
+    }
+    class SaveManager {
+        +save_file: str
+        +last_error: str
+        +save(state)
+        +load()
+        +load_or_new()
+    }
+
+    FishAPI *-- WormsAPI
+    FishAPI *-- OpenFisheriesAPI
+    SpeciesLoader o-- FishAPI : ห่อไว้ไม่ให้หน้าต่างค้าง
+    SaveManager ..> GameState : อ่าน/เขียน
+```
+
+### 10.3 ชั้นหน้าจอ
+
+```mermaid
+classDiagram
+    direction TB
+
+    class FishingApp {
+        -state_data: GameState
+        -api: SpeciesLoader
+        -saver: SaveManager
+        -clock: TkClock
+        +game
+        +show_frame(name)
+        +autosave()
+        +tick()
+        +on_close()
+    }
+    class InventoryPresenter {
+        +keyword · location_filter · sort_key
+        +toggle_sort(key)
+        +visible_rows()
+        +fish_at(index)
+        +rename_at(index, name)
+        +toggle_keep_at(index)
+        +sell_one(index)
+        +sell_species_at(index)
+        +sell_all()
+    }
+    class FishingPresenter {
+        +start(location)
+        +press(key)
+        +finish()
+    }
+    class ShopPresenter {
+        +items()
+        +buy(key)
+    }
+    class DashboardPresenter {
+        +status_lines()
+        +api_status()
+    }
+    class BaseFrame {
+        <<abstract>>
+        +on_show()
+    }
+    class DashboardFrame
+    class FishingFrame
+    class ShopFrame
+    class InventoryFrame
+
+    FishingApp o-- BaseFrame : ถือ 4 เฟรม
+    BaseFrame <|-- DashboardFrame
+    BaseFrame <|-- FishingFrame
+    BaseFrame <|-- ShopFrame
+    BaseFrame <|-- InventoryFrame
+    DashboardFrame --> DashboardPresenter
+    FishingFrame --> FishingPresenter
+    ShopFrame --> ShopPresenter
+    InventoryFrame --> InventoryPresenter
+```
+
+`presenter.py` ตัดสินใจ ส่วน `frames.py` วาด แยกกันเพื่อให้เทสต์รันบนเครื่องที่ไม่มีจอได้
+
+---
+
+## 11. Data Model — โครงสร้างการเก็บบันทึกข้อมูล
+
+เลือกใช้ **ไฟล์ JSON** เพราะข้อมูลเป็นสถานะผู้เล่นคนเดียว ไม่มีความสัมพันธ์ระหว่างตาราง
+เขียนด้วย `ensure_ascii=False` ชื่อปลาภาษาไทยจึงอ่านออกในไฟล์
+
+### 11.1 `data/save_game.json` — สถานะผู้เล่น
+
+| ฟิลด์ | ชนิด | ค่าเริ่มต้น | ความหมาย |
+|---|---|---|---|
+| `money` | `int` | `100` | เงินคงเหลือ |
+| `bait_level` | `int` | `1` | เลเวลเหยื่อ มีผลต่อน้ำหนักและราคาปลา |
+| `rod_level` | `int` | `1` | เลเวลคันเบ็ด มีผลต่อเวลาในมินิเกม |
+| `inventory` | `list[Fish]` | `[]` | ปลาในกระเป๋า |
+
+**โครงสร้างของแต่ละรายการใน `inventory`**
+
+| ฟิลด์ | ชนิด | ค่าเริ่มต้น | ความหมาย |
+|---|---|---|---|
+| `name` | `str` | `"ปลาปริศนา"` | ชื่อปลา แก้ไขได้ด้วยการตั้งชื่อเล่น |
+| `location` | `str` | `"freshwater"` | แหล่งน้ำ — `freshwater` · `marine` · `brackish` |
+| `weight_kg` | `float` | `0.0` | น้ำหนักเป็นกิโลกรัม |
+| `price` | `int` | `0` | ราคาขาย |
+| `keep` | `bool` | `false` | ทำเครื่องหมายเก็บไว้ไม่ขาย |
+
+```json
+{
+    "money": 431,
+    "bait_level": 2,
+    "rod_level": 1,
+    "inventory": [
+        {
+            "name": "เจ้าอ้วน",
+            "location": "marine",
+            "weight_kg": 4.1,
+            "price": 123,
+            "keep": true
+        }
+    ]
+}
+```
+
+**ทุกฟิลด์มีค่า default** — `Fish.from_dict()` และ `GameState.from_dict()` ใช้ `.get()`
+ไฟล์เซฟรุ่นเก่าที่ยังไม่มีฟิลด์ `keep` จึงโหลดได้โดยไม่ crash
+
+### 11.2 `data/fish_species.json` — ข้อมูลปลาสำรอง
+
+อ่านอย่างเดียว ใช้เมื่อเชื่อมต่อ API ไม่ได้ · 90 รายการ แหล่งน้ำละ 30
+
+| ฟิลด์ | ชนิด | ความหมาย |
+|---|---|---|
+| `name` | `str` | ชื่อสามัญภาษาอังกฤษ จาก Open Fisheries |
+| `scientific_name` | `str` | ชื่อวิทยาศาสตร์ จาก WoRMS |
+| `location` | `str` | แหล่งน้ำ |
+| `family` | `str` | วงศ์ |
+| `aphia_id` | `int` | รหัสอ้างอิงใน WoRMS |
+| `description` | `str` | ข้อความเกร็ดความรู้ที่แสดงตอนจับปลาได้ |
+
+### 11.3 จังหวะการเขียนไฟล์
+
+ข้อกำหนดของสปรินต์คือข้อมูลในหน่วยความจำต้องตรงกับไฟล์ตลอดเวลา
+ระบบจึงเขียนลงไฟล์**ทันทีที่สถานะเปลี่ยน** ไม่ใช่รอตอนปิดโปรแกรม
+
+| เหตุการณ์ | ที่เรียก |
+|---|---|
+| จับปลาได้ | `FishingFrame.finish()` → `app.autosave()` |
+| ซื้อของสำเร็จ | `ShopFrame.buy()` → `app.autosave()` |
+| ขาย · เปลี่ยนชื่อ · เก็บไว้ไม่ขาย | `InventoryFrame.after_change()` → `app.autosave()` |
+| ปิดหน้าต่าง | `FishingApp.on_close()` |
+
+โหมด CLI เป็นโหมดสำรองที่มีเฉพาะฟีเจอร์ของ Sprint 1-2 และเรียก `SaveManager.save()`
+ที่จุดเทียบเท่ากัน 4 จุดเช่นกัน — จับปลาได้ · อัปเกรดอุปกรณ์ · ขายทั้งกระเป๋า · ออกจากเกม
+ส่วนการตั้งชื่อเล่นและการเก็บปลาไว้ไม่ขายมีเฉพาะในโหมด GUI
+
+---
+
+## 12. ประวัติการ Refactor
+
+บันทึกเฉพาะการรื้อโครงสร้างที่มีผลต่อสถาปัตยกรรม รายละเอียดรายเวอร์ชันอยู่ใน
+[`CHANGELOG.md`](CHANGELOG.md)
+
+| # | สปรินต์ | ก่อน Refactor | หลัง Refactor | เหตุผล |
+|---|---|---|---|---|
+| R1 | 1 | คลาสเดียว `FishingGame` 415 บรรทัด รวม `print` · `input` · คำนวณ · ไฟล์ | แยกเป็น 6 ชั้น | เขียน unit test ไม่ได้เลยเพราะทุกอย่างผูกกับหน้าจอ |
+| R2 | 1 | `.isdigit()` ก่อน `int()` | `.isdecimal()` | `.isdigit()` รับตัวยก `"²"` ซึ่ง `int()` แปลงไม่ได้ ทำให้โปรแกรมพัง |
+| R3 | 2 | `QTEMinigame` เรียก `time.monotonic()` ตรงๆ | ฉีด `clock` เข้ามาทาง constructor | เทสต์เรื่องหมดเวลาต้อง `sleep()` รอจริงหลายวินาที |
+| R4 | 2 | `except Exception: pass` ครอบการเรียก API | ดัก error 4 ชนิดเจาะจง + เก็บไว้ใน `last_error` | ความผิดพลาดถูกกลืนหมด ไม่มีใครรู้ว่า API พังมาตลอด |
+| R5 | 2 | `self.inventory.sort()` | `sorted()` คืนลิสต์ใหม่ | การเรียงเพื่อดูผลไปเปลี่ยนลำดับจริงและกระทบไฟล์เซฟ |
+| R6 | 2 | `FishAPI` ยิง HTTP เอง | แยกเป็น `WormsAPI` · `OpenFisheriesAPI` แล้วให้ `FishAPI` ประสาน | หนึ่ง API ต่อหนึ่งคลาส ทดสอบแยกกันได้ |
+| R7 | 3 | `frames.py` จะตัดสินใจเองว่าปุ่มไหนกดได้ | ย้ายการตัดสินใจไปไว้ใน `presenter.py` | เครื่อง CI ไม่มีจอ ถ้าเทสต์ต้องสร้าง `tk.Tk()` จะพังทันที |
+| R8 | 3 | `FishingApp` ตั้ง property ชื่อ `state` | เปลี่ยนเป็น `game` | ชื่อไปทับเมธอด `tk.Tk.state()` ของไลบรารี |
+| R9 | 3 | เรียก `random_species()` ตรงๆ ตอนจับปลาได้ | เพิ่ม `SpeciesLoader` โหลดล่วงหน้าในเธรดเบื้องหลัง | หน้าต่างค้าง 34 วินาทีตอนจับปลาตัวแรก |
+| R10 | 3 | บันทึกไฟล์เฉพาะตอนปิดหน้าต่าง | `app.autosave()` ทุกครั้งที่สถานะเปลี่ยน | ปิดผิดปกติแล้วความคืบหน้าหาย ข้อมูลใน RAM ไม่ตรงกับไฟล์ |
+
+---
+
+## 13. กลยุทธ์การทดสอบ
 
 ของที่ทดสอบยากที่สุดในโปรเจกต์นี้คือเครือข่าย เวลา และหน้าจอ ทีมจึงออกแบบให้ทั้งสามอย่าง
 **แทนที่ได้จากภายนอก** ตั้งแต่ตอนเขียนโค้ด ไม่ใช่มาแก้ทีหลัง
@@ -336,21 +635,24 @@ src/cli.py                 Application Layer — การไหลของเ�
 | **การเขียนไฟล์** | ใช้ `tmp_path` ของ pytest จึงไม่แตะไฟล์เซฟจริงของผู้เล่น |
 | **หน้าจอ** | แยก `ui.py` ให้มีแต่ `print()` แล้วทดสอบที่ `validators.py` แทน ไม่ต้อง mock `input()` |
 
-**ผลลัพธ์ของกลยุทธ์นี้** — ชุดทดสอบ 135 เคสรันเสร็จใน 0.54 วินาที ไม่พึ่งเครือข่าย ไม่พึ่งเวลาจริง
+**ผลลัพธ์ของกลยุทธ์นี้** — ชุดทดสอบ 272 เคสรันเสร็จในเสี้ยววินาที ไม่พึ่งเครือข่าย ไม่พึ่งเวลาจริง ไม่เปิดหน้าต่างจริง
 และไม่พึ่งไฟล์จริง จึงรันบน GitHub Actions ได้โดยไม่ต้องตั้งค่าอะไรเพิ่ม
 และจะใช้กลยุทธ์เดียวกันนี้ต่อได้ตอนแปลงเป็น GUI ใน Sprint 3
 
 ---
 
-## 11. สรุปผลการทดสอบ
+## 14. สรุปผลการทดสอบ
 
-รายละเอียดการทดสอบแยกตามสปรินต์อยู่ใน [`reports/sprint1_report.md`](reports/sprint1_report.md)
-และ [`reports/sprint2_report.md`](reports/sprint2_report.md)
+รายละเอียดการทดสอบแยกตามสปรินต์อยู่ใน
+[`sprint1_report.md`](reports/sprint1_report.md) ·
+[`sprint2_report.md`](reports/sprint2_report.md) ·
+[`sprint3_report.md`](reports/sprint3_report.md)
+*(รายงาน Final Sprint จะเพิ่มเมื่อสปรินต์นั้นเสร็จ)*
 
 | สปรินต์ | ไฟล์ทดสอบ | จำนวนเคส | สถานะ |
 |---|---|---|---|
 | Sprint 1 | `test_validators.py` | 29 | ผ่านทั้งหมด |
-| Sprint 2 | `test_game_state.py` 24 · `test_worms_api.py` 32 · `test_fish_api.py` 16 · `test_minigame.py` 14 · `test_openfisheries_api.py` 10 · `test_save_manager.py` 10 | 106 | ผ่านทั้งหมด |
-| Sprint 3 | `test_gui_logic.py` | วางแผนไว้ | — |
+| Sprint 2 | `test_game_state.py` 38 · `test_worms_api.py` 32 · `test_fish_api.py` 16 · `test_minigame.py` 14 · `test_openfisheries_api.py` 10 · `test_save_manager.py` 10 | 106 | ผ่านทั้งหมด |
+| Sprint 3 | `test_gui_logic.py` 77 · `test_species_loader.py` 17 · เพิ่มใน `test_game_state.py` 36 · เพิ่มใน `test_validators.py` 7 | 137 | ผ่านทั้งหมด |
 | Final Sprint | `test_ai_quest.py` · `test_difficulty.py` | วางแผนไว้ | — |
-| **รวมปัจจุบัน** | **7 ไฟล์** | **135** | **135 passed · flake8 0 issues** |
+| **รวมปัจจุบัน** | **9 ไฟล์** | **272** | **272 passed · flake8 0 issues** |

@@ -20,6 +20,18 @@ class NotEnoughMoneyError(Exception):
     """เงินไม่พอสำหรับรายการที่เลือก"""
 
 
+class FishNotFoundError(ValueError):
+    """อ้างถึงปลาที่ไม่มีอยู่ในกระเป๋า
+
+    สืบทอดจาก `ValueError` เพื่อให้โค้ดเดิมที่ดัก `ValueError` ยังทำงานได้
+    แต่ผู้เรียกที่ต้องการแยกกรณีนี้ออกมาก็ดักคลาสนี้ตรงๆ ได้
+    """
+
+
+class FishProtectedError(ValueError):
+    """ปลาถูกทำเครื่องหมายเก็บไว้ ต้องยกเลิกเครื่องหมายก่อนจึงจะขายได้"""
+
+
 class GameState:
     """เงิน กระเป๋าปลา และเลเวลอุปกรณ์ของผู้เล่น"""
 
@@ -50,12 +62,84 @@ class GameState:
         self.inventory.append(fish)
         return fish
 
+    # -------------------------------------------- แก้ไขข้อมูล (Update)
+    def require_fish(self, fish):
+        """ตรวจว่าปลาตัวนี้อยู่ในกระเป๋าจริง ถ้าไม่ใช่ให้โยน FishNotFoundError
+
+        เทียบด้วยตัวตนของอ็อบเจกต์ ไม่ใช่ชื่อ ปลาชื่อซ้ำกันจึงไม่สับสน
+        """
+        if fish not in self.inventory:
+            raise FishNotFoundError(f"ไม่พบ {fish.name} ในกระเป๋า")
+        return fish
+
+    def rename_fish(self, fish, new_name):
+        """ตั้งชื่อเล่นให้ปลาที่จับได้ คืนชื่อใหม่
+
+        ชื่อถูกตรวจความถูกต้องมาแล้วจากชั้น Validation ชั้นนี้จึงตรวจแค่
+        เรื่องที่เป็นกฎของเกม คือปลาต้องมีอยู่จริงและชื่อต้องไม่ว่าง
+        """
+        self.require_fish(fish)
+        cleaned = str(new_name).strip()
+        if not cleaned:
+            raise ValueError("ชื่อปลาห้ามเว้นว่าง")
+        fish.name = cleaned
+        return fish.name
+
+    def set_keep(self, fish, keep):
+        """ทำเครื่องหมายเก็บปลาไว้ไม่ให้ขาย หรือยกเลิกเครื่องหมาย"""
+        self.require_fish(fish)
+        fish.keep = bool(keep)
+        return fish.keep
+
+    def toggle_keep(self, fish):
+        """สลับสถานะเก็บไว้ของปลาหนึ่งตัว"""
+        return self.set_keep(fish, not fish.keep)
+
+    def kept_fish(self):
+        """ปลาที่ถูกทำเครื่องหมายเก็บไว้ทั้งหมด"""
+        return [fish for fish in self.inventory if fish.keep]
+
+    # --------------------------------------------- ขายปลา (Delete)
     def sell_all(self):
-        """ขายปลาทั้งกระเป๋า คืนค่าเงินที่ได้รับ"""
-        total = sum(fish.price for fish in self.inventory)
+        """ขายปลาทั้งกระเป๋า ยกเว้นตัวที่ทำเครื่องหมายเก็บไว้
+
+        คืนค่าเงินที่ได้รับ ปลาที่เก็บไว้จะยังอยู่ในกระเป๋าเหมือนเดิม
+        """
+        sellable = [fish for fish in self.inventory if not fish.keep]
+        total = sum(fish.price for fish in sellable)
         self.money += total
-        self.inventory.clear()
+        self.inventory = [fish for fish in self.inventory if fish.keep]
         return total
+
+    def sell_fish(self, fish):
+        """ขายปลาตัวเดียว คืนค่าเงินที่ได้รับ
+
+        เทียบด้วยตัวตนของอ็อบเจกต์ ไม่ใช่ชื่อ ปลาชื่อซ้ำกันจึงขายผิดตัวไม่ได้
+        """
+        self.require_fish(fish)
+        if fish.keep:
+            raise FishProtectedError(
+                f"{fish.name} ถูกเก็บไว้ ยกเลิกเครื่องหมายก่อนจึงจะขายได้")
+        self.inventory.remove(fish)
+        self.money += fish.price
+        return fish.price
+
+    def count_species(self, name):
+        """นับว่ามีปลาชื่อนี้ในกระเป๋ากี่ตัว"""
+        return sum(1 for fish in self.inventory if fish.name == name)
+
+    def sell_species(self, name):
+        """ขายปลาทุกตัวที่ชื่อตรงกัน คืนค่า (จำนวนตัว, เงินที่ได้รับ)"""
+        if not any(fish.name == name for fish in self.inventory):
+            raise FishNotFoundError(f"ไม่พบ {name} ในกระเป๋า")
+
+        # ปลาที่ทำเครื่องหมายเก็บไว้จะไม่ถูกขายไปกับยกชนิด
+        matched = [fish for fish in self.inventory
+                   if fish.name == name and not fish.keep]
+        total = sum(fish.price for fish in matched)
+        self.inventory = [fish for fish in self.inventory if fish not in matched]
+        self.money += total
+        return len(matched), total
 
     def upgrade_bait(self):
         """อัปเกรดเหยื่อ ถ้าเงินไม่พอจะโยน NotEnoughMoneyError"""

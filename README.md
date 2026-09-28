@@ -1,5 +1,7 @@
 # 📝 Final Term Project Pitch
 
+[![CI](https://github.com/suphachaikh-creator/Final-Project_G11_Sec2_Script_Programming/actions/workflows/ci.yml/badge.svg)](https://github.com/suphachaikh-creator/Final-Project_G11_Sec2_Script_Programming/actions/workflows/ci.yml)
+
 **รายวิชา:** CP352301 Script Programming · ภาคปลาย 2569
 **กลุ่ม:** Group 7 Section 2
 
@@ -171,8 +173,10 @@ python tools/seed_fish_data.py --limit 30    # เก็บแหล่งน้
 
 **File-based (JSON)**
 
-**รายละเอียด:** บันทึกสถานะของผู้เล่นลงไฟล์ `save_game.json` โดยเซฟอัตโนมัติทุกครั้งที่จับปลาได้
-หรือทำรายการในร้านค้า ผู้เล่นไม่ต้องกดเซฟเอง
+**รายละเอียด:** บันทึกสถานะของผู้เล่นลงไฟล์ `save_game.json` โดยเซฟอัตโนมัติ
+**ทุกครั้งที่สถานะเปลี่ยน** — จับปลาได้ · ซื้อของ · ขายปลา · ตั้งชื่อเล่น ·
+ทำเครื่องหมายเก็บไว้ และตอนปิดหน้าต่าง ผู้เล่นไม่ต้องกดเซฟเอง
+ข้อมูลในหน่วยความจำจึงตรงกับไฟล์ตลอดเวลา ปิดโปรแกรมผิดปกติก็ไม่เสียความคืบหน้า
 
 **เหตุผลที่เลือก JSON แทนฐานข้อมูล**
 
@@ -194,7 +198,8 @@ python tools/seed_fish_data.py --limit 30    # เก็บแหล่งน้
             "name": "Nile tilapia",
             "location": "freshwater",
             "weight_kg": 2.4,
-            "price": 180
+            "price": 180,
+            "keep": false
         }
     ]
 }
@@ -261,18 +266,52 @@ python tools/seed_fish_data.py --limit 30    # เก็บแหล่งน้
 
 ## 8. Roles & Responsibilities
 
-ทีมมีสมาชิก 4 คน แบ่งบทบาทตามที่รายวิชากำหนด โดยบทบาท Planner และ Debugger/QA
-**หมุนเวียนครบทั้งสี่คนใน 4 สปรินต์** ดูว่าใครรับบทไหนในสปรินต์ใดได้ที่ [`PLAN.md`](PLAN.md)
-ตารางด้านล่างคือความถนัดหลักและไฟล์ที่แต่ละคนดูแลตลอดโปรเจกต์
+### 👥 รายชื่อสมาชิกในกลุ่มและบทบาทหน้าที่ (Team Members)
 
-| บทบาท | ผู้รับผิดชอบ | หน้าที่ |
-|---|---|---|
-| **Planner** | นายศุภชัย คนเพียร 663380576-0 | เขียนสเปกและ Definition of Done ใน `PLAN.md` กำหนดขอบเขตของแต่ละสปรินต์ก่อนเริ่มเขียนโค้ด |
-| **Debugger / QA** | นายยศพล ถิรพงศชาติ 663380568-9 | ออกแบบชุดทดสอบ ทดสอบกรณีขอบเขต ตรวจมาตรฐาน PEP 8 และดูแล CI Pipeline |
-| **Coder** | นายภาวัต วงศ์มาลาสิทธิ์ | พัฒนาชั้นตรรกะของเกม — `game_state.py` · `fish.py` · `minigame.py` |
-| **Coder** | นายธนภัทร สมบูรณ์ | พัฒนาชั้นเชื่อมต่อและบันทึกข้อมูล — `worms_api.py` · `openfisheries_api.py` · `fish_api.py` · `seed_fish_data.py` · `save_manager.py` |
+1. **นายศุภชัย คนเพียร**
+   **รหัสนักศึกษา:** 663380576-0 
+2. **นายยศพล ถิรพงศชาติ**
+   **รหัสนักศึกษา:** 663380568-9 
+3. **นายภาวัต วงศ์มาลาสิทธิ์**
+   **รหัสนักศึกษา:** 663380636-8 
+4. **นายธนภัทร สมบูรณ์**
+   **รหัสนักศึกษา:** 663380347-5 
 
-**การเทียบกับบทบาทมาตรฐานของรายวิชา**
+---
+
+### 🔄 สมาชิกในทีมและการหมุนเวียนบทบาท (Role Rotation Matrix)
+
+เพื่อให้สมาชิกทุกคนในทีมได้ฝึกฝนทั้ง 3 บทบาทหลัก (Planner · Coder / Dev ·
+Debugger / QA & DevOps) ครบทุกคน 100%
+
+| สมาชิก | Sprint 1 : Front-End | Sprint 2 : Back-End | Sprint 3 : Full-Stack | Final Sprint : DevOps & AI |
+|---|---|---|---|---|
+| **นายศุภชัย คนเพียร** | Planner | Debugger | Coder | Coder |
+| **นายยศพล ถิรพงศชาติ** | Debugger | Coder | Coder | Planner |
+| **นายภาวัต วงศ์มาลาสิทธิ์** | Coder | Coder | Planner | Debugger |
+| **นายธนภัทร สมบูรณ์** | Coder | Planner | Debugger | Coder |
+
+**ทุกคนได้ครบทั้ง 3 บทบาท** — บทบาท Planner และ Debugger / QA หมุนครบทั้งสี่คนพอดีใน
+4 สปรินต์ ส่วนรอบที่ไม่ได้รับสองบทบาทนี้จะทำหน้าที่ Coder
+รายละเอียดว่าแต่ละคนทำอะไรในสปรินต์ไหนอยู่ในหัวข้อ "หน้าที่และผลงานของแต่ละคน"
+ของรายงานแต่ละฉบับใน [`reports/`](reports/)
+
+---
+
+### 🧰 ไฟล์ที่แต่ละคนดูแลในแต่ละสปรินต์
+
+ตารางนี้ตรงกับหัวข้อ "หน้าที่และผลงานของแต่ละคน" ในรายงานทั้งสามฉบับ
+
+| สมาชิก | Sprint 1 | Sprint 2 | Sprint 3 |
+|---|---|---|---|
+| **นายศุภชัย คนเพียร** | `PLAN.md` · `README.md` | `tests/` · `.github/workflows/ci.yml` | `src/gui/app.py` |
+| **นายยศพล ถิรพงศชาติ** | `tests/` · `.flake8` · `.github/workflows/ci.yml` | `src/worms_api.py` · `src/openfisheries_api.py` · `src/fish_api.py` · `src/save_manager.py` | `src/gui/frames.py` |
+| **นายภาวัต วงศ์มาลาสิทธิ์** | `src/ui.py` · `src/cli.py` · `main.py` | `src/fish.py` · `src/game_state.py` · `src/minigame.py` | `PLAN.md` · ผังหน้าจอ 4 Frame |
+| **นายธนภัทร สมบูรณ์** | `src/validators.py` | `PLAN.md` · `tools/seed_fish_data.py` | `tests/test_gui_logic.py` |
+
+---
+
+### 📋 การเทียบกับบทบาทมาตรฐานของรายวิชา
 
 | บทบาทตามข้อกำหนด | ผู้รับผิดชอบหลัก |
 |---|---|
@@ -289,7 +328,9 @@ python tools/seed_fish_data.py --limit 30    # เก็บแหล่งน้
 3. **คำนวณน้ำหนักและราคาปลา** — สุ่มน้ำหนักตามชนิดปลา แล้วคิดราคาจากน้ำหนักคูณกับเลเวลเหยื่อ พร้อมแสดงชื่อวิทยาศาสตร์ของปลาที่จับได้
 4. **ร้านค้าอัปเกรดอุปกรณ์** — นำเงินที่ได้ไปเพิ่มเลเวลเหยื่อ (จับปลาใหญ่ขึ้น) หรือคันเบ็ด (เพิ่มเวลาสู้ปลา) ปุ่มซื้อจะถูกปิดเองเมื่อเงินไม่พอ
 5. **คลังสินค้า ค้นหา กรอง เรียงลำดับ** — ตาราง `ttk.Treeview` พร้อมช่องค้นหาชื่อปลา ตัวกรองแหล่งน้ำ และคลิกหัวคอลัมน์เพื่อเรียงตามน้ำหนักหรือราคา
-6. **บันทึกและเล่นต่ออัตโนมัติ** — เก็บเงิน กระเป๋าปลา และเลเวลอุปกรณ์ลงไฟล์ JSON ทุกครั้งที่สถานะเปลี่ยน และโหลดคืนเมื่อเปิดโปรแกรมใหม่
+6. **ขายปลาได้ 3 แบบ** — ทีละตัว · ยกชนิด (เช่น ขาย Carp ทั้ง 3 ตัวรวดเดียว) · ทั้งกระเป๋า คลิกแถวในตารางเพื่อเลือกปลา ปุ่มขายยกชนิดบอกจำนวนให้เห็นก่อนกด
+7. **ตั้งชื่อเล่นให้ปลาและเก็บไว้ไม่ขาย** — เปลี่ยนชื่อปลาที่จับได้ในตาราง และทำเครื่องหมายดาวเพื่อกันไม่ให้ถูกขายทั้งจากการขายทีละตัว ยกชนิด และขายทั้งกระเป๋า
+8. **บันทึกและเล่นต่ออัตโนมัติ** — เก็บเงิน กระเป๋าปลา และเลเวลอุปกรณ์ลงไฟล์ JSON ทุกครั้งที่สถานะเปลี่ยน และโหลดคืนเมื่อเปิดโปรแกรมใหม่
 
 ---
 
@@ -309,16 +350,18 @@ python tools/seed_fish_data.py --limit 30    # เก็บแหล่งน้
 
 | # | เกณฑ์ | สปรินต์ | สถานะ |
 |---|---|---|---|
-| 1 | Code follows PEP 8 (linted & clean) | Sprint 1 | **เสร็จแล้ว** — `flake8 .` 0 issues |
-| 2 | Tests run (pytest) | Sprint 1 | **เสร็จแล้ว** — 135 เคส ผ่านทั้งหมด |
-| 3 | CI/CD pipeline จริงบน GitHub Actions | Sprint 1 | **เสร็จแล้ว** |
-| 4 | README includes setup + usage instructions | Sprint 1 | **เสร็จแล้ว** |
-| 5 | Team roles documented | Sprint 1 | **เสร็จแล้ว** |
-| 6 | API works (GET/POST, error handling) | Sprint 2 | **เสร็จแล้ว** *(GET เท่านั้น — ดูหมายเหตุ)* |
-| 7 | Data persisted correctly (JSON file) | Sprint 2 | **เสร็จแล้ว** |
-| 8 | Search / Filter / Sort ทำงานได้ | Sprint 2–3 | ตรรกะเสร็จแล้ว · ส่วนติดต่อผู้ใช้อยู่ใน Sprint 3 |
-| 9 | UML Class Diagram | Final Sprint | ยังไม่ถึงกำหนด |
-| 10 | สไลด์นำเสนอ 5 ส่วน | Final Sprint | ยังไม่ถึงกำหนด |
+| 1 | Code follows PEP 8 (linted & clean) | Sprint 1 | เสร็จแล้ว |
+| 2 | Tests run (pytest) | Sprint 1 | เสร็จแล้ว — 272 เคส |
+| 3 | CI/CD pipeline จริงบน GitHub Actions | Sprint 1 | เสร็จแล้ว |
+| 4 | README includes setup + usage instructions | Sprint 1 | เสร็จแล้ว |
+| 5 | Team roles documented | Sprint 1 | เสร็จแล้ว |
+| 6 | API works (GET/POST, error handling) | Sprint 2 | เสร็จแล้ว *(GET เท่านั้น — ดูหมายเหตุ)* |
+| 7 | Data persisted correctly (JSON file) | Sprint 2 | เสร็จแล้ว |
+| 8 | Search / Filter / Sort ทำงานได้ | Sprint 2–3 | เสร็จแล้ว |
+| 9 | UML Class Diagram | Sprint 3 | เสร็จแล้ว — [`PLAN.md` หัวข้อ 10](PLAN.md#10-uml-class-diagram) |
+| 10 | LICENSE · CONTRIBUTING.md | Final Sprint | ยังไม่ถึงกำหนด |
+| 11 | Test coverage ใน CI | Final Sprint | ยังไม่ถึงกำหนด |
+| 12 | สไลด์นำเสนอ 5 ส่วน | Final Sprint | ยังไม่ถึงกำหนด |
 
 > **หมายเหตุข้อ 6** — ทั้ง WoRMS และ Open Fisheries เป็น public API **แบบอ่านอย่างเดียว**
 > โครงการจึงใช้ `GET` เท่านั้น ซึ่งตรงกับตัวอย่างที่อาจารย์ให้มาในไฟล์เดียวกัน
@@ -332,10 +375,10 @@ python tools/seed_fish_data.py --limit 30    # เก็บแหล่งน้
 
 | สปรินต์ | สัปดาห์ | ขอบเขต |
 |---|---|---|
-| **Sprint 1** | 13 | Front-End App Dev — วางหน้าจอ GUI ทั้งสี่หน้า (Dashboard, Fishing, Shop, Inventory) และการตรวจสอบอินพุต (ใช้ข้อมูลจำลอง) |
+| **Sprint 1** | 12 | Front-End App Dev — วางหน้าจอ GUI ทั้งสี่หน้า (Dashboard, Fishing, Shop, Inventory) และการตรวจสอบอินพุต (ใช้ข้อมูลจำลอง) |
 | **Sprint 2** | 13 | Back-End App Dev — มินิเกม QTE, การคำนวณน้ำหนักและราคา, เชื่อมสอง Public API และไฟล์เซฟ |
-| **Sprint 3** | 14 | Full-Stack — รวมระบบ, ค้นหา/กรอง/เรียงลำดับ และการรับมือ Edge Cases |
-| **Sprint Final** | 15 | DevOps, CI/CD และการเชื่อมต่อฟีเจอร์ AI |
+| **Sprint 3** | 14 | Full-Stack App Dev — แปลงเป็น Desktop GUI (Tkinter) 4 หน้าจอ พร้อมตารางค้นหา กรอง เรียงลำดับ · ขายปลา 3 แบบ · แก้ไขข้อมูลครบ CRUD · บันทึกทันทีที่สถานะเปลี่ยน |
+| **Final Sprint** | 15 | *(วางแผนไว้)* DevOps, CI/CD & AI — เควสต์ประจำวันด้วย AI, ปรับความยากอัตโนมัติ, coverage ใน CI, UML |
 
 ---
 
@@ -350,7 +393,8 @@ pip install -r requirements.txt
 ### เล่นเกม
 
 ```bash
-python main.py
+python main.py                  # โหมด Desktop GUI
+python main.py --cli            # โหมด Terminal
 ```
 
 เกมจะดึงชนิดปลาจาก WoRMS API ให้อัตโนมัติเมื่อเปิดเกม ถ้าเชื่อมต่อไม่ได้
@@ -372,18 +416,25 @@ flake8 .
 
 ```
 .
-├── main.py                     จุดเริ่มโปรแกรม
-├── requirements.txt
-├── PLAN.md                     แผนงาน · Readiness Check · Prototype Sprint · DoD · บทบาทในทีม
+├── main.py                     จุดเริ่มโปรแกรม — เปิด GUI เป็นค่าเริ่มต้น `--cli` เปิดโหมด Terminal
+├── requirements.txt            requests · pytest · flake8
+├── .flake8                     ตั้งค่าตรวจมาตรฐานโค้ด (max-line-length 100)
+├── .gitignore                  ไม่เก็บ venv/ · __pycache__/ · ไฟล์เซฟของผู้เล่น
+├── PLAN.md                     แผนงาน · Readiness Check · DoD · UML · Data Model · ประวัติ Refactor
 ├── CHANGELOG.md                บันทึกการเปลี่ยนแปลงรายสปรินต์
 ├── LEARNINGLOG.md              บันทึกการเรียนรู้และ Prompt ที่ใช้ร่วมกับ AI
 ├── README.md                   เอกสารฉบับนี้ (Project Pitch + วิธีใช้งาน)
+├── .github/
+│   └── workflows/ci.yml        CI — รัน flake8 และ pytest ทุก push และ pull request
 ├── data/
 │   ├── fish_species.json       ชนิดปลาสำรอง 90 ชนิด (แหล่งน้ำละ 30)
 │   └── save_game.json          ไฟล์เซฟ (สร้างอัตโนมัติ ไม่เก็บเข้า git)
 ├── reports/
-│   ├── sprint1_report.md       รายงาน Sprint 1 (Front-End) + สรุปผลทดสอบ
-│   └── sprint2_report.md       รายงาน Sprint 2 (Back-End) + สรุปผลทดสอบ
+│   ├── sprint1_report.md       รายงาน Sprint 1 (Front-End) + ตาราง QA
+│   ├── sprint2_report.md       รายงาน Sprint 2 (Back-End) + ตาราง QA
+│   └── sprint3_report.md       รายงาน Sprint 3 (Full-Stack GUI) + ตาราง QA
+├── tools/
+│   └── seed_fish_data.py       สคริปต์ดึงชนิดปลาจาก API มาสร้างไฟล์ข้อมูลสำรอง
 ├── src/
 │   ├── ui.py                   Presentation — print เท่านั้น
 │   ├── validators.py           Validation   — ไม่มี input()/print()
@@ -391,10 +442,26 @@ flake8 .
 │   ├── fish.py                 Domain       — ปลาหนึ่งตัว + กฎน้ำหนักและราคา
 │   ├── game_state.py           Domain       — เงิน กระเป๋า เลเวล และกฎการซื้อขาย
 │   ├── minigame.py             Domain       — มินิเกม QTE
+│   ├── gui/
+│   │   ├── presenter.py        Application  — ตรรกะหน้าจอ (ไม่ import tkinter)
+│   │   ├── species_loader.py   Application  — โหลดข้อมูลปลาเบื้องหลัง
+│   │   ├── theme.py            Presentation — ชุดสีและสไตล์ ttk
+│   │   ├── widgets.py          Presentation — การ์ด · แถบเวลา · คีย์แคป
+│   │   ├── app.py              Presentation — FishingApp (tk.Tk) + ตัวจับเวลา + autosave
+│   │   └── frames.py           Presentation — 4 หน้าจอ
 │   ├── worms_api.py            Integration  — WoRMS (แหล่งน้ำ + อนุกรมวิธาน)
 │   ├── openfisheries_api.py    Integration  — Open Fisheries (ชื่อสามัญ)
 │   ├── fish_api.py             Integration  — ประสานสอง API + แคช + ระบบสำรอง
 │   └── save_manager.py         Data Access  — อ่าน/เขียนไฟล์เซฟ
-└── tests/                      ชุดทดสอบ 135 เคส
+└── tests/                      ชุดทดสอบ 272 เคส · 9 ไฟล์
+    ├── test_validators.py          36   ตรวจอินพุต · ชื่อปลา
+    ├── test_game_state.py          60   กฎการซื้อขาย · แก้ไขข้อมูล · ประสิทธิภาพ
+    ├── test_fish_api.py            16   การประสานสอง API + ระบบสำรอง
+    ├── test_worms_api.py           32   WoRMS · การกรองแหล่งน้ำ
+    ├── test_openfisheries_api.py   10   Open Fisheries · การดักข้อผิดพลาด
+    ├── test_minigame.py            14   มินิเกม QTE · นาฬิกาจำลอง
+    ├── test_save_manager.py        10   บันทึก · โหลด · ไฟล์เสียหาย
+    ├── test_gui_logic.py           77   ตรรกะหน้าจอ (ไม่สร้าง tk.Tk())
+    └── test_species_loader.py      17   การโหลดข้อมูลเบื้องหลัง
 ```
 

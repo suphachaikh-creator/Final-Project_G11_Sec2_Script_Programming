@@ -57,6 +57,22 @@ def validate_qte_key(raw_input, expected_key):
     return text == normalize_command(expected_key)
 
 
+def validate_fish_name(raw_input, max_length=24):
+    """ตรวจชื่อเล่นที่ผู้เล่นตั้งให้ปลา คืนชื่อที่ตัดช่องว่างแล้ว
+
+    ห้ามเว้นว่าง ห้ามยาวเกินกำหนด และห้ามมีอักขระขึ้นบรรทัดใหม่
+    เพราะชื่อจะถูกเขียนลงไฟล์ JSON และแสดงในตารางบรรทัดเดียว
+    """
+    cleaned = str(raw_input).strip()
+    if not cleaned:
+        raise ValueError("ชื่อปลาห้ามเว้นว่าง")
+    if len(cleaned) > max_length:
+        raise ValueError(f"ชื่อปลายาวเกินไป ใช้ได้ไม่เกิน {max_length} ตัวอักษร")
+    if any(ch in cleaned for ch in ("\n", "\r", "\t")):
+        raise ValueError("ชื่อปลาห้ามมีการขึ้นบรรทัดใหม่")
+    return cleaned
+
+
 def validate_search_keyword(raw_input, max_length=30):
     """ตรวจคำค้นของหน้าคลังสินค้า — ห้ามว่าง และยาวไม่เกินที่กำหนด"""
     keyword = str(raw_input).strip()
