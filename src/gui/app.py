@@ -85,7 +85,7 @@ class FishingApp(tk.Tk):
                   foreground=COLORS["text"],
                   font=(self.fonts["body"][0], 12, "bold")).pack(anchor="w",
                                                                  pady=(6, 0))
-        ttk.Label(brand, text="CP352301 · Group 11", background=COLORS["sidebar"],
+        ttk.Label(brand, text="CP352301 · Group 7", background=COLORS["sidebar"],
                   foreground=COLORS["muted"],
                   font=self.fonts["small"]).pack(anchor="w")
 
