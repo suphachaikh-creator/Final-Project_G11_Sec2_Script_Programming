@@ -35,11 +35,13 @@ class FishProtectedError(ValueError):
 class GameState:
     """เงิน กระเป๋าปลา และเลเวลอุปกรณ์ของผู้เล่น"""
 
-    def __init__(self, money=START_MONEY, inventory=None, bait_level=1, rod_level=1):
+    def __init__(self, money=START_MONEY, inventory=None, bait_level=1,
+                 rod_level=1, quest_data=None):
         self.money = money
         self.inventory = list(inventory or [])
         self.bait_level = bait_level
         self.rod_level = rod_level
+        self.quest_data = dict(quest_data or {})
 
     # ------------------------------------------------------------------ ราคา
     @property
@@ -196,6 +198,7 @@ class GameState:
             "bait_level": self.bait_level,
             "rod_level": self.rod_level,
             "inventory": [fish.to_dict() for fish in self.inventory],
+            "quest_data": self.quest_data,
         }
 
     @classmethod
@@ -206,4 +209,5 @@ class GameState:
             inventory=[Fish.from_dict(item) for item in data.get("inventory", [])],
             bait_level=data.get("bait_level", 1),
             rod_level=data.get("rod_level", 1),
+            quest_data=data.get("quest_data", {}),
         )
