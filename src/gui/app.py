@@ -11,6 +11,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+from src.ai_fishing import AIFishingAgent
 from src.gui.presenter import TkClock
 from src.gui.species_loader import SpeciesLoader
 from src.gui.theme import COLORS, apply_theme
@@ -23,6 +24,7 @@ MIN_SIZE = (900, 640)
 NAV_ITEMS = (
     ("dashboard", "🏠   หน้าแรก"),
     ("fishing", "🎣   ออกไปตกปลา"),
+    ("quests", "📜   เควสต์ตกปลา"),
     ("shop", "🛒   ร้านค้า"),
     ("inventory", "🎒   คลังสินค้า"),
 )
@@ -40,6 +42,7 @@ class FishingApp(tk.Tk):
 
         self.saver = saver or SaveManager()
         self.state_data = state or self.saver.load_or_new()
+        self.ai_agent = AIFishingAgent(self.state_data)
         # ห่อ API ไว้ด้วยตัวโหลดเบื้องหลัง ไม่งั้นการจับปลาครั้งแรกจะทำให้
         # หน้าต่างค้างราว 34 วินาทีระหว่างรอ WoRMS กับ Open Fisheries
         self.api = api or SpeciesLoader()
@@ -52,12 +55,13 @@ class FishingApp(tk.Tk):
         content = self._build_shell()
 
         # import ที่นี่เพื่อเลี่ยงการ import วนระหว่างสองไฟล์
-        from src.gui.frames import (DashboardFrame, FishingFrame,
-                                    InventoryFrame, ShopFrame)
+        from src.gui.pages import (DashboardFrame, FishingFrame,
+                                   InventoryFrame, QuestFrame, ShopFrame)
 
         self.frames = {}
         for name, frame_class in (("dashboard", DashboardFrame),
                                   ("fishing", FishingFrame),
+                                  ("quests", QuestFrame),
                                   ("shop", ShopFrame),
                                   ("inventory", InventoryFrame)):
             frame = frame_class(content, self)

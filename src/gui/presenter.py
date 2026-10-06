@@ -258,11 +258,12 @@ class FishingPresenter:
     `root.after()` ส่วนตอนทดสอบใส่นาฬิกาจำลอง จึงไม่ต้องรอเวลาจริง
     """
 
-    def __init__(self, state, api, rng=None, clock=None):
+    def __init__(self, state, api, rng=None, clock=None, ai_agent=None):
         self.state = state
         self.api = api
         self.rng = rng
         self.clock = clock
+        self.ai_agent = ai_agent
         self.location = FRESHWATER
         self.minigame = None
         self.last_result = None
@@ -315,9 +316,16 @@ class FishingPresenter:
         result = self.minigame.result()
         result["fish"] = None
         if result["success"]:
-            species = self.api.random_species(self.location, rng=self.rng)
+            if self.ai_agent is None:
+                species = self.api.random_species(self.location, rng=self.rng)
+            else:
+                species = self.ai_agent.choose_species(
+                    self.api, self.location, rng=self.rng
+                )
             result["fish"] = self.state.add_fish(
                 self._make_fish(species["name"]))
+            if self.ai_agent is not None:
+                result["quest"] = self.ai_agent.record_catch(result["fish"])
 
         self.last_result = result
         return result
