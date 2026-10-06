@@ -19,7 +19,8 @@ class FishingFrame(BaseFrame):
     def __init__(self, master, app):
         super().__init__(master, app)
         self.presenter = FishingPresenter(
-            app.game, app.api, clock=app.clock, ai_agent=app.ai_agent
+            app.game, app.api, clock=app.clock, ai_agent=app.ai_agent,
+            tuner=app.tuner, catch_log=app.catch_log,
         )
 
         # ------------------------------------------------------ เลือกแหล่งน้ำ
@@ -52,6 +53,8 @@ class FishingFrame(BaseFrame):
         info.pack(fill="x", pady=(8, 0))
         self.timer = ttk.Label(info, style="Card.TLabel")
         self.timer.pack(side="left")
+        self.difficulty = ttk.Label(info, style="Muted.TLabel")
+        self.difficulty.pack(side="right")
 
         self.message = ttk.Label(game_card, style="Success.TLabel",
                                  font=self.fonts["heading"])
@@ -88,6 +91,7 @@ class FishingFrame(BaseFrame):
         won = bool(result and result["success"])
         self.message.config(text=self.presenter.result_text(),
                             foreground=COLORS["success"] if won else COLORS["danger"])
+        self.difficulty.config(text=self.presenter.difficulty_text())
         self.keycaps.show(game.targets, game.total_targets)
         self.presenter.minigame = None
         self.start_button.config(state="normal")
@@ -99,3 +103,4 @@ class FishingFrame(BaseFrame):
         self.keycaps.clear()
         self.timer_bar.set(0)
         self.start_button.config(state="normal")
+        self.difficulty.config(text=self.presenter.difficulty_text())

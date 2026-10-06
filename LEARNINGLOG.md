@@ -16,7 +16,7 @@
 
 ## 1. Context & Educational Rationale
 
-เอกสารฉบับนี้บันทึกคำถามที่ทีมใช้ร่วมกับ AI ตลอด Sprint 1 ถึง Sprint 3 พร้อมสิ่งที่ได้เรียนรู้จริง
+เอกสารฉบับนี้บันทึกคำถามที่ทีมใช้ร่วมกับ AI ตลอดทั้ง 4 สปรินต์ พร้อมสิ่งที่ได้เรียนรู้จริง
 จุดสำคัญคือทีมไม่ได้รับคำตอบของ AI มาใช้ทันที แต่**ทดสอบก่อนทุกครั้ง** และหลายครั้ง
 การทดสอบนั้นเองที่พาไปเจอปัญหาที่ไม่มีใครถาม เช่น การค้นพบว่า `.isdigit()` ไม่ปลอดภัย
 และการค้นพบว่าโค้ดเรียก API ไม่สำเร็จมาตลอดโดยไม่มีใครรู้
@@ -591,6 +591,88 @@ Presentation · Application · Validation · Domain · Integration · Data Acces
 - **บทเรียน:** การเรียก AI ก็เป็นแค่การเรียก API อีกตัว ใช้กลยุทธ์ฉีดของปลอมแบบเดียวกับ WoRMS ได้
   และควรรันเทสต์ใหม่กับโค้ดเดิมก่อนแก้หนึ่งครั้ง ถ้าไม่มีเคสไหนแดงแปลว่าเทสต์ยังจับบั๊กไม่ได้
 
+### 🔹 Prompt 23: ปรับความยากอัตโนมัติโดยไม่บีบจนเล่นไม่ได้ *(v1.0.0)*
+
+- **Student Prompt:**
+  ```text
+  ทำระบบปรับความยากจากอัตราการกดทันย้อนหลัง แต่ต้องไม่บีบเวลาจนผู้เล่นเก่ง
+  เล่นไม่ได้เลย ควรออกแบบยังไง
+  ```
+- **AI Response Summary:**
+  ต้องมีทั้ง **พื้นและเพดาน** เสมอ และไม่ควรตัดสินจากข้อมูลน้อยเกินไป
+  ให้คืนระดับ `normal` ไว้ก่อนถ้ายังเล่นไม่ครบขั้นต่ำ และให้ดูเฉพาะรอบล่าสุด
+  เพื่อให้ระบบตามฝีมือปัจจุบัน ไม่ใช่ฝีมือตอนเพิ่งเริ่มเล่น
+  ปรับมินิเกมจากภายนอกด้วย `apply_to()` แทนการแก้ `minigame.py` ของ Sprint 2
+- **Verified Result:**
+  ```text
+  ทดสอบวนคันเบ็ดเลเวล 1-29 ทุกอัตรากดทัน — เวลาไม่เคยต่ำกว่า 4.0 วินาที
+  และความยาวโจทย์อยู่ในช่วง 6-12 ตัวเสมอ
+  เล่นจริงบนหน้าต่าง: รอบ 1 โจทย์ 7 ตัว/6.5 วิ -> รอบ 4 โจทย์ 8 ตัว/5.5 วิ
+  ```
+- **บทเรียน:** ระบบที่ปรับตัวเองได้ต้องมีกรอบเสมอ ไม่งั้นผู้เล่นที่เก่งที่สุดจะเจอเกมที่เล่นไม่ได้
+
+### 🔹 Prompt 24: งานสองฝั่งทำระบบเดียวกันซ้อนกัน *(v1.0.0)*
+
+- **Student Prompt:**
+  ```text
+  งาน Final ที่พักไว้มีระบบเควสต์ของตัวเอง แต่เพื่อนทำระบบเควสต์ด้วย Gemini
+  เสร็จไปแล้วใน Sprint 3 จะเอางาน Final เข้า repo ยังไงให้เข้ากับของเพื่อน
+  ```
+- **AI Response Summary:**
+  เทียบสองระบบทีละด้าน — ของ Sprint 3 เรียก Gemini ได้จริง มี 1–5 เควสต์ มีหน้าแยก
+  และเก็บใน `GameState` ส่วนของ Final ยังไม่มีตัวเรียกโมเดลจริงและเก็บในไฟล์แยก
+  จึงควรใช้ของ Sprint 3 ต่อ แล้วนำเข้าเฉพาะส่วนที่ไม่ซ้ำ (ระบบปรับความยาก coverage เอกสาร)
+  และเก็บประวัติความยากแบบเดียวกับ `quest_data` เพื่อให้ข้อมูลอยู่ในไฟล์เซฟเดียว
+- **Verified Result:**
+  ```text
+  ตัด ai_quest.py · session_store.py · การ์ดภารกิจหน้าแรก ออก
+  358 passed · flake8 0 issues · smoke test: เควสต์และประวัติความยากอยู่ใน save_game.json เดียวกัน
+  (ก่อนเพิ่มงาน catch_log ของธนภัทร — หลังเพิ่มเป็น 385 passed)
+  ```
+- **บทเรียน:** งานที่ยังไม่เสร็จควรอยู่ใน branch บน GitHub ให้ทุกคนเห็น
+  ถ้าพักไว้ในเครื่องคนเดียว อีกคนจะทำเรื่องเดียวกันซ้ำโดยไม่รู้ตัว
+
+### 🔹 Prompt 25: ประวัติที่ไม่หายเมื่อขายปลา *(v1.0.0)*
+
+- **Student Prompt:**
+  ```text
+  README บอกว่าระบบสะสมประวัติการจับปลาแล้วสรุปย้อนหลัง แต่ตอนนี้สถิติคิดจากกระเป๋า
+  ขายปลาแล้วข้อมูลหายไปด้วย ควรเก็บประวัติยังไงให้ไม่หายและไม่ทำให้ไฟล์เซฟใหญ่ขึ้นเรื่อยๆ
+  ```
+- **AI Response Summary:**
+  ใช้ไฟล์ **JSON Lines แบบต่อท้ายอย่างเดียว** บรรทัดละหนึ่งเหตุการณ์ เปิดไฟล์โหมด `"a"`
+  จึงไม่ต้องเขียนประวัติทั้งหมดซ้ำทุกครั้ง แยกจากไฟล์เซฟเพราะไม่มีค่าใดในไฟล์เซฟคำนวณมาจากมัน
+  ถ้าบรรทัดสุดท้ายขาดครึ่งเพราะปิดโปรแกรมระหว่างเขียน ให้ข้ามเฉพาะบรรทัดนั้น
+  และแยกการสรุปเป็นฟังก์ชันล้วนที่ไม่แตะไฟล์เพื่อให้ทดสอบได้ตรงๆ
+- **Verified Result:**
+  ```text
+  tests/test_catch_log.py 27 เคส ผ่านทั้งหมด
+  smoke test: จับปลา 4 ตัว ขายทั้งกระเป๋า (เหลือ 0) -> หน้าแรกยังขึ้น "จับได้ทั้งหมด 4 ตัว"
+  ```
+- **บทเรียน:** เลือกที่เก็บตามลักษณะของข้อมูล — ข้อมูลที่ต้องสอดคล้องกันอยู่ไฟล์เดียว
+  ส่วนบันทึกเหตุการณ์ที่โตไม่หยุดแยกเป็นไฟล์ต่อท้าย
+
+### 🔹 Prompt 26: ทำให้ผู้เล่นได้เวอร์ชันล่าสุดเสมอ (CD) *(v1.0.0)*
+
+- **Student Prompt:**
+  ```text
+  อาจารย์อยากให้ deploy ให้คนที่มาเล่นได้เกมเวอร์ชันปัจจุบันอยู่ตลอด แบบนี้คืออะไร ต้องทำยังไง
+  ```
+- **AI Response Summary:**
+  เอกสารรายวิชากำหนด CI/CD pipeline และเกณฑ์ "พร้อมนำไปใช้งานจริง" ทีมมี CI แล้ว
+  ที่ขาดคือ **CD** — ให้ GitHub Actions สร้าง Release เองเมื่อ push tag หลัง lint + test ผ่าน
+  และให้เกมถาม GitHub Releases ตอนเปิดเพื่อแจ้งว่ามีเวอร์ชันใหม่ ไม่ควรทำตัวอัปเดตที่ดาวน์โหลด
+  แล้วเขียนทับเกมเอง เพราะซับซ้อนและเสี่ยงเกินขอบเขต ต้องมีเลขเวอร์ชันที่เดียวในโค้ด
+  และตรวจให้ตรงกับ tag และ CHANGELOG ก่อนปล่อยทุกครั้ง
+- **Verified Result:**
+  ```text
+  release.py check v1.0.1 ตอน __version__ ยังเป็น 1.0.0 -> ✘ 2 ข้อ · exit 1 (หยุดก่อนสร้าง release)
+  smoke test: GitHub ปลอมตอบ v1.1.0 -> หน้าแรกขึ้น "มีเวอร์ชันใหม่ v1.1.0" พร้อมปุ่มดาวน์โหลด
+  GitHub จริง (ยังไม่มี release) -> "ยังไม่มี release บน GitHub" เกมไม่ crash
+  ```
+- **บทเรียน:** "deploy" สำหรับเกม desktop ไม่ได้แปลว่าต้องอัปเดตเครื่องผู้เล่นเอง
+  แค่ทำให้เวอร์ชันใหม่ไปถึงผู้ใช้ได้อัตโนมัติและบอกให้รู้ว่ามี ก็ครบตามความหมายของ Continuous Delivery
+
 ---
 
 ## 3. Key Learning Outcomes
@@ -612,6 +694,9 @@ Presentation · Application · Validation · Domain · Integration · Data Acces
 - **ให้ AI ตัดสินใจเฉพาะส่วนที่ปลอดภัย** *(v0.7.0)* — Gemini เลือกประเภทและตั้งชื่อเควสต์
   แต่ตัวเลขทุกตัวเกมคำนวณเอง และทุกเส้นทางที่ AI ล้มเหลวมีโหมดสำรองในเครื่อง
 - **push ผ่านไม่ได้แปลว่า CI ผ่าน** *(v0.7.0)* — ✕ บน GitHub คือผลตรวจของ Actions ไม่ใช่การอัปโหลด
+- **coverage ต้องอ่านแยกชั้น** *(v1.0.0)* — รวมทั้งโปรเจกต์ 52% แต่ชั้นตรรกะ 95%
+  ตัวเลขรวมต่ำเพราะชั้นหน้าจอที่ทดสอบบน CI ไม่ได้ ไม่ได้แปลว่าตรรกะไม่ถูกทดสอบ
+- **ข้อมูลที่ต้องสอดคล้องกันควรอยู่ในไฟล์เดียว** *(v1.0.0)* — แยกไฟล์แล้วต้องคอยบังคับให้เขียนพร้อมกัน
 
 ---
 
@@ -674,14 +759,14 @@ Presentation · Application · Validation · Domain · Integration · Data Acces
 | Presentation | [src/ui.py](./src/ui.py) |
 | Application | [src/cli.py](./src/cli.py) · [src/minigame.py](./src/minigame.py) |
 | Validation | [src/validators.py](./src/validators.py) |
-| Domain | [src/game_state.py](./src/game_state.py) · [src/fish.py](./src/fish.py) · [src/ai_fishing.py](./src/ai_fishing.py) |
-| Integration | [src/worms_api.py](./src/worms_api.py) · [src/openfisheries_api.py](./src/openfisheries_api.py) · [src/fish_api.py](./src/fish_api.py) |
-| Data Access | [src/save_manager.py](./src/save_manager.py) |
+| Domain | [src/game_state.py](./src/game_state.py) · [src/fish.py](./src/fish.py) · [src/ai_fishing.py](./src/ai_fishing.py) · [src/difficulty.py](./src/difficulty.py) |
+| Integration | [src/worms_api.py](./src/worms_api.py) · [src/openfisheries_api.py](./src/openfisheries_api.py) · [src/fish_api.py](./src/fish_api.py) · [src/update_checker.py](./src/update_checker.py) |
+| Data Access | [src/save_manager.py](./src/save_manager.py) · [src/catch_log.py](./src/catch_log.py) |
 | เครื่องมือ | [tools/seed_fish_data.py](./tools/seed_fish_data.py) |
 | Presentation (GUI) | [src/gui/app.py](./src/gui/app.py) · [src/gui/pages/](./src/gui/pages/) · [src/gui/theme.py](./src/gui/theme.py) · [src/gui/widgets.py](./src/gui/widgets.py) |
 | Application (GUI) | [src/gui/presenter.py](./src/gui/presenter.py) · [src/gui/species_loader.py](./src/gui/species_loader.py) |
-| ชุดทดสอบ 316 เคส | [tests/](./tests/) |
-| CI Pipeline | [.github/workflows/ci.yml](./.github/workflows/ci.yml) |
-| แผนงาน | [PLAN.md](./PLAN.md) |
+| ชุดทดสอบ 437 เคส | [tests/](./tests/) |
+| CI / CD Pipeline | [.github/workflows/ci.yml](./.github/workflows/ci.yml) · [.github/workflows/release.yml](./.github/workflows/release.yml) · [tools/release.py](./tools/release.py) |
+| แผนงาน | [PLAN.md](./PLAN.md) · [UML](./docs/uml_class_diagram.md) · [CONTRIBUTING.md](./CONTRIBUTING.md) |
 | บันทึกเวอร์ชัน | [CHANGELOG.md](./CHANGELOG.md) |
-| รายงานสปรินต์ | [reports/sprint1_report.md](./reports/sprint1_report.md) · [reports/sprint2_report.md](./reports/sprint2_report.md) · [reports/sprint3_report.md](./reports/sprint3_report.md) |
+| รายงานสปรินต์ | [reports/sprint1_report.md](./reports/sprint1_report.md) · [reports/sprint2_report.md](./reports/sprint2_report.md) · [reports/sprint3_report.md](./reports/sprint3_report.md) · [reports/final_report.md](./reports/final_report.md) |

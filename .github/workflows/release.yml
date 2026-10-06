@@ -1,0 +1,61 @@
+name: Release
+
+# CD — push tag เช่น v1.0.1 แล้ว GitHub จะตรวจโค้ด แพ็กเกม และสร้างหน้า Release ให้เอง
+# ผู้เล่นดาวน์โหลดเวอร์ชันล่าสุดได้จากหน้า Releases และเกมจะแจ้งเตือนเมื่อมีเวอร์ชันใหม่
+#
+#   git tag v1.0.1
+#   git push origin v1.0.1
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  quality:
+    name: Lint & Test
+    uses: ./.github/workflows/ci.yml
+
+  release:
+    name: Build & Publish Release
+    needs: quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check tag, __version__ and CHANGELOG match
+        run: python tools/release.py check "$GITHUB_REF_NAME"
+
+      - name: Build game package
+        run: |
+          mkdir -p dist
+          git archive --format=zip \
+            --prefix="HOW_DO_YOU_FISH-$GITHUB_REF_NAME/" \
+            -o "dist/HOW_DO_YOU_FISH-$GITHUB_REF_NAME.zip" HEAD
+
+      - name: Release notes from CHANGELOG
+        run: python tools/release.py notes "$GITHUB_REF_NAME" > release_notes.md
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/*.zip \
+            --title "HOW DO YOU FISH $GITHUB_REF_NAME" \
+            --notes-file release_notes.md \
+            --verify-tag

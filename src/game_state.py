@@ -36,13 +36,16 @@ class GameState:
     """เงิน กระเป๋าปลา และเลเวลอุปกรณ์ของผู้เล่น"""
 
     def __init__(self, money=START_MONEY, inventory=None, bait_level=1,
-                 rod_level=1, quest_data=None):
+                 rod_level=1, quest_data=None, difficulty_data=None):
         self.money = money
         self.inventory = list(inventory or [])
         self.bait_level = bait_level
         self.rod_level = rod_level
         # ไฟล์เซฟเสียอาจเก็บค่าชนิดอื่นไว้ — ใช้ dict ว่างแทนเพื่อไม่ให้ crash
         self.quest_data = dict(quest_data) if isinstance(quest_data, dict) else {}
+        # ประวัติการเล่นของตัวปรับความยาก (Final Sprint) เก็บแบบเดียวกับ quest_data
+        self.difficulty_data = (dict(difficulty_data)
+                                if isinstance(difficulty_data, dict) else {})
 
     # ------------------------------------------------------------------ ราคา
     @property
@@ -200,6 +203,7 @@ class GameState:
             "rod_level": self.rod_level,
             "inventory": [fish.to_dict() for fish in self.inventory],
             "quest_data": self.quest_data,
+            "difficulty_data": self.difficulty_data,
         }
 
     @classmethod
@@ -211,4 +215,5 @@ class GameState:
             bait_level=data.get("bait_level", 1),
             rod_level=data.get("rod_level", 1),
             quest_data=data.get("quest_data", {}),
+            difficulty_data=data.get("difficulty_data", {}),
         )

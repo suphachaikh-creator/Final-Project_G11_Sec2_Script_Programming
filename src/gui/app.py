@@ -12,10 +12,14 @@ import tkinter as tk
 from tkinter import ttk
 
 from src.ai_fishing import AIFishingAgent
+from src import __version__
+from src.catch_log import CatchLog
+from src.difficulty import DifficultyTuner
 from src.gui.presenter import TkClock
 from src.gui.species_loader import SpeciesLoader
 from src.gui.theme import COLORS, apply_theme
 from src.save_manager import SaveManager
+from src.update_checker import UpdateChecker
 
 TICK_MS = 100
 WINDOW_SIZE = "1020x700"
@@ -33,7 +37,7 @@ NAV_ITEMS = (
 class FishingApp(tk.Tk):
     """หน้าต่างเกมทั้งหมด"""
 
-    def __init__(self, state=None, api=None, saver=None):
+    def __init__(self, state=None, api=None, saver=None, catch_log=None, updates=None):
         super().__init__()
         self.title("HOW DO YOU FISH")
         self.geometry(WINDOW_SIZE)
@@ -43,6 +47,11 @@ class FishingApp(tk.Tk):
         self.saver = saver or SaveManager()
         self.state_data = state or self.saver.load_or_new()
         self.ai_agent = AIFishingAgent(self.state_data)
+        self.tuner = DifficultyTuner.from_dict(self.state_data.difficulty_data)
+        # ประวัติการจับปลาทั้งหมด เขียนต่อท้ายไฟล์ ไม่หายแม้ขายปลาไปแล้ว
+        self.catch_log = catch_log or CatchLog()
+        # ถาม GitHub ว่ามีเวอร์ชันใหม่ไหม (ทำในเบื้องหลัง ไม่มีเน็ตก็เล่นได้)
+        self.updates = updates or UpdateChecker()
         # ห่อ API ไว้ด้วยตัวโหลดเบื้องหลัง ไม่งั้นการจับปลาครั้งแรกจะทำให้
         # หน้าต่างค้างราว 34 วินาทีระหว่างรอ WoRMS กับ Open Fisheries
         self.api = api or SpeciesLoader()
@@ -89,7 +98,8 @@ class FishingApp(tk.Tk):
                   foreground=COLORS["text"],
                   font=(self.fonts["body"][0], 12, "bold")).pack(anchor="w",
                                                                  pady=(6, 0))
-        ttk.Label(brand, text="CP352301 · Group 7", background=COLORS["sidebar"],
+        ttk.Label(brand, text=f"CP352301 · Group 7 · v{__version__}",
+                  background=COLORS["sidebar"],
                   foreground=COLORS["muted"],
                   font=self.fonts["small"]).pack(anchor="w")
 
@@ -153,18 +163,19 @@ class FishingApp(tk.Tk):
         return frame
 
     def start_loading(self):
-        """เริ่มโหลดข้อมูลปลาเบื้องหลัง แล้วคอยรีเฟรชหน้าแรกจนกว่าจะเสร็จ"""
-        starter = getattr(self.api, "start", None)
-        if not callable(starter):
-            return
-        starter()
+        """เริ่มงานเบื้องหลัง (โหลดข้อมูลปลา · ตรวจเวอร์ชันใหม่) แล้วคอยรีเฟรชหน้าแรก"""
+        for worker in (self.api, self.updates):
+            starter = getattr(worker, "start", None)
+            if callable(starter):
+                starter()
         self._watch_loading()
 
     def _watch_loading(self):
-        """ถามสถานะการโหลดเป็นระยะ พอเสร็จแล้วอัปเดตหน้าจอครั้งสุดท้าย"""
+        """ถามสถานะเป็นระยะ พองานเบื้องหลังเสร็จครบแล้วอัปเดตหน้าจอครั้งสุดท้าย"""
         if self.current == "dashboard":
             self.frames["dashboard"].refresh_status()
-        if getattr(self.api, "is_complete", True):
+        if all(getattr(worker, "is_complete", True)
+               for worker in (self.api, self.updates)):
             return
         self.after(500, self._watch_loading)
 

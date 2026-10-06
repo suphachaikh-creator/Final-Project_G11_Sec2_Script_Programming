@@ -21,7 +21,7 @@ env/
 
 # ไฟล์ที่เกมสร้างตอนเล่น (สร้างใหม่ได้เสมอ ไม่ต้องเก็บเข้า git)
 data/save_game.json
-data/session.json
+data/catch_log.jsonl
 
 # OS
 Thumbs.db

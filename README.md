@@ -67,6 +67,9 @@ HOW DO YOU FISH คือเกมตกปลาแบบ Desktop Application �
 | **Open Fisheries** | ชื่อสามัญภาษาอังกฤษ | ให้ผู้เล่นเห็น `Atlantic salmon` แทน `Salmo salar` |
 | **Google Gemini** *(ไม่บังคับ)* | ประเภทและชื่อเควสต์ประจำวันภาษาไทย | หัวข้อ AI Integration — ถ้าไม่มี key เกมสุ่มเควสต์ในเครื่องแทน |
 
+นอกจากนี้ตั้งแต่ Final Sprint เกมเรียก **GitHub Releases API** (`GET /repos/{repo}/releases/latest`)
+ครั้งเดียวตอนเปิดเกม เพื่อบอกผู้เล่นว่ามีเวอร์ชันใหม่หรือไม่ ไม่เกี่ยวกับข้อมูลปลา และเรียกไม่ได้ก็เล่นได้ตามปกติ
+
 ### API ที่ 1 — WoRMS (World Register of Marine Species)
 
 | หัวข้อ | รายละเอียด |
@@ -218,9 +221,18 @@ python tools/seed_fish_data.py --limit 30    # เก็บแหล่งน้
             "price": 180,
             "keep": false
         }
-    ]
+    ],
+    "quest_data": {"date": "2026-10-06", "quests": ["..."]},
+    "difficulty_data": {"rounds": ["... ผลเล่น 20 รอบล่าสุด ..."]}
 }
 ```
+
+`quest_data` (v0.7.0) เก็บเควสต์ของวัน และ `difficulty_data` (v1.0.0) เก็บผลเล่นล่าสุด
+ไม่เกิน 20 รอบสำหรับปรับความยาก ทั้งคู่อยู่ในไฟล์เซฟเดียวกันจึงบันทึกพร้อมกันเสมอ
+
+**ประวัติการจับปลา** *(v1.0.0)* แยกไว้ใน `data/catch_log.jsonl` บรรทัดละหนึ่งตัว
+เขียนต่อท้ายอย่างเดียว ขายปลาไปแล้วประวัติก็ไม่หาย และไม่ทำให้ไฟล์เซฟใหญ่ขึ้นเรื่อยๆ
+รายละเอียดทุกฟิลด์อยู่ใน [`PLAN.md` หัวข้อ 11](PLAN.md)
 
 ---
 
@@ -244,7 +256,7 @@ python tools/seed_fish_data.py --limit 30    # เก็บแหล่งน้
 
 | หน้าจอ | เนื้อหา |
 |---|---|
-| Dashboard | แถบสถานะเงิน เลเวลเหยื่อ เลเวลคันเบ็ด จำนวนปลา และปุ่มเข้าสู่แต่ละหน้า |
+| Dashboard | แถบสถานะเงิน เลเวลเหยื่อ เลเวลคันเบ็ด จำนวนปลา · สถิติตลอดการเล่น · สถานะแหล่งข้อมูล · เวอร์ชันของเกม *(v1.0.0)* |
 | Fishing | เลือกสถานที่ 3 แหล่งน้ำ ปุ่มหย่อนเบ็ด แถบรอปลากินเบ็ด และมินิเกม QTE พร้อมแถบเวลา |
 | Shop | รายการอัปเกรดพร้อมราคา และปุ่มซื้อที่ปิดเองเมื่อเงินไม่พอ |
 | Inventory | ตารางปลาที่จับได้ ช่องค้นหา ตัวกรองแหล่งน้ำ และเรียงลำดับด้วยการคลิกหัวคอลัมน์ |
@@ -262,6 +274,9 @@ python tools/seed_fish_data.py --limit 30    # เก็บแหล่งน้
 | `GameState` | Domain | สถานะการเล่นทั้งหมด — เงิน เลเวลอุปกรณ์ กระเป๋าปลา และกฎการซื้อขาย |
 | `QTEMinigame` | Domain | ตรรกะมินิเกมล้วนๆ — สุ่มโจทย์ ตรวจคำตอบ คิดเวลาที่เหลือ โดยไม่รู้จัก Tkinter |
 | `AIFishingAgent` | Domain | เควสต์ประจำวัน ความคืบหน้า รางวัล การเรียก Gemini และการสุ่มปลาที่ให้น้ำหนักชนิดที่จับได้น้อย |
+| `DifficultyTuner` *(v1.0.0)* | Domain | ปรับเวลาและความยาวโจทย์ QTE จากอัตราการกดทันย้อนหลัง โดยมีพื้นและเพดาน |
+| `CatchLog` *(v1.0.0)* | Data Access | จดปลาที่จับได้ลง `catch_log.jsonl` แบบต่อท้าย และสรุปสถิติย้อนหลัง |
+| `UpdateChecker` *(v1.0.0)* | Integration | ถาม GitHub Releases ในเบื้องหลังว่ามีเวอร์ชันใหม่กว่าที่เล่นอยู่หรือไม่ |
 | `FishingApp` | Presentation | หน้าต่างหลัก (`tk.Tk`) ควบคุมการสลับหน้าจอและวาดแถบสถานะ |
 | `DashboardFrame` · `FishingFrame` · `QuestFrame` · `ShopFrame` · `InventoryFrame` | Presentation | แต่ละหน้าจอเป็นคลาสลูกของ `ttk.Frame` หน้าละหนึ่งไฟล์ใน `src/gui/pages/` |
 
@@ -319,14 +334,14 @@ Debugger / QA & DevOps) ครบทุกคน 100%
 
 ### 🧰 ไฟล์ที่แต่ละคนดูแลในแต่ละสปรินต์
 
-ตารางนี้ตรงกับหัวข้อ "หน้าที่และผลงานของแต่ละคน" ในรายงานทั้งสามฉบับ
+ตารางนี้ตรงกับหัวข้อ "หน้าที่และผลงานของแต่ละคน" ในรายงานทั้งสี่ฉบับ
 
-| สมาชิก | Sprint 1 | Sprint 2 | Sprint 3 |
-|---|---|---|---|
-| **นายศุภชัย คนเพียร** | `PLAN.md` · `README.md` | `tests/` · `.github/workflows/ci.yml` | `src/gui/app.py` · v0.7.0: `src/ai_fishing.py` · `src/gui/pages/` |
-| **นายยศพล ถิรพงศชาติ** | `tests/` · `.flake8` · `.github/workflows/ci.yml` | `src/worms_api.py` · `src/openfisheries_api.py` · `src/fish_api.py` · `src/save_manager.py` | `src/gui/frames.py` · v0.7.0: `tests/test_ai_fishing.py` |
-| **นายภาวัต วงศ์มาลาสิทธิ์** | `src/ui.py` · `src/cli.py` · `main.py` | `src/fish.py` · `src/game_state.py` · `src/minigame.py` | `PLAN.md` · ผังหน้าจอ 4 Frame |
-| **นายธนภัทร สมบูรณ์** | `src/validators.py` | `PLAN.md` · `tools/seed_fish_data.py` | `tests/test_gui_logic.py` |
+| สมาชิก | Sprint 1 | Sprint 2 | Sprint 3 | Final Sprint |
+|---|---|---|---|---|
+| **นายศุภชัย คนเพียร** | `PLAN.md` · `README.md` | `tests/` · `.github/workflows/ci.yml` | `src/gui/app.py` · v0.7.0: `src/ai_fishing.py` · `src/gui/pages/` | `src/difficulty.py` · `ci.yml` (coverage) · `release.yml` · `src/update_checker.py` · `tools/release.py` · `LICENSE` · `CONTRIBUTING.md` |
+| **นายยศพล ถิรพงศชาติ** | `tests/` · `.flake8` · `.github/workflows/ci.yml` | `src/worms_api.py` · `src/openfisheries_api.py` · `src/fish_api.py` · `src/save_manager.py` | `src/gui/frames.py` · v0.7.0: `tests/test_ai_fishing.py` | `PLAN.md` · `CHANGELOG.md` · ผสานงาน Final กับ Sprint 3 |
+| **นายภาวัต วงศ์มาลาสิทธิ์** | `src/ui.py` · `src/cli.py` · `main.py` | `src/fish.py` · `src/game_state.py` · `src/minigame.py` | `PLAN.md` · ผังหน้าจอ 4 Frame | `tests/test_difficulty.py` · `docs/uml_class_diagram.md` |
+| **นายธนภัทร สมบูรณ์** | `src/validators.py` | `PLAN.md` · `tools/seed_fish_data.py` | `tests/test_gui_logic.py` | `src/catch_log.py` · `tests/test_catch_log.py` |
 
 ---
 
@@ -342,25 +357,26 @@ Debugger / QA & DevOps) ครบทุกคน 100%
 
 ## 9. Features
 
-1. **เลือกสถานที่ตกปลา** — เลือกระหว่างทะเลสาบน้ำจืด ทะเลลึก และปากแม่น้ำน้ำกร่อย จากหน้าจอ Fishing ระบบกรองชนิดปลาจากฟิลด์ `isFreshwater` · `isMarine` · `isBrackish` ของ WoRMS ให้ตรงกับแหล่งน้ำ
-2. **มินิเกม QTE สู้แรงปลา** — สุ่มตัวอักษรให้กดแข่งกับแถบเวลาที่ลดลงแบบเรียลไทม์ คันเบ็ดเลเวลสูงขึ้นจะได้เวลามากขึ้น กดถูกได้เวลาเพิ่ม
-3. **คำนวณน้ำหนักและราคาปลา** — สุ่มน้ำหนักตามชนิดปลา แล้วคิดราคาจากน้ำหนักคูณกับเลเวลเหยื่อ พร้อมแสดงชื่อวิทยาศาสตร์ของปลาที่จับได้
-4. **ร้านค้าอัปเกรดอุปกรณ์** — นำเงินที่ได้ไปเพิ่มเลเวลเหยื่อ (จับปลาใหญ่ขึ้น) หรือคันเบ็ด (เพิ่มเวลาสู้ปลา) ปุ่มซื้อจะถูกปิดเองเมื่อเงินไม่พอ
-5. **คลังสินค้า ค้นหา กรอง เรียงลำดับ** — ตาราง `ttk.Treeview` พร้อมช่องค้นหาชื่อปลา ตัวกรองแหล่งน้ำ และคลิกหัวคอลัมน์เพื่อเรียงตามน้ำหนักหรือราคา
-6. **ขายปลาได้ 3 แบบ** — ทีละตัว · ยกชนิด (เช่น ขาย Carp ทั้ง 3 ตัวรวดเดียว) · ทั้งกระเป๋า คลิกแถวในตารางเพื่อเลือกปลา ปุ่มขายยกชนิดบอกจำนวนให้เห็นก่อนกด
-7. **ตั้งชื่อเล่นให้ปลาและเก็บไว้ไม่ขาย** — เปลี่ยนชื่อปลาที่จับได้ในตาราง และทำเครื่องหมายดาวเพื่อกันไม่ให้ถูกขายทั้งจากการขายทีละตัว ยกชนิด และขายทั้งกระเป๋า
-8. **บันทึกและเล่นต่ออัตโนมัติ** — เก็บเงิน กระเป๋าปลา และเลเวลอุปกรณ์ลงไฟล์ JSON ทุกครั้งที่สถานะเปลี่ยน และโหลดคืนเมื่อเปิดโปรแกรมใหม่
+วงเล็บท้ายชื่อคือเวอร์ชันที่ฟีเจอร์นั้นเริ่มมี การพัฒนาต่อในเวอร์ชันถัดมาบันทึกไว้ใน [`CHANGELOG.md`](CHANGELOG.md)
+
+1. **เลือกสถานที่ตกปลา** *(v0.1.0)* — เลือกระหว่างทะเลสาบน้ำจืด ทะเลลึก และปากแม่น้ำน้ำกร่อย จากหน้าจอ Fishing ระบบกรองชนิดปลาจากฟิลด์ `isFreshwater` · `isMarine` · `isBrackish` ของ WoRMS ให้ตรงกับแหล่งน้ำ
+2. **มินิเกม QTE สู้แรงปลา** *(v0.1.0)* — สุ่มตัวอักษรให้กดแข่งกับแถบเวลาที่ลดลงแบบเรียลไทม์ คันเบ็ดเลเวลสูงขึ้นจะได้เวลามากขึ้น กดถูกได้เวลาเพิ่ม
+3. **คำนวณน้ำหนักและราคาปลา** *(v0.1.0)* — สุ่มน้ำหนักตามชนิดปลา แล้วคิดราคาจากน้ำหนักคูณกับเลเวลเหยื่อ พร้อมแสดงชื่อวิทยาศาสตร์ของปลาที่จับได้
+4. **ร้านค้าอัปเกรดอุปกรณ์** *(v0.1.0)* — นำเงินที่ได้ไปเพิ่มเลเวลเหยื่อ (จับปลาใหญ่ขึ้น) หรือคันเบ็ด (เพิ่มเวลาสู้ปลา) ปุ่มซื้อจะถูกปิดเองเมื่อเงินไม่พอ
+5. **คลังสินค้า ค้นหา กรอง เรียงลำดับ** *(v0.2.0)* — ตาราง `ttk.Treeview` พร้อมช่องค้นหาชื่อปลา ตัวกรองแหล่งน้ำ และคลิกหัวคอลัมน์เพื่อเรียงตามน้ำหนักหรือราคา
+6. **ขายปลาได้ 3 แบบ** *(v0.3.0)* — ทีละตัว · ยกชนิด (เช่น ขาย Carp ทั้ง 3 ตัวรวดเดียว) · ทั้งกระเป๋า คลิกแถวในตารางเพื่อเลือกปลา ปุ่มขายยกชนิดบอกจำนวนให้เห็นก่อนกด
+7. **ตั้งชื่อเล่นให้ปลาและเก็บไว้ไม่ขาย** *(v0.3.0)* — เปลี่ยนชื่อปลาที่จับได้ในตาราง และทำเครื่องหมายดาวเพื่อกันไม่ให้ถูกขายทั้งจากการขายทีละตัว ยกชนิด และขายทั้งกระเป๋า
+8. **บันทึกและเล่นต่ออัตโนมัติ** *(v0.2.0)* — เก็บเงิน กระเป๋าปลา และเลเวลอุปกรณ์ลงไฟล์ JSON ทุกครั้งที่สถานะเปลี่ยน และโหลดคืนเมื่อเปิดโปรแกรมใหม่
 9. **เควสต์ประจำวันด้วย AI** *(v0.7.0)* — ทุกวันได้เควสต์ 1–5 รายการ (น้ำจืด · ทะเล · ปากแม่น้ำ · จับปลาทั่วไป · ปลาตัวหนัก) Gemini ตั้งชื่อเควสต์ให้เมื่อมี API key ถ้าไม่มีหรือเรียกไม่สำเร็จจะสุ่มในเครื่องแทน เป้าหมายและรางวัลเพิ่มตามเลเวลอุปกรณ์ ปลาหนึ่งตัวนับให้หลายเควสต์ได้ และการสุ่มปลาเพิ่มโอกาสให้ชนิดที่ยังจับได้น้อย
+10. **ปรับความยากอัตโนมัติ** *(v1.0.0)* — ดูอัตราการกดทันของรอบล่าสุด ถ้าเก่งจะได้โจทย์ยาวขึ้นและเวลาน้อยลง ถ้าพลาดบ่อยจะง่ายลง โดยเวลาไม่ต่ำกว่า 4 วินาทีจนเล่นไม่ได้ หน้าตกปลาบอกระดับปัจจุบันให้เห็น
+11. **สถิติตลอดการเล่น** *(v1.0.0)* — จดปลาทุกตัวที่จับได้ลงไฟล์ประวัติแบบต่อท้ายอย่างเดียว ขายไปแล้วก็ไม่หาย หน้าแรกสรุปจำนวน น้ำหนัก ชนิดที่จับบ่อยที่สุด ตัวที่หนักที่สุด และมูลค่าแยกตามแหล่งน้ำ
+12. **แจ้งเตือนเวอร์ชันใหม่** *(v1.0.0)* — ตอนเปิดเกมจะถาม GitHub Releases ในเบื้องหลัง ถ้ามีเวอร์ชันใหม่กว่าที่เล่นอยู่ หน้าแรกจะแจ้งพร้อมปุ่มไปหน้าดาวน์โหลด ไม่มีอินเทอร์เน็ตก็เล่นได้ตามปกติ
 
 ---
 
 ## 10. Stretch Features (Optional)
 
-- ~~**เควสต์ประจำวันด้วย AI**~~ — **ทำแล้วใน v0.7.0** ดู [Features ข้อ 9](#9-features)
-- **ปรับความยากอัตโนมัติ (Dynamic Difficulty)** — วิเคราะห์อัตราการพิมพ์ทันของผู้เล่นย้อนหลัง
-  แล้วปรับเวลาและจำนวนตัวอักษรของมินิเกม QTE ให้ยากขึ้นหรือง่ายลงเอง
-- **สถิติการตกปลา** — เก็บประวัติการจับปลาแบบ append-only แล้วสรุปว่าปลาที่จับได้บ่อยที่สุดคือชนิดใด
-  น้ำหนักเฉลี่ยเท่าไร และรายได้รวมแยกตามสถานที่เป็นเท่าใด
+ฟีเจอร์เสริมที่วางแผนไว้ทำครบทุกข้อแล้ว และย้ายไปอยู่ใน [Features](#9-features) ข้อ 9–11
 
 ---
 
@@ -369,22 +385,24 @@ Debugger / QA & DevOps) ครบทุกคน 100%
 | # | เกณฑ์ | สปรินต์ | สถานะ |
 |---|---|---|---|
 | 1 | Code follows PEP 8 (linted & clean) | Sprint 1 | เสร็จแล้ว |
-| 2 | Tests run (pytest) | Sprint 1 | เสร็จแล้ว — 316 เคส |
-| 3 | CI/CD pipeline จริงบน GitHub Actions | Sprint 1 | เสร็จแล้ว |
+| 2 | Tests run (pytest) | Sprint 1 | เสร็จแล้ว — 437 เคส |
+| 3 | CI/CD pipeline จริงบน GitHub Actions | Sprint 1 · Final Sprint | เสร็จแล้ว — CI ตรวจทุก push · CD สร้าง Release เมื่อ push tag |
 | 4 | README includes setup + usage instructions | Sprint 1 | เสร็จแล้ว |
 | 5 | Team roles documented | Sprint 1 | เสร็จแล้ว |
-| 6 | API works (GET/POST, error handling) | Sprint 2 | เสร็จแล้ว *(GET เท่านั้น — ดูหมายเหตุ)* |
+| 6 | API works (GET/POST, error handling) | Sprint 2 · Sprint 3 | เสร็จแล้ว — GET: WoRMS · Open Fisheries · POST: Gemini *(ดูหมายเหตุ)* |
 | 7 | Data persisted correctly (JSON file) | Sprint 2 | เสร็จแล้ว |
 | 8 | Search / Filter / Sort ทำงานได้ | Sprint 2–3 | เสร็จแล้ว |
-| 9 | UML Class Diagram | Sprint 3 | เสร็จแล้ว — [`PLAN.md` หัวข้อ 10](PLAN.md#10-uml-class-diagram) |
-| 10 | AI Integration | Sprint 3 (v0.7.0) | เสร็จแล้ว — เควสต์ประจำวันด้วย Gemini พร้อมโหมดสำรอง |
-| 11 | LICENSE · CONTRIBUTING.md | Final Sprint | ยังไม่ถึงกำหนด |
-| 12 | Test coverage ใน CI | Final Sprint | ยังไม่ถึงกำหนด |
-| 13 | สไลด์นำเสนอ 5 ส่วน | Final Sprint | ยังไม่ถึงกำหนด |
+| 9 | สะสมข้อมูลเพื่อวิเคราะห์ย้อนหลัง (Domain: Data Analysis) | Final Sprint | เสร็จแล้ว — `catch_log.py` + สถิติบนหน้าแรก |
+| 10 | UML Class Diagram | Sprint 3 · Final Sprint | เสร็จแล้ว — [`PLAN.md` หัวข้อ 10](PLAN.md#10-uml-class-diagram) และ [`docs/uml_class_diagram.md`](docs/uml_class_diagram.md) |
+| 11 | AI Integration | Sprint 3 (v0.7.0) | เสร็จแล้ว — เควสต์ประจำวันด้วย Gemini พร้อมโหมดสำรอง |
+| 12 | LICENSE · CONTRIBUTING.md | Final Sprint | เสร็จแล้ว |
+| 13 | Test coverage ใน CI | Final Sprint | เสร็จแล้ว — ชั้นตรรกะ 95% |
+| 14 | Badge สถานะ CI ใน README | Final Sprint | เสร็จแล้ว |
+| 15 | พร้อมนำไปใช้งานจริง (deployment/use) | Final Sprint | เสร็จแล้ว — ดาวน์โหลดจาก GitHub Releases · แจ้งเตือนเวอร์ชันใหม่ |
 
 > **หมายเหตุข้อ 6** — ทั้ง WoRMS และ Open Fisheries เป็น public API **แบบอ่านอย่างเดียว**
-> โครงการจึงใช้ `GET` เท่านั้น ซึ่งตรงกับตัวอย่างที่อาจารย์ให้มาในไฟล์เดียวกัน
-> ที่กรอก checklist ไว้ว่า *"API works (GET requests tested, errors handled)"*
+> จึงใช้ `GET` ส่วน Gemini ที่เพิ่มใน v0.7.0 ใช้ `POST` ไปที่ `generateContent`
+> ทั้งสามตัวจัดการข้อผิดพลาดครบ — เรียกไม่สำเร็จเกมยังเล่นต่อได้
 > ส่วนการบันทึกข้อมูลผู้เล่นใช้ไฟล์ JSON ในเครื่องตามข้อ 7
 
 
@@ -397,11 +415,20 @@ Debugger / QA & DevOps) ครบทุกคน 100%
 | **Sprint 1** | 12 | Front-End App Dev — วางหน้าจอ GUI ทั้งสี่หน้า (Dashboard, Fishing, Shop, Inventory) และการตรวจสอบอินพุต (ใช้ข้อมูลจำลอง) |
 | **Sprint 2** | 13 | Back-End App Dev — มินิเกม QTE, การคำนวณน้ำหนักและราคา, เชื่อมสอง Public API และไฟล์เซฟ |
 | **Sprint 3** | 14 | Full-Stack App Dev — v0.3.0: แปลงเป็น Desktop GUI (Tkinter) 4 หน้าจอ พร้อมตารางค้นหา กรอง เรียงลำดับ · ขายปลา 3 แบบ · แก้ไขข้อมูลครบ CRUD · บันทึกทันทีที่สถานะเปลี่ยน · **v0.7.0: เควสต์ประจำวันด้วย Gemini AI และแยกหน้าจอเป็นไฟล์รายหน้า** |
-| **Final Sprint** | 15 | *(วางแผนไว้)* DevOps & CI/CD — ปรับความยากอัตโนมัติ, coverage ใน CI, LICENSE, สไลด์นำเสนอ |
+| **Final Sprint** | 15 | DevOps, CI/CD & AI — ปรับความยากอัตโนมัติ, ประวัติและสถิติย้อนหลัง, CD สร้าง Release อัตโนมัติ + แจ้งเตือนเวอร์ชันใหม่, coverage ใน CI, UML ฉบับละเอียด, LICENSE · CONTRIBUTING *(เควสต์ AI ทำเสร็จแล้วใน Sprint 3)* |
 
 ---
 
 ## การติดตั้งและใช้งาน (Setup & Usage)
+
+### ดาวน์โหลดเวอร์ชันล่าสุด (สำหรับผู้เล่น)
+
+1. เปิดหน้า [**Releases**](https://github.com/suphachaikh-creator/Final-Project_G11_Sec2_Script_Programming/releases/latest)
+   แล้วดาวน์โหลดไฟล์ `HOW_DO_YOU_FISH-vX.Y.Z.zip` จากเวอร์ชันล่าสุด
+2. แตก zip แล้วติดตั้งตามขั้นตอนด้านล่าง (ต้องมี Python 3.11)
+3. เมื่อทีมปล่อยเวอร์ชันใหม่ หน้าแรกของเกมจะแจ้งพร้อมปุ่มพาไปหน้าดาวน์โหลด
+   ไฟล์เซฟอยู่ใน `data/` ของโฟลเดอร์เดิม คัดลอก `save_game.json` และ `catch_log.jsonl`
+   ไปไว้ใน `data/` ของเวอร์ชันใหม่ก็เล่นต่อได้
 
 ### ติดตั้ง
 
@@ -447,10 +474,25 @@ python main.py --cli            # โหมด Terminal
 
 ```bash
 python -m pytest -q
+python -m pytest -q --cov=src --cov-report=term-missing   # พร้อมวัด coverage แบบเดียวกับ CI
 flake8 .
 ```
 
 ชุดทดสอบทั้งหมดทำงานแบบออฟไลน์ ไม่ยิงเครือข่ายจริงและไม่แตะไฟล์เซฟจริง
+แนวทางการร่วมพัฒนาอยู่ใน [`CONTRIBUTING.md`](CONTRIBUTING.md)
+
+### ปล่อยเวอร์ชันใหม่ (สำหรับทีม)
+
+```bash
+# 1) แก้ __version__ ใน src/__init__.py และเพิ่มหัวข้อ ## [X.Y.Z] ไว้บนสุดของ CHANGELOG.md
+python tools/release.py check vX.Y.Z      # ตรวจว่าเลขตรงกันครบทุกที่
+# 2) commit + push แล้วสร้าง tag
+git tag vX.Y.Z
+git push origin vX.Y.Z
+```
+
+GitHub Actions (`release.yml`) จะรัน lint + test ตรวจเลขเวอร์ชันซ้ำอีกรอบ แพ็กเกมเป็น zip
+และสร้างหน้า Release ให้เอง ถ้าขั้นใดไม่ผ่านจะไม่มี release ถูกสร้าง
 
 ---
 
@@ -459,25 +501,35 @@ flake8 .
 ```
 .
 ├── main.py                     จุดเริ่มโปรแกรม — เปิด GUI เป็นค่าเริ่มต้น `--cli` เปิดโหมด Terminal
-├── requirements.txt            requests · pytest · flake8
+├── requirements.txt            requests · pytest · pytest-cov · flake8
 ├── .flake8                     ตั้งค่าตรวจมาตรฐานโค้ด (max-line-length 100)
 ├── .gitignore                  ไม่เก็บ venv/ · __pycache__/ · ไฟล์เซฟของผู้เล่น
 ├── PLAN.md                     แผนงาน · Readiness Check · DoD · UML · Data Model · ประวัติ Refactor
 ├── CHANGELOG.md                บันทึกการเปลี่ยนแปลงรายสปรินต์
 ├── LEARNINGLOG.md              บันทึกการเรียนรู้และ Prompt ที่ใช้ร่วมกับ AI
 ├── README.md                   เอกสารฉบับนี้ (Project Pitch + วิธีใช้งาน)
+├── CONTRIBUTING.md             แนวทางร่วมพัฒนา — กฎการแบ่งชั้น · กฎการเขียนเทสต์ · ก่อน commit
+├── LICENSE                     สัญญาอนุญาต MIT
 ├── .github/
-│   └── workflows/ci.yml        CI — รัน flake8 และ pytest ทุก push และ pull request
+│   └── workflows/
+│       ├── ci.yml              CI — รัน flake8 และ pytest + coverage ทุก push และ pull request
+│       └── release.yml         CD — push tag vX.Y.Z แล้วตรวจ แพ็ก zip และสร้าง GitHub Release
 ├── data/
 │   ├── fish_species.json       ชนิดปลาสำรอง 90 ชนิด (แหล่งน้ำละ 30)
-│   └── save_game.json          ไฟล์เซฟ (สร้างอัตโนมัติ ไม่เก็บเข้า git)
+│   ├── save_game.json          ไฟล์เซฟ (สร้างอัตโนมัติ ไม่เก็บเข้า git)
+│   └── catch_log.jsonl         ประวัติการจับปลาแบบต่อท้าย (สร้างอัตโนมัติ ไม่เก็บเข้า git)
 ├── reports/
 │   ├── sprint1_report.md       รายงาน Sprint 1 (Front-End) + ตาราง QA
 │   ├── sprint2_report.md       รายงาน Sprint 2 (Back-End) + ตาราง QA
-│   └── sprint3_report.md       รายงาน Sprint 3 (Full-Stack GUI · v0.3.0 และ v0.7.0) + ตาราง QA
+│   ├── sprint3_report.md       รายงาน Sprint 3 (Full-Stack GUI · v0.3.0 และ v0.7.0) + ตาราง QA
+│   └── final_report.md         รายงาน Final Sprint (DevOps · CI/CD · ปรับความยาก) + ตาราง QA
+├── docs/
+│   └── uml_class_diagram.md    UML Class Diagram ฉบับละเอียด + sequence diagram
 ├── tools/
-│   └── seed_fish_data.py       สคริปต์ดึงชนิดปลาจาก API มาสร้างไฟล์ข้อมูลสำรอง
+│   ├── seed_fish_data.py       สคริปต์ดึงชนิดปลาจาก API มาสร้างไฟล์ข้อมูลสำรอง
+│   └── release.py              ตรวจ tag · __version__ · CHANGELOG ให้ตรงกัน + ดึง release notes
 ├── src/
+│   ├── __init__.py             __version__ — เลขเวอร์ชันของเกมที่เดียวในโค้ด
 │   ├── ui.py                   Presentation — print เท่านั้น
 │   ├── validators.py           Validation   — ไม่มี input()/print()
 │   ├── cli.py                  Application  — การไหลของเมนู
@@ -485,6 +537,7 @@ flake8 .
 │   ├── game_state.py           Domain       — เงิน กระเป๋า เลเวล และกฎการซื้อขาย
 │   ├── minigame.py             Domain       — มินิเกม QTE
 │   ├── ai_fishing.py           Domain       — เควสต์ประจำวัน + Gemini + การสุ่มปลาแบบถ่วงน้ำหนัก
+│   ├── difficulty.py           Domain       — ปรับความยาก QTE อัตโนมัติ
 │   ├── gui/
 │   │   ├── presenter.py        Application  — ตรรกะหน้าจอ (ไม่ import tkinter)
 │   │   ├── species_loader.py   Application  — โหลดข้อมูลปลาเบื้องหลัง
@@ -502,8 +555,10 @@ flake8 .
 │   ├── worms_api.py            Integration  — WoRMS (แหล่งน้ำ + อนุกรมวิธาน)
 │   ├── openfisheries_api.py    Integration  — Open Fisheries (ชื่อสามัญ)
 │   ├── fish_api.py             Integration  — ประสานสอง API + แคช + ระบบสำรอง
-│   └── save_manager.py         Data Access  — อ่าน/เขียนไฟล์เซฟ
-└── tests/                      ชุดทดสอบ 316 เคส · 10 ไฟล์
+│   ├── save_manager.py         Data Access  — อ่าน/เขียนไฟล์เซฟ
+│   ├── catch_log.py            Data Access  — ประวัติการจับปลา append-only + สรุปสถิติ
+│   └── update_checker.py       Integration  — ถาม GitHub Releases ว่ามีเวอร์ชันใหม่ไหม
+└── tests/                      ชุดทดสอบ 437 เคส · 14 ไฟล์
     ├── test_validators.py          36   ตรวจอินพุต · ชื่อปลา
     ├── test_game_state.py          60   กฎการซื้อขาย · แก้ไขข้อมูล · ประสิทธิภาพ
     ├── test_fish_api.py            16   การประสานสอง API + ระบบสำรอง
@@ -511,8 +566,12 @@ flake8 .
     ├── test_openfisheries_api.py   10   Open Fisheries · การดักข้อผิดพลาด
     ├── test_minigame.py            14   มินิเกม QTE · นาฬิกาจำลอง
     ├── test_save_manager.py        10   บันทึก · โหลด · ไฟล์เสียหาย
-    ├── test_gui_logic.py           77   ตรรกะหน้าจอ (ไม่สร้าง tk.Tk())
+    ├── test_gui_logic.py           83   ตรรกะหน้าจอ (ไม่สร้าง tk.Tk())
     ├── test_species_loader.py      17   การโหลดข้อมูลเบื้องหลัง
-    └── test_ai_fishing.py          44   เควสต์ · รางวัล · Gemini ปลอม · ไฟล์เซฟเสีย
+    ├── test_ai_fishing.py          44   เควสต์ · รางวัล · Gemini ปลอม · ไฟล์เซฟเสีย
+    ├── test_difficulty.py          36   ปรับความยาก · พื้นและเพดาน · ประวัติในไฟล์เซฟ
+    ├── test_catch_log.py           27   ประวัติแบบต่อท้าย · บรรทัดเสีย · สถิติย้อนหลัง
+    ├── test_update_checker.py      36   เทียบเวอร์ชัน · GitHub ปลอม · ไม่มีเน็ตไม่ crash
+    └── test_release_tool.py        16   tag · __version__ · CHANGELOG ต้องตรงกัน
 ```
 

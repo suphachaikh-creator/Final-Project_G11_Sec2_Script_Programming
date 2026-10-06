@@ -258,23 +258,42 @@ class FishingPresenter:
     `root.after()` ส่วนตอนทดสอบใส่นาฬิกาจำลอง จึงไม่ต้องรอเวลาจริง
     """
 
-    def __init__(self, state, api, rng=None, clock=None, ai_agent=None):
+    def __init__(self, state, api, rng=None, clock=None, ai_agent=None, tuner=None,
+                 catch_log=None):
         self.state = state
         self.api = api
         self.rng = rng
         self.clock = clock
         self.ai_agent = ai_agent
+        self.tuner = tuner
+        self.catch_log = catch_log
         self.location = FRESHWATER
         self.minigame = None
         self.last_result = None
+        self.last_settings = None
 
     def start(self, location):
-        """เริ่มรอบใหม่ที่แหล่งน้ำที่เลือก"""
+        """เริ่มรอบใหม่ที่แหล่งน้ำที่เลือก
+
+        ถ้ามีตัวปรับความยาก จะให้มันปรับเวลาและความยาวโจทย์ก่อนเริ่มจับเวลา
+        """
         self.location = location
         self.last_result = None
         self.minigame = QTEMinigame(self.state.rod_level, rng=self.rng, clock=self.clock)
+        if self.tuner is not None:
+            self.last_settings = self.tuner.apply_to(
+                self.minigame, self.state.rod_level, rng=self.rng)
         self.minigame.start()
         return self.minigame
+
+    def difficulty_text(self):
+        """บอกผู้เล่นว่าตอนนี้ระบบปรับความยากเป็นระดับไหน"""
+        if self.tuner is None:
+            return ""
+        labels = {"easy": "ง่ายลง", "normal": "ปกติ", "hard": "ยากขึ้น"}
+        level = self.tuner.level()
+        rate = int(self.tuner.hit_rate() * 100)
+        return f"ความยาก: {labels.get(level, level)} (กดทัน {rate}% จากรอบก่อนๆ)"
 
     @property
     def is_running(self):
@@ -326,6 +345,15 @@ class FishingPresenter:
                 self._make_fish(species["name"]))
             if self.ai_agent is not None:
                 result["quest"] = self.ai_agent.record_catch(result["fish"])
+            # จดลงประวัติถาวร ขายปลาไปแล้วสถิติย้อนหลังก็ยังอยู่
+            if self.catch_log is not None:
+                self.catch_log.record(result["fish"])
+
+        # เก็บผลรอบนี้ไว้ให้ตัวปรับความยากใช้ตัดสินรอบถัดไป และใส่ลงสถานะเกม
+        # เพื่อให้ autosave ครั้งถัดไปเขียนลงไฟล์เซฟพร้อมปลาที่เพิ่งจับได้
+        if self.tuner is not None:
+            self.tuner.record(self.minigame.result())
+            self.state.difficulty_data = self.tuner.to_dict()
 
         self.last_result = result
         return result
@@ -346,11 +374,47 @@ class FishingPresenter:
 
 
 class DashboardPresenter:
-    """ข้อความบนหน้าแรก"""
+    """ข้อความบนหน้าแรก รวมถึงสถิติย้อนหลังจากประวัติการจับปลา"""
 
-    def __init__(self, state, api=None):
+    def __init__(self, state, api=None, catch_log=None, updates=None):
         self.state = state
         self.api = api
+        self.catch_log = catch_log
+        self.updates = updates
+
+    def version_text(self):
+        """เวอร์ชันที่เล่นอยู่ และมีเวอร์ชันใหม่ให้ดาวน์โหลดหรือไม่"""
+        if self.updates is None:
+            return ""
+        return self.updates.status_text()
+
+    def can_download_update(self):
+        """เปิดปุ่มดาวน์โหลดเฉพาะเมื่อ GitHub มีเวอร์ชันที่ใหม่กว่า"""
+        return self.updates is not None and self.updates.update_available
+
+    def history_lines(self):
+        """สถิติตลอดการเล่น สรุปจากประวัติ ไม่ใช่จากกระเป๋าที่ขายไปแล้วก็หาย"""
+        if self.catch_log is None:
+            return []
+        stats = self.catch_log.summary()
+        if not stats["count"]:
+            return ["ยังไม่มีประวัติการจับปลา ออกไปตกปลาก่อนแล้วกลับมาดูสถิติ"]
+
+        name, times = stats["most_common"]
+        heaviest = stats["heaviest"]
+        places = " · ".join(
+            f"{location_label(code)} {place['count']} ตัว ${place['value']}"
+            for code, place in stats["by_location"].items())
+        lines = [
+            f"จับได้ทั้งหมด {stats['count']} ตัว · น้ำหนักรวม {stats['total_weight']} กก. "
+            f"· เฉลี่ย {stats['average_weight']} กก.",
+            f"จับบ่อยที่สุด {name} ({times} ครั้ง) · "
+            f"ตัวที่หนักที่สุด {heaviest['name']} {heaviest['weight_kg']} กก.",
+            f"มูลค่ารวม ${stats['total_value']} — {places}",
+        ]
+        if self.catch_log.skipped:
+            lines.append(f"ข้ามประวัติที่เสีย {self.catch_log.skipped} บรรทัด")
+        return lines
 
     def status_lines(self):
         """สถานะผู้เล่นแบบย่อ"""

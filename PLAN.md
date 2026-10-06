@@ -34,7 +34,7 @@
 | Sprint 1 | v0.1.0 | 12 | Front-End App Dev | เสร็จแล้ว |
 | Sprint 2 | v0.2.0 | 13 | Back-End App Dev | เสร็จแล้ว |
 | Sprint 3 | v0.3.0 · v0.7.0 | 14 | Full-Stack App Dev · เควสต์ประจำวันด้วย AI (v0.7.0) | เสร็จแล้ว |
-| Final Sprint | v1.0.0 | 15 | DevOps, CI/CD & AI Integration | วางแผนไว้ |
+| Final Sprint | v1.0.0 | 15 | DevOps, CI/CD & AI Integration | เสร็จแล้ว |
 
 > งานเควสต์ด้วย AI เดิมอยู่ในแผน Final Sprint แต่ทำเสร็จก่อนกำหนดระหว่าง Sprint 3
 > จึงปล่อยเป็น v0.7.0 ของ Sprint 3 รายละเอียดอยู่ใน [หัวข้อ 7](#7-sprint-3--full-stack-app-dev-v030--v070)
@@ -75,18 +75,19 @@
 |---|---|---|
 | **Project Repository** | พร้อม | `github.com/suphachaikh-creator/Final-Project_G11_Sec2_Script_Programming` มี `README.md` ที่เป็น Project Pitch ฉบับเต็ม |
 | **Virtual Environment** | พร้อม | ใช้ `venv` ของ Python 3.11 และใส่ `venv/` ไว้ใน `.gitignore` แล้ว |
-| **Dependency List** | พร้อม | `requirements.txt` — `requests` · `pytest` · `flake8` (Tkinter และ `http.server` เป็นไลบรารีมาตรฐาน) |
+| **Dependency List** | พร้อม | `requirements.txt` — `requests` · `pytest` · `pytest-cov` · `flake8` (Tkinter และ `http.server` เป็นไลบรารีมาตรฐาน) |
 | **API Key / Config** | พร้อม | WoRMS และ Open Fisheries ไม่ต้องใช้ API Key · Gemini (ไม่บังคับ) อ่าน `GEMINI_API_KEY` จาก `.env` ที่อยู่ใน `.gitignore` |
 | **Initial Code Structure** | พร้อม | `src/` · `tests/` · `data/` · `reports/` · `tools/` · `.github/workflows/` |
 | **CI Pipeline** | พร้อม | `.github/workflows/ci.yml` รัน `flake8` และ `pytest` ทุก push และ pull request |
-| **Test Suite** | พร้อม | 316 เคส รันแบบออฟไลน์ทั้งหมด เสร็จในเสี้ยววินาที |
+| **CD / Release** | พร้อม | `.github/workflows/release.yml` — push tag `vX.Y.Z` แล้วสร้าง GitHub Release พร้อม zip ให้เอง · เกมแจ้งเตือนเวอร์ชันใหม่ |
+| **Test Suite** | พร้อม | 437 เคส รันแบบออฟไลน์ทั้งหมด เสร็จในเสี้ยววินาที |
 | **Seed Data** | พร้อม | `data/fish_species.json` 90 รายการ (แหล่งน้ำละ 30) มีชื่อสามัญครบ 100% |
 | **Save Data Location** | พร้อม | `data/save_game.json` สร้างอัตโนมัติ และถูก gitignore ไว้ไม่ให้ปนเข้า repo |
-| **License & Contributor Docs** | ยังไม่พร้อม | ยังไม่มี `LICENSE` (แนะนำ MIT) และ `CONTRIBUTING.md` |
+| **License & Contributor Docs** | พร้อม | `LICENSE` (MIT) และ `CONTRIBUTING.md` — กฎการแบ่งชั้น กฎการเขียนเทสต์ และขั้นตอนก่อน commit |
 | **UML Class Diagram** | พร้อม | [หัวข้อ 10](#10-uml-class-diagram) ของเอกสารนี้ — 3 แผนผัง Mermaid แยกตามชั้น (โดเมน · เชื่อมต่อข้อมูล · หน้าจอ) GitHub แสดงผลได้ในตัว |
-| **Test Coverage Report** | ยังไม่พร้อม | ยังไม่ได้เพิ่มขั้นตอนวัด coverage เข้า CI |
+| **Test Coverage Report** | พร้อม | CI รัน `pytest --cov=src` และเก็บ `coverage.xml` เป็น artifact · ชั้นตรรกะ 95% · รวม 52% |
 
-**สรุป:** พร้อม 10 จาก 12 รายการ — ที่เหลือเป็นงานเอกสารและ DevOps ซึ่งอยู่ในแผน Final Sprint
+**สรุป:** พร้อมครบ 13 จาก 13 รายการ — License · Coverage · CD ทำเสร็จใน Final Sprint
 
 ---
 
@@ -132,7 +133,7 @@
 |---|---|---|
 | Integration | `src/cli.py` เชื่อม `FishAPI` · `SaveManager` · `GameState` เข้าด้วยกัน | เสร็จ |
 | End-to-End Run | เล่นจริงหนึ่งรอบ: เลือกสถานที่ → ตกปลา → ขาย → อัปเกรด → เซฟ → โหลด | ผ่าน |
-| Quality Gate | `flake8 .` ต้องได้ 0 issues และ `pytest -q` ต้องผ่านทั้งหมด | 0 issues · 316 passed |
+| Quality Gate | `flake8 .` ต้องได้ 0 issues และ `pytest -q` ต้องผ่านทั้งหมด | 0 issues · 437 passed |
 | Wrap-up & Commit | commit โค้ด เทสต์ และเอกสาร ให้อยู่ในสถานะที่ทำซ้ำได้ | รอ commit |
 
 ### References — endpoint ที่ใช้จริง
@@ -302,43 +303,54 @@
 
 ## 8. Final Sprint — DevOps, CI/CD & AI Integration (v1.0.0)
 
-**เป้าหมาย:** ปิดงานให้ครบตามเกณฑ์การประเมิน
+**เป้าหมาย:** ปิดงานให้ครบตามเกณฑ์การประเมิน · **สถานะ: เสร็จแล้ว**
 
 > **เควสต์ประจำวันด้วย AI ทำเสร็จแล้วใน Sprint 3 (v0.7.0)** ในชื่อไฟล์ `src/ai_fishing.py`
 > และ `tests/test_ai_fishing.py` แทน `src/ai_quest.py` · `tests/test_ai_quest.py` ที่วางแผนไว้
-> DoD 4.1 และ 4.2 จึงผ่านแล้ว งานที่เหลือของสปรินต์นี้คือส่วน DevOps และเอกสาร
+> DoD 4.1 และ 4.2 จึงผ่านแล้ว งานของสปรินต์นี้คือส่วน DevOps และเอกสาร
+> งาน Final ที่เคยพัฒนาแยกไว้มีระบบเควสต์ของตัวเอง (`ai_quest.py` · `session_store.py`)
+> ตอนผสานจึงตัดออกและใช้ระบบของ Sprint 3 แทน — รายละเอียดใน
+> [`final_report.md` หัวข้อ 7](reports/final_report.md)
 
-**ไฟล์ที่จะสร้าง:** `src/difficulty.py` · `tests/test_difficulty.py`
+**ไฟล์ที่สร้าง:** `src/difficulty.py` · `tests/test_difficulty.py` · `src/catch_log.py` · `tests/test_catch_log.py` ·
+`src/update_checker.py` · `tests/test_update_checker.py` · `tools/release.py` · `tests/test_release_tool.py` ·
+`.github/workflows/release.yml` · `docs/uml_class_diagram.md` ·
+`reports/final_report.md` · `LICENSE` · `CONTRIBUTING.md`
 
 ### บทบาทในสปรินต์นี้
 
 | บทบาท | ผู้รับผิดชอบ | สิ่งที่จะทำในสปรินต์นี้ |
 |---|---|---|
 | Planner | ยศพล | ไล่เกณฑ์การประเมินให้ครบทุกข้อ เขียน DoD ของ Final Sprint และคุมกำหนดส่ง |
-| Coder | ธนภัทร | ~~`src/ai_quest.py`~~ ทำแล้วใน v0.7.0 (`src/ai_fishing.py`) — งานใหม่ของรอบนี้รอ Planner กำหนด |
-| Coder | ศุภชัย | `src/difficulty.py` — ปรับความยาก QTE อัตโนมัติ · เพิ่ม coverage เข้า CI · Badge สถานะ CI |
-| Debugger / QA | ภาวัต | `tests/test_difficulty.py` และตรวจ UML Class Diagram กับสไลด์นำเสนอ |
+| Coder | ธนภัทร | `src/catch_log.py` — บันทึกประวัติการจับปลาแบบ append-only และสถิติย้อนหลังบนหน้าแรก |
+| Coder | ศุภชัย | `src/difficulty.py` — ปรับความยาก QTE อัตโนมัติ · เพิ่ม coverage เข้า CI · Badge สถานะ CI · **CD สร้าง Release อัตโนมัติ + แจ้งเตือนเวอร์ชันใหม่ในเกม** |
+| Debugger / QA | ภาวัต | `tests/test_difficulty.py` และตรวจ UML Class Diagram |
 
 ### งานที่ต้องทำ
 
 | งาน | รายละเอียด |
 |---|---|
-| ~~เควสต์ประจำวันด้วย AI~~ | ทำแล้วใน Sprint 3 (v0.7.0) |
-| ปรับความยากอัตโนมัติ | วิเคราะห์อัตราการกดทันย้อนหลัง แล้วปรับเวลาและจำนวนตัวอักษรของ QTE |
-| Test coverage | เพิ่มขั้นตอนวัด coverage เข้าไปใน CI Pipeline |
-| เอกสารนำเสนอ | UML Class Diagram และสไลด์ 5 ส่วนตามที่รายวิชากำหนด |
-| Badge สถานะ CI | แสดงผลการรัน CI ล่าสุดในหน้าแรกของ repo |
+| ปรับความยากอัตโนมัติ | วิเคราะห์อัตราการกดทันย้อนหลัง แล้วปรับเวลาและจำนวนตัวอักษรของ QTE — **เสร็จ** · เก็บประวัติ 20 รอบล่าสุดใน `difficulty_data` |
+| Test coverage | เพิ่มขั้นตอนวัด coverage เข้าไปใน CI Pipeline — **เสร็จ** |
+| UML Class Diagram | ผังคลาสของระบบทั้งหมดหลังผสานงาน — **เสร็จ** (`docs/uml_class_diagram.md`) |
+| Badge สถานะ CI | แสดงผลการรัน CI ล่าสุดในหน้าแรกของ repo — **เสร็จ** |
+| LICENSE · CONTRIBUTING.md | MIT และแนวทางการร่วมพัฒนา — **เสร็จ** |
+| ประวัติและสถิติย้อนหลัง | จดปลาทุกตัวลง `data/catch_log.jsonl` แล้วสรุปบนหน้าแรก ตามที่ README หัวข้อ 4 อ้างไว้ — **เสร็จ** |
+| CD — ปล่อยเวอร์ชันอัตโนมัติ | push tag แล้ว Actions ตรวจ แพ็ก zip และสร้าง GitHub Release · เกมแจ้งเมื่อมีเวอร์ชันใหม่ — **เสร็จ** |
 
 ### Definition of Done
 
-| # | เงื่อนไข | จะตรวจด้วย |
-|---|---|---|
-| 4.1 | เรียก AI ไม่ได้ต้องมีโหมดสำรอง เกมยังเล่นต่อได้ | `test_ai_fishing` — ผ่านแล้วใน v0.7.0 |
-| 4.2 | เควสต์ที่ได้ต้องตรวจสอบความสำเร็จได้จริงจากกระเป๋าปลา | `test_ai_fishing` — ผ่านแล้วใน v0.7.0 |
-| 4.3 | ระบบปรับความยากต้องไม่ทำให้เวลาต่ำกว่าขั้นต่ำที่กำหนด | `test_difficulty` |
-| 4.4 | CI ต้องผ่านทั้ง lint และ test ทุก push | GitHub Actions |
-| 4.5 | มี UML Class Diagram ประกอบการนำเสนอ | ตรวจด้วยการรีวิวเอกสาร |
-| 4.6 | README มีวิธีติดตั้ง วิธีใช้งาน และบทบาทในทีมครบถ้วน | ตรวจด้วยการรีวิวเอกสาร |
+| # | เงื่อนไข | ตรวจด้วย | ผล |
+|---|---|---|---|
+| 4.1 | เรียก AI ไม่ได้ต้องมีโหมดสำรอง เกมยังเล่นต่อได้ | `test_ai_fishing` | ผ่านแล้วใน v0.7.0 |
+| 4.2 | เควสต์ที่ได้ต้องตรวจสอบความสำเร็จได้จริงจากกระเป๋าปลา | `test_ai_fishing` | ผ่านแล้วใน v0.7.0 |
+| 4.3 | ระบบปรับความยากต้องไม่ทำให้เวลาต่ำกว่าขั้นต่ำที่กำหนด | `test_difficulty::TestTimeLimit` | ผ่าน |
+| 4.4 | CI ต้องผ่านทั้ง lint และ test ทุก push | GitHub Actions (`flake8` · `pytest --cov`) | ผ่านในเครื่อง (437 passed · 0 issues) |
+| 4.5 | มี UML Class Diagram ประกอบการนำเสนอ | `docs/uml_class_diagram.md` | ผ่าน |
+| 4.6 | README มีวิธีติดตั้ง วิธีใช้งาน และบทบาทในทีมครบถ้วน | ตรวจด้วยการรีวิวเอกสาร | ผ่าน |
+| 4.7 | ขายปลาไปแล้วประวัติต้องไม่หาย และบรรทัดที่เสียต้องไม่ทำให้ crash | `test_catch_log` · smoke test | ผ่าน |
+| 4.8 | ปล่อยเวอร์ชันได้ด้วยการ push tag โดย tag · `__version__` · CHANGELOG ต้องตรงกัน | `test_release_tool` · `release.yml` | ผ่านในเครื่อง *(release จริงครั้งแรกเมื่อ push tag)* |
+| 4.9 | เกมแจ้งเมื่อมีเวอร์ชันใหม่ และไม่มีเน็ตหรือยังไม่มี release ต้องเล่นได้ตามปกติ | `test_update_checker` · smoke test | ผ่าน |
 
 ---
 
@@ -357,13 +369,16 @@ src/cli.py                 Application Layer — การไหลของเ�
    +--> src/fish.py        Domain Layer        (ปลาหนึ่งตัว + กฎน้ำหนักและราคา)
    +--> src/minigame.py    Domain Layer        (QTE — ตัวจับเวลาฉีดเข้ามาได้)
    +--> src/ai_fishing.py  Domain Layer        (เควสต์ประจำวัน + Gemini แบบไม่บังคับ — v0.7.0)
+   +--> src/difficulty.py  Domain Layer        (ปรับความยาก QTE อัตโนมัติ — Final Sprint)
    +--> src/gui/           Presentation Layer  (Tkinter — presenter + 5 หน้าจอ)
    |      pages/             หน้าละหนึ่งไฟล์ (dashboard · fishing · quest · shop · inventory)
    |      species_loader.py  โหลดข้อมูลปลาเบื้องหลัง ไม่ให้หน้าต่างค้าง
    +--> src/worms_api.py   Integration Layer   (WoRMS — แหล่งน้ำ + อนุกรมวิธาน)
    +--> src/openfisheries_api.py  Integration  (Open Fisheries — ชื่อสามัญ)
    +--> src/fish_api.py    Integration Layer   (ประสานสอง API + แคช + ระบบสำรอง)
+   +--> src/update_checker.py Integration      (GitHub Releases — แจ้งเวอร์ชันใหม่ · Final Sprint)
    +--> src/save_manager.py Data Access Layer  (อ่าน/เขียน data/save_game.json)
+   +--> src/catch_log.py   Data Access Layer   (ประวัติการจับปลา data/catch_log.jsonl — Final Sprint)
 
 ```
 
@@ -393,6 +408,7 @@ classDiagram
         +bait_level: int
         +rod_level: int
         +quest_data: dict
+        +difficulty_data: dict
         +can_afford(cost)
         +add_fish(fish)
         +require_fish(fish)
@@ -463,8 +479,22 @@ classDiagram
         +quest_description(quest)$
     }
 
+    class DifficultyTuner {
+        +rounds: list
+        +record(result)
+        +hit_rate()
+        +level()
+        +time_limit_for(rod_level)
+        +target_length_for(rod_level)
+        +apply_to(minigame, rod_level, rng)
+        +to_dict()
+        +from_dict(data)$
+    }
+
     GameState o-- Fish : ถือปลาในกระเป๋า
     AIFishingAgent --> GameState : อ่านเลเวล เก็บเควสต์ จ่ายรางวัล
+    DifficultyTuner ..> QTEMinigame : ปรับเวลาและความยาวโจทย์
+    DifficultyTuner ..> GameState : เก็บประวัติใน difficulty_data
     GameState ..> NotEnoughMoneyError : เงินไม่พอ
     GameState ..> FishNotFoundError : อ้างถึงปลาที่ไม่มี
     GameState ..> FishProtectedError : ขายปลาที่เก็บไว้
@@ -514,6 +544,27 @@ classDiagram
 
     FishAPI *-- WormsAPI
     FishAPI *-- OpenFisheriesAPI
+    class CatchLog {
+        +log_file: str
+        +last_error: str
+        +skipped: int
+        +record(fish)
+        +entries()
+        +summary()
+    }
+    class UpdateChecker {
+        -http
+        -spawn
+        +current: str
+        +latest: str
+        +status: str
+        +url: str
+        +last_error: str
+        +start()
+        +check()
+        +status_text()
+    }
+
     SpeciesLoader o-- FishAPI : ห่อไว้ไม่ให้หน้าต่างค้าง
     SaveManager ..> GameState : อ่าน/เขียน
 ```
@@ -530,6 +581,7 @@ classDiagram
         -saver: SaveManager
         -clock: TkClock
         -ai_agent: AIFishingAgent
+        -tuner: DifficultyTuner
         +game
         +show_frame(name)
         +autosave()
@@ -549,6 +601,8 @@ classDiagram
     }
     class FishingPresenter {
         -ai_agent: AIFishingAgent
+        -tuner: DifficultyTuner
+        -catch_log: CatchLog
         +start(location)
         +press(key)
         +finish()
@@ -558,8 +612,10 @@ classDiagram
         +buy(key)
     }
     class DashboardPresenter {
+        -catch_log: CatchLog
         +status_lines()
         +api_status()
+        +history_lines()
     }
     class BaseFrame {
         <<abstract>>
@@ -589,7 +645,8 @@ classDiagram
 ```
 
 `presenter.py` ตัดสินใจ ส่วนไฟล์ใน `pages/` วาด แยกกันเพื่อให้เทสต์รันบนเครื่องที่ไม่มีจอได้
-`AIFishingAgent` อยู่ในชั้นโดเมน (ไม่ import tkinter) แผนผัง 10.3 แสดงไว้เพื่อให้เห็นว่าหน้าจอไหนเรียกใช้
+`AIFishingAgent` และ `DifficultyTuner` อยู่ในชั้นโดเมน (ไม่ import tkinter) แผนผัง 10.3 แสดงไว้เพื่อให้เห็นว่าหน้าจอไหนเรียกใช้
+แผนผังฉบับละเอียดพร้อม sequence diagram อยู่ใน [`docs/uml_class_diagram.md`](docs/uml_class_diagram.md)
 
 ---
 
@@ -607,6 +664,7 @@ classDiagram
 | `rod_level` | `int` | `1` | เลเวลคันเบ็ด มีผลต่อเวลาในมินิเกม |
 | `inventory` | `list[Fish]` | `[]` | ปลาในกระเป๋า |
 | `quest_data` | `dict` | `{}` | เควสต์ประจำวันและความคืบหน้า *(v0.7.0)* |
+| `difficulty_data` | `dict` | `{}` | ประวัติการเล่นของตัวปรับความยาก `{"rounds": [...]}` เก็บ 20 รอบล่าสุด *(v1.0.0)* |
 
 **โครงสร้างของแต่ละรายการใน `inventory`**
 
@@ -650,7 +708,33 @@ classDiagram
 ไฟล์เซฟรุ่นเก่าที่ไม่มี `quest_data` หรือมีแต่เสีย (ไม่ใช่ dict หรือเควสต์ขาดฟิลด์)
 จะได้ชุดเควสต์ใหม่แทน ไม่ crash
 
-### 11.2 `data/fish_species.json` — ข้อมูลปลาสำรอง
+**โครงสร้างของ `difficulty_data`** *(v1.0.0)* — แต่ละรายการใน `rounds` คือผลจาก
+`QTEMinigame.result()` เช่น `{"success": true, "hits": 7, "total": 7, "time_left": 2.1}`
+ค่าที่ไม่ใช่ dict ถือเป็นค่าว่าง และประวัติที่ยาวเกิน 20 รอบถูกตัดเหลือรอบล่าสุดตอนโหลด
+
+เควสต์และประวัติความยากอยู่ใน `save_game.json` ไฟล์เดียวกับเงินและกระเป๋าปลา
+การบันทึกหนึ่งครั้งจึงเขียนทุกอย่างพร้อมกัน ไม่มีจังหวะที่ข้อมูลสองไฟล์ไม่ตรงกัน
+
+### 11.2 `data/catch_log.jsonl` — ประวัติการจับปลา (v1.0.0)
+
+JSON Lines — **บรรทัดละหนึ่งตัว เขียนต่อท้ายอย่างเดียว** ถูก gitignore ไว้เพราะเป็นข้อมูลของผู้เล่นแต่ละคน
+
+| ฟิลด์ | ชนิด | ความหมาย |
+|---|---|---|
+| `name` | `str` | ชื่อปลา ณ ตอนจับ (ตั้งชื่อเล่นทีหลังไม่กระทบประวัติ) |
+| `location` | `str` | แหล่งน้ำ |
+| `weight_kg` | `float` | น้ำหนัก |
+| `price` | `int` | มูลค่า ณ ตอนจับ |
+| `caught_at` | `str` | เวลาที่จับได้ (ISO 8601) |
+
+```json
+{"name": "Atlantic salmon", "location": "marine", "weight_kg": 4.1, "price": 123, "caught_at": "2026-10-06T09:00:00"}
+```
+
+แยกจาก `save_game.json` เพราะไม่มีค่าใดในไฟล์เซฟคำนวณมาจากไฟล์นี้ และมันโตขึ้นตลอดการเล่น
+บรรทัดที่เสีย เช่นขาดครึ่งเพราะปิดโปรแกรมระหว่างเขียน จะถูกข้ามและนับไว้ใน `CatchLog.skipped` ไม่ทำให้ crash
+
+### 11.3 `data/fish_species.json` — ข้อมูลปลาสำรอง
 
 อ่านอย่างเดียว ใช้เมื่อเชื่อมต่อ API ไม่ได้ · 90 รายการ แหล่งน้ำละ 30
 
@@ -663,14 +747,14 @@ classDiagram
 | `aphia_id` | `int` | รหัสอ้างอิงใน WoRMS |
 | `description` | `str` | ข้อความเกร็ดความรู้ที่แสดงตอนจับปลาได้ |
 
-### 11.3 จังหวะการเขียนไฟล์
+### 11.4 จังหวะการเขียนไฟล์
 
 ข้อกำหนดของสปรินต์คือข้อมูลในหน่วยความจำต้องตรงกับไฟล์ตลอดเวลา
 ระบบจึงเขียนลงไฟล์**ทันทีที่สถานะเปลี่ยน** ไม่ใช่รอตอนปิดโปรแกรม
 
 | เหตุการณ์ | ที่เรียก |
 |---|---|
-| จับปลาได้ | `FishingFrame.finish()` → `app.autosave()` |
+| จับปลาได้ | `FishingFrame.finish()` → `app.autosave()` · ต่อท้าย `catch_log.jsonl` ทันทีใน `FishingPresenter.finish()` |
 | ซื้อของสำเร็จ | `ShopFrame.buy()` → `app.autosave()` |
 | ขาย · เปลี่ยนชื่อ · เก็บไว้ไม่ขาย | `InventoryFrame.after_change()` → `app.autosave()` |
 | รับรางวัลเควสต์ · ได้ชุดเควสต์ใหม่ | `QuestFrame` → `app.autosave()` *(v0.7.0)* |
@@ -700,6 +784,7 @@ classDiagram
 | R9 | 3 | เรียก `random_species()` ตรงๆ ตอนจับปลาได้ | เพิ่ม `SpeciesLoader` โหลดล่วงหน้าในเธรดเบื้องหลัง | หน้าต่างค้าง 34 วินาทีตอนจับปลาตัวแรก |
 | R10 | 3 | บันทึกไฟล์เฉพาะตอนปิดหน้าต่าง | `app.autosave()` ทุกครั้งที่สถานะเปลี่ยน | ปิดผิดปกติแล้วความคืบหน้าหาย ข้อมูลใน RAM ไม่ตรงกับไฟล์ |
 | R11 | 3 (v0.7.0) | `frames.py` ไฟล์เดียว 438 บรรทัด รวมทุกหน้าจอ | หน้าละหนึ่งไฟล์ใน `src/gui/pages/` · `frames.py` เหลือเป็นตัวชี้ | เพิ่มหน้าเควสต์แล้วไฟล์จะยาวเกินไป และหลายคนแก้ไฟล์เดียวกันจะชนกัน |
+| R12 | Final | งาน Final เก็บเควสต์และความยากใน `data/session.json` ผ่าน `SessionStore` และมีระบบเควสต์ของตัวเอง (`ai_quest.py`) | ใช้ระบบเควสต์ของ Sprint 3 · เก็บความยากใน `GameState.difficulty_data` · ตัด `ai_quest.py` และ `session_store.py` | ระบบเควสต์ซ้ำกันสองชุด และข้อมูลสองไฟล์เคยบันทึกไม่พร้อมกันจนรับรางวัลซ้ำได้ |
 
 ---
 
@@ -716,7 +801,7 @@ classDiagram
 | **การเขียนไฟล์** | ใช้ `tmp_path` ของ pytest จึงไม่แตะไฟล์เซฟจริงของผู้เล่น |
 | **หน้าจอ** | แยก `ui.py` ให้มีแต่ `print()` แล้วทดสอบที่ `validators.py` แทน ไม่ต้อง mock `input()` |
 
-**ผลลัพธ์ของกลยุทธ์นี้** — ชุดทดสอบ 316 เคสรันเสร็จในเสี้ยววินาที ไม่พึ่งเครือข่าย ไม่พึ่งเวลาจริง ไม่เปิดหน้าต่างจริง
+**ผลลัพธ์ของกลยุทธ์นี้** — ชุดทดสอบ 437 เคสรันเสร็จในเสี้ยววินาที ไม่พึ่งเครือข่าย ไม่พึ่งเวลาจริง ไม่เปิดหน้าต่างจริง
 และไม่พึ่งไฟล์จริง จึงรันบน GitHub Actions ได้โดยไม่ต้องตั้งค่าอะไรเพิ่ม
 และจะใช้กลยุทธ์เดียวกันนี้ต่อได้ตอนแปลงเป็น GUI ใน Sprint 3
 
@@ -727,8 +812,8 @@ classDiagram
 รายละเอียดการทดสอบแยกตามสปรินต์อยู่ใน
 [`sprint1_report.md`](reports/sprint1_report.md) ·
 [`sprint2_report.md`](reports/sprint2_report.md) ·
-[`sprint3_report.md`](reports/sprint3_report.md)
-*(รายงาน Final Sprint จะเพิ่มเมื่อสปรินต์นั้นเสร็จ)*
+[`sprint3_report.md`](reports/sprint3_report.md) ·
+[`final_report.md`](reports/final_report.md)
 
 | สปรินต์ | ไฟล์ทดสอบ | จำนวนเคส | สถานะ |
 |---|---|---|---|
@@ -736,5 +821,5 @@ classDiagram
 | Sprint 2 | `test_game_state.py` 24 · `test_worms_api.py` 32 · `test_fish_api.py` 16 · `test_minigame.py` 14 · `test_openfisheries_api.py` 10 · `test_save_manager.py` 10 | 106 | ผ่านทั้งหมด |
 | Sprint 3 (v0.3.0) | `test_gui_logic.py` 77 · `test_species_loader.py` 17 · เพิ่มใน `test_game_state.py` 36 · เพิ่มใน `test_validators.py` 7 | 137 | ผ่านทั้งหมด |
 | Sprint 3 (v0.7.0) | `test_ai_fishing.py` 44 | 44 | ผ่านทั้งหมด |
-| Final Sprint | `test_difficulty.py` | วางแผนไว้ | — |
-| **รวมปัจจุบัน** | **10 ไฟล์** | **316** | **316 passed · flake8 0 issues** |
+| Final Sprint | `test_difficulty.py` 36 · `test_catch_log.py` 27 · `test_update_checker.py` 36 · `test_release_tool.py` 16 · เพิ่มใน `test_gui_logic.py` 6 | 121 | ผ่านทั้งหมด |
+| **รวมปัจจุบัน** | **14 ไฟล์** | **437** | **437 passed · flake8 0 issues · coverage ชั้นตรรกะ 95%** |

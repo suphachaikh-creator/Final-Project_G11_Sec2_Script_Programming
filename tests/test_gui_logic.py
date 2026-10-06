@@ -309,6 +309,61 @@ class TestFishingRound:
         assert presenter.finish() is None
 
 
+class TestFishingDifficulty:
+    """ตัวปรับความยากอัตโนมัติ (Final Sprint) ต่อเข้ากับรอบการตกปลา"""
+
+    def make_presenter(self, rounds=None):
+        from src.difficulty import DifficultyTuner
+        state = make_state(rod_level=2)
+        clock = TkClock(1000)
+        tuner = DifficultyTuner(rounds or [])
+        presenter = FishingPresenter(state, FakeApi(), rng=FakeRng(),
+                                     clock=clock, tuner=tuner)
+        return presenter, clock, tuner
+
+    def test_round_result_is_recorded(self):
+        presenter, clock, tuner = self.make_presenter()
+        presenter.start(FRESHWATER)
+        for _ in range(50):
+            clock.tick()
+        presenter.finish()
+        assert len(tuner.rounds) == 1
+
+    def test_history_is_put_into_the_game_state_for_autosave(self):
+        presenter, clock, tuner = self.make_presenter()
+        presenter.start(FRESHWATER)
+        for _ in range(50):
+            clock.tick()
+        presenter.finish()
+        assert presenter.state.difficulty_data == tuner.to_dict()
+
+    def test_difficulty_is_applied_to_the_new_round(self):
+        from src.difficulty import HARD
+        rounds = [{"hits": 10, "total": 10} for _ in range(5)]
+        presenter, _, tuner = self.make_presenter(rounds)
+        presenter.start(FRESHWATER)
+        assert presenter.last_settings["level"] == HARD
+        assert presenter.minigame.time_limit == tuner.time_limit_for(2)
+
+    def test_text_tells_the_player_the_current_level(self):
+        rounds = [{"hits": 10, "total": 10} for _ in range(5)]
+        presenter, _, _ = self.make_presenter(rounds)
+        assert "ยากขึ้น" in presenter.difficulty_text()
+        assert "100%" in presenter.difficulty_text()
+
+    def test_text_is_blank_without_a_tuner(self):
+        presenter = FishingPresenter(make_state(), FakeApi())
+        assert presenter.difficulty_text() == ""
+
+    def test_works_without_a_tuner_at_all(self):
+        """ไม่มีตัวปรับความยากก็ต้องเล่นได้ตามปกติ"""
+        presenter = FishingPresenter(make_state(), FakeApi(), rng=FakeRng(),
+                                     clock=TkClock(1000))
+        presenter.start(FRESHWATER)
+        assert presenter.is_running is True
+        assert presenter.last_settings is None
+
+
 class TestDashboard:
     def test_status_lines_show_player_state(self):
         presenter = DashboardPresenter(make_state(money=250, fish=sample_fish()))
