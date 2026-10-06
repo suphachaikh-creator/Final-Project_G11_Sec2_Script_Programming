@@ -345,11 +345,11 @@
 | 4.1 | เรียก AI ไม่ได้ต้องมีโหมดสำรอง เกมยังเล่นต่อได้ | `test_ai_fishing` | ผ่านแล้วใน v0.7.0 |
 | 4.2 | เควสต์ที่ได้ต้องตรวจสอบความสำเร็จได้จริงจากกระเป๋าปลา | `test_ai_fishing` | ผ่านแล้วใน v0.7.0 |
 | 4.3 | ระบบปรับความยากต้องไม่ทำให้เวลาต่ำกว่าขั้นต่ำที่กำหนด | `test_difficulty::TestTimeLimit` | ผ่าน |
-| 4.4 | CI ต้องผ่านทั้ง lint และ test ทุก push | GitHub Actions (`flake8` · `pytest --cov`) | ผ่านในเครื่อง (437 passed · 0 issues) |
+| 4.4 | CI ต้องผ่านทั้ง lint และ test ทุก push | GitHub Actions (`flake8` · `pytest --cov`) | ผ่าน — รันบน GitHub Actions (437 passed · 0 issues) |
 | 4.5 | มี UML Class Diagram ประกอบการนำเสนอ | `docs/uml_class_diagram.md` | ผ่าน |
 | 4.6 | README มีวิธีติดตั้ง วิธีใช้งาน และบทบาทในทีมครบถ้วน | ตรวจด้วยการรีวิวเอกสาร | ผ่าน |
 | 4.7 | ขายปลาไปแล้วประวัติต้องไม่หาย และบรรทัดที่เสียต้องไม่ทำให้ crash | `test_catch_log` · smoke test | ผ่าน |
-| 4.8 | ปล่อยเวอร์ชันได้ด้วยการ push tag โดย tag · `__version__` · CHANGELOG ต้องตรงกัน | `test_release_tool` · `release.yml` | ผ่านในเครื่อง *(release จริงครั้งแรกเมื่อ push tag)* |
+| 4.8 | ปล่อยเวอร์ชันได้ด้วยการ push tag โดย tag · `__version__` · CHANGELOG ต้องตรงกัน | `test_release_tool` · `release.yml` | ผ่าน — push tag `v1.0.0` แล้วได้ GitHub Release อัตโนมัติ |
 | 4.9 | เกมแจ้งเมื่อมีเวอร์ชันใหม่ และไม่มีเน็ตหรือยังไม่มี release ต้องเล่นได้ตามปกติ | `test_update_checker` · smoke test | ผ่าน |
 
 ---

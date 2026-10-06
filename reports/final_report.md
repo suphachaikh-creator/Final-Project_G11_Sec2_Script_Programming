@@ -33,7 +33,7 @@
 - [x] จัดทำ UML Class Diagram ของระบบทั้งหมด — `docs/uml_class_diagram.md`
 - [x] เพิ่ม `LICENSE` และ `CONTRIBUTING.md`
 - [x] ผสานงาน Final เข้ากับงานเควสต์ AI ของ Sprint 3 — ใช้ระบบเควสต์ของ Sprint 3 ต่อ ไม่ทำซ้ำ
-- [x] เขียนรายการเวอร์ชัน **v1.0.0** ใน `CHANGELOG.md` *(ยังไม่ได้ tag บน GitHub)*
+- [x] เขียนรายการเวอร์ชัน **v1.0.0** ใน `CHANGELOG.md` และ push tag `v1.0.0` — GitHub Release ถูกสร้างอัตโนมัติ
 
 ---
 
@@ -175,8 +175,10 @@ requirements.txt           เพิ่ม pytest-cov
 | TC-F24 | release notes จาก CHANGELOG | `release.py notes v1.0.0` | ได้เฉพาะหัวข้อ 1.0.0 | เริ่มที่ `## [1.0.0]` จบก่อนหัวข้อถัดไป | **PASSED** |
 | TC-F25 | แพ็กเกม | `git archive` แบบเดียวกับใน `release.yml` | zip มีไฟล์ที่ต้องใช้เล่น | มี `main.py` · `requirements.txt` · `data/fish_species.json` | **PASSED** |
 | TC-F26 | CI ครบทุกขั้นตอน | รัน `flake8` และ `pytest --cov` | ผ่านทั้งหมด | 0 issues · 437 passed · coverage 52% | **PASSED** |
+| TC-F27 | **ปล่อยเวอร์ชันจริง** | push tag `v1.0.0` ขึ้น GitHub | Actions สร้าง Release เอง | lint + test ผ่าน · ตรวจเลขผ่าน · ได้ `HOW_DO_YOU_FISH-v1.0.0.zip` และ release notes จาก CHANGELOG | **PASSED** |
+| TC-F28 | ตรวจเวอร์ชันหลังมี release | เรียก GitHub API จริงหลังปล่อย v1.0.0 | บอกว่าเป็นเวอร์ชันล่าสุด | "v1.0.0 · เป็นเวอร์ชันล่าสุดแล้ว" | **PASSED** |
 
-*`release.yml` ตรวจไวยากรณ์แล้วและทดสอบทุกขั้นตอนในเครื่องแล้ว แต่ release จริงครั้งแรกจะเกิดเมื่อ push tag `v1.0.0` ขึ้น GitHub*
+*TC-F20 ทดสอบก่อนปล่อย release แรก ส่วน TC-F27–F28 ทดสอบหลังปล่อยแล้ว — Release: https://github.com/suphachaikh-creator/Final-Project_G11_Sec2_Script_Programming/releases/tag/v1.0.0*
 
 ### สรุปชุดทดสอบอัตโนมัติของสปรินต์นี้
 
@@ -380,7 +382,7 @@ public API **แบบอ่านอย่างเดียว** จึงใ�
 
 | รายการ | ค่า |
 |---|---|
-| เวอร์ชันสุดท้าย | v1.0.0 *(เขียนใน CHANGELOG แล้ว · ยังไม่ tag บน GitHub)* |
+| เวอร์ชันสุดท้าย | v1.0.0 — [GitHub Release](https://github.com/suphachaikh-creator/Final-Project_G11_Sec2_Script_Programming/releases/tag/v1.0.0) |
 | จำนวนเทสต์ทั้งโปรเจกต์ | 437 เคส ผ่านทั้งหมด |
 | Test coverage | ชั้นตรรกะ 95% · รวมทั้งโปรเจกต์ 52% (รวมชั้นหน้าจอ) |
 | ช่องทางแจกจ่ายเกม | GitHub Releases — สร้างอัตโนมัติเมื่อ push tag · เกมแจ้งเมื่อมีเวอร์ชันใหม่ |

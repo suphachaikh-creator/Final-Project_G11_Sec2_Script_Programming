@@ -669,6 +669,8 @@ Presentation · Application · Validation · Domain · Integration · Data Acces
   release.py check v1.0.1 ตอน __version__ ยังเป็น 1.0.0 -> ✘ 2 ข้อ · exit 1 (หยุดก่อนสร้าง release)
   smoke test: GitHub ปลอมตอบ v1.1.0 -> หน้าแรกขึ้น "มีเวอร์ชันใหม่ v1.1.0" พร้อมปุ่มดาวน์โหลด
   GitHub จริง (ยังไม่มี release) -> "ยังไม่มี release บน GitHub" เกมไม่ crash
+  push tag v1.0.0 -> Actions: lint + test + ตรวจเลข + แพ็ก zip + สร้าง Release สำเร็จ
+  GitHub จริง (หลังปล่อย) -> "v1.0.0 · เป็นเวอร์ชันล่าสุดแล้ว"
   ```
 - **บทเรียน:** "deploy" สำหรับเกม desktop ไม่ได้แปลว่าต้องอัปเดตเครื่องผู้เล่นเอง
   แค่ทำให้เวอร์ชันใหม่ไปถึงผู้ใช้ได้อัตโนมัติและบอกให้รู้ว่ามี ก็ครบตามความหมายของ Continuous Delivery
