@@ -63,4 +63,3 @@ class ShopFrame(BaseFrame):
             self.costs[item["key"]].config(text=f"ราคา ${item['cost']}")
             button.config(state="normal" if item["enabled"] else "disabled",
                           text="ซื้อ" if item["enabled"] else "เงินไม่พอ")
-

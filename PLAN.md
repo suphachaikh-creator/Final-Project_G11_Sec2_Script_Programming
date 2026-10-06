@@ -10,7 +10,8 @@
 โปรแกรม Desktop ที่ให้ผู้เล่นเลือกสถานที่ตกปลา เล่นมินิเกมสู้แรงปลา แล้วนำปลาที่จับได้
 ไปขายเพื่ออัปเกรดอุปกรณ์ ข้อมูลชนิดปลามาจาก **Public API สองตัว** คือ WoRMS (แหล่งน้ำ)
 และ Open Fisheries (ชื่อสามัญภาษาอังกฤษ)
-และสถานะการเล่นถูกบันทึกลงไฟล์ JSON อัตโนมัติ
+และสถานะการเล่นถูกบันทึกลงไฟล์ JSON อัตโนมัติ ตั้งแต่ v0.7.0 มี**เควสต์ประจำวัน**
+ที่ Google Gemini ช่วยตั้งชื่อเมื่อมี API key (ไม่บังคับ)
 
 **หน้าจอทั้งหมด 5 หน้า**
 
@@ -22,6 +23,8 @@
 | ร้านค้า | อัปเกรดเหยื่อและคันเบ็ด |
 | คลังสินค้า | ค้นหา · กรอง · เรียงลำดับ · ขายปลา · สรุปสถิติ |
 
+โหมด GUI มีหน้าที่หกเพิ่มตั้งแต่ v0.7.0 คือ **เควสต์ตกปลา** — เควสต์ประจำวัน ความคืบหน้า และปุ่มรับรางวัล
+
 ---
 
 ## 2. ภาพรวมแผน 4 สปรินต์
@@ -30,8 +33,11 @@
 |---|---|---|---|---|
 | Sprint 1 | v0.1.0 | 12 | Front-End App Dev | เสร็จแล้ว |
 | Sprint 2 | v0.2.0 | 13 | Back-End App Dev | เสร็จแล้ว |
-| Sprint 3 | v0.3.0 | 14 | Full-Stack App Dev | เสร็จแล้ว |
+| Sprint 3 | v0.3.0 · v0.7.0 | 14 | Full-Stack App Dev · เควสต์ประจำวันด้วย AI (v0.7.0) | เสร็จแล้ว |
 | Final Sprint | v1.0.0 | 15 | DevOps, CI/CD & AI Integration | วางแผนไว้ |
+
+> งานเควสต์ด้วย AI เดิมอยู่ในแผน Final Sprint แต่ทำเสร็จก่อนกำหนดระหว่าง Sprint 3
+> จึงปล่อยเป็น v0.7.0 ของ Sprint 3 รายละเอียดอยู่ใน [หัวข้อ 7](#7-sprint-3--full-stack-app-dev-v030--v070)
 
 **การหมุนเวียนบทบาท** — บทบาท Planner และ Debugger/QA หมุนครบทั้งสี่คนพอดีใน 4 สปรินต์
 ส่วนที่เหลือของแต่ละรอบทำหน้าที่ Coder ทุกคนจึงได้ทำครบทุกบทบาทอย่างน้อยหนึ่งครั้ง
@@ -70,10 +76,10 @@
 | **Project Repository** | พร้อม | `github.com/suphachaikh-creator/Final-Project_G11_Sec2_Script_Programming` มี `README.md` ที่เป็น Project Pitch ฉบับเต็ม |
 | **Virtual Environment** | พร้อม | ใช้ `venv` ของ Python 3.11 และใส่ `venv/` ไว้ใน `.gitignore` แล้ว |
 | **Dependency List** | พร้อม | `requirements.txt` — `requests` · `pytest` · `flake8` (Tkinter และ `http.server` เป็นไลบรารีมาตรฐาน) |
-| **API Key / Config** | พร้อม | ทั้ง WoRMS และ Open Fisheries เปิดให้เรียกฟรี ไม่ต้องใช้ API Key |
+| **API Key / Config** | พร้อม | WoRMS และ Open Fisheries ไม่ต้องใช้ API Key · Gemini (ไม่บังคับ) อ่าน `GEMINI_API_KEY` จาก `.env` ที่อยู่ใน `.gitignore` |
 | **Initial Code Structure** | พร้อม | `src/` · `tests/` · `data/` · `reports/` · `tools/` · `.github/workflows/` |
 | **CI Pipeline** | พร้อม | `.github/workflows/ci.yml` รัน `flake8` และ `pytest` ทุก push และ pull request |
-| **Test Suite** | พร้อม | 272 เคส รันแบบออฟไลน์ทั้งหมด เสร็จในเสี้ยววินาที |
+| **Test Suite** | พร้อม | 316 เคส รันแบบออฟไลน์ทั้งหมด เสร็จในเสี้ยววินาที |
 | **Seed Data** | พร้อม | `data/fish_species.json` 90 รายการ (แหล่งน้ำละ 30) มีชื่อสามัญครบ 100% |
 | **Save Data Location** | พร้อม | `data/save_game.json` สร้างอัตโนมัติ และถูก gitignore ไว้ไม่ให้ปนเข้า repo |
 | **License & Contributor Docs** | ยังไม่พร้อม | ยังไม่มี `LICENSE` (แนะนำ MIT) และ `CONTRIBUTING.md` |
@@ -126,7 +132,7 @@
 |---|---|---|
 | Integration | `src/cli.py` เชื่อม `FishAPI` · `SaveManager` · `GameState` เข้าด้วยกัน | เสร็จ |
 | End-to-End Run | เล่นจริงหนึ่งรอบ: เลือกสถานที่ → ตกปลา → ขาย → อัปเกรด → เซฟ → โหลด | ผ่าน |
-| Quality Gate | `flake8 .` ต้องได้ 0 issues และ `pytest -q` ต้องผ่านทั้งหมด | 0 issues · 272 passed |
+| Quality Gate | `flake8 .` ต้องได้ 0 issues และ `pytest -q` ต้องผ่านทั้งหมด | 0 issues · 316 passed |
 | Wrap-up & Commit | commit โค้ด เทสต์ และเอกสาร ให้อยู่ในสถานะที่ทำซ้ำได้ | รอ commit |
 
 ### References — endpoint ที่ใช้จริง
@@ -214,7 +220,7 @@
 
 ---
 
-## 7. Sprint 3 — Full-Stack App Dev (v0.3.0)
+## 7. Sprint 3 — Full-Stack App Dev (v0.3.0 · v0.7.0)
 
 **เป้าหมาย:** เปลี่ยนส่วนติดต่อผู้ใช้เป็น Desktop GUI และรวมทุกชั้นเข้าด้วยกันให้สมบูรณ์
 
@@ -265,29 +271,59 @@
 | 3.12 | ข้อมูลในหน่วยความจำต้องตรงกับไฟล์เซฟตลอดเวลา ไม่ใช่รอบันทึกตอนปิดโปรแกรม | smoke test อ่านไฟล์เซฟระหว่างเล่น |
 | 3.13 | **เรียง ค้นหา และสรุปสถิติบนข้อมูล 1,000 รายการ ต้องเสร็จภายใน 50 ms** | `test_game_state::TestPerformanceOnLargeData` |
 
+### งานเพิ่มเติมใน v0.7.0 — เควสต์ประจำวันด้วย AI
+
+**ไฟล์ที่สร้าง:** `src/ai_fishing.py` · `src/gui/pages/` (6 ไฟล์) · `tests/test_ai_fishing.py`
+
+| บทบาท | ผู้รับผิดชอบ | สิ่งที่ทำ |
+|---|---|---|
+| Coder | ศุภชัย | `src/ai_fishing.py` — เควสต์ประจำวัน ตัวเชื่อม Gemini และโหมดสำรอง · หน้าเควสต์ · แยก `frames.py` เป็น `src/gui/pages/` |
+| Debugger / QA | ยศพล | `tests/test_ai_fishing.py` 44 เคส · แก้ CI · แก้บั๊กไฟล์เซฟเสียและข้อผิดพลาด HTTP · ปรับเอกสารให้ตรงกับ v0.7.0 |
+
+| งาน | รายละเอียด |
+|---|---|
+| เควสต์ประจำวัน | 1–5 รายการไม่ซ้ำประเภท จาก 5 แบบ (น้ำจืด · ทะเล · ปากแม่น้ำ · ทั่วไป · ปลาหนัก) |
+| เชื่อม Gemini | ให้ AI เลือกประเภทและตั้งชื่อ ส่วนเป้าหมายและรางวัลเกมคำนวณเอง |
+| โหมดสำรอง | ไม่มี key หรือเรียกไม่สำเร็จ สุ่มเควสต์ในเครื่องแทน |
+| ความยากตามเลเวล | เป้าหมาย น้ำหนักขั้นต่ำ และรางวัลเพิ่มตามเลเวลเหยื่อและคันเบ็ด |
+| หน้าเควสต์ | การ์ด แถบความคืบหน้า ปุ่มรับรางวัล และสถานะการเชื่อม Gemini |
+| แยกหน้าจอ | `frames.py` 438 บรรทัด → หน้าละหนึ่งไฟล์ใน `src/gui/pages/` |
+
+| # | เงื่อนไข | ตรวจด้วย | ผล |
+|---|---|---|---|
+| 3.14 | เรียก AI ไม่ได้ต้องมีโหมดสำรอง เกมยังเล่นต่อได้ | `TestGemini` · smoke test | ผ่าน |
+| 3.15 | ความคืบหน้าเควสต์ตรวจได้จริงจากปลาที่จับได้ และรับรางวัลได้ครั้งเดียว | `TestProgressAndReward` | ผ่าน |
+| 3.16 | คำตอบของ AI ที่ผิดรูปแบบต้องถูกปฏิเสธ และ AI กำหนดตัวเลขในเกมเองไม่ได้ | `TestGemini` | ผ่าน |
+| 3.17 | เควสต์ในไฟล์เซฟเสียหรือมาจากรุ่นเก่าต้องไม่ crash | `TestSaveFile` | ผ่าน |
+| 3.18 | API key ต้องไม่ถูก commit เข้า git | `.gitignore` + ตรวจประวัติ commit | ผ่าน |
+| 3.19 | CI ต้องผ่านทั้ง lint และ test | `flake8 .` · `pytest` | ผ่านในเครื่อง (316 passed · 0 issues) |
+
 ---
 
 ## 8. Final Sprint — DevOps, CI/CD & AI Integration (v1.0.0)
 
-**เป้าหมาย:** ปิดงานให้ครบตามเกณฑ์การประเมิน และเพิ่มฟีเจอร์ AI
+**เป้าหมาย:** ปิดงานให้ครบตามเกณฑ์การประเมิน
 
-**ไฟล์ที่จะสร้าง:** `src/ai_quest.py` · `src/difficulty.py` · `tests/test_ai_quest.py` ·
-`tests/test_difficulty.py`
+> **เควสต์ประจำวันด้วย AI ทำเสร็จแล้วใน Sprint 3 (v0.7.0)** ในชื่อไฟล์ `src/ai_fishing.py`
+> และ `tests/test_ai_fishing.py` แทน `src/ai_quest.py` · `tests/test_ai_quest.py` ที่วางแผนไว้
+> DoD 4.1 และ 4.2 จึงผ่านแล้ว งานที่เหลือของสปรินต์นี้คือส่วน DevOps และเอกสาร
+
+**ไฟล์ที่จะสร้าง:** `src/difficulty.py` · `tests/test_difficulty.py`
 
 ### บทบาทในสปรินต์นี้
 
 | บทบาท | ผู้รับผิดชอบ | สิ่งที่จะทำในสปรินต์นี้ |
 |---|---|---|
 | Planner | ยศพล | ไล่เกณฑ์การประเมินให้ครบทุกข้อ เขียน DoD ของ Final Sprint และคุมกำหนดส่ง |
-| Coder | ธนภัทร | `src/ai_quest.py` — เควสต์ประจำวันด้วยโมเดลภาษา พร้อมโหมดสำรองเมื่อเรียก AI ไม่ได้ |
+| Coder | ธนภัทร | ~~`src/ai_quest.py`~~ ทำแล้วใน v0.7.0 (`src/ai_fishing.py`) — งานใหม่ของรอบนี้รอ Planner กำหนด |
 | Coder | ศุภชัย | `src/difficulty.py` — ปรับความยาก QTE อัตโนมัติ · เพิ่ม coverage เข้า CI · Badge สถานะ CI |
-| Debugger / QA | ภาวัต | `tests/test_ai_quest.py` · `tests/test_difficulty.py` และตรวจ UML Class Diagram กับสไลด์นำเสนอ |
+| Debugger / QA | ภาวัต | `tests/test_difficulty.py` และตรวจ UML Class Diagram กับสไลด์นำเสนอ |
 
 ### งานที่ต้องทำ
 
 | งาน | รายละเอียด |
 |---|---|
-| เควสต์ประจำวันด้วย AI | ส่งรายการปลาที่ผู้เล่นมีให้โมเดลภาษา แล้วให้สร้างภารกิจประจำวัน |
+| ~~เควสต์ประจำวันด้วย AI~~ | ทำแล้วใน Sprint 3 (v0.7.0) |
 | ปรับความยากอัตโนมัติ | วิเคราะห์อัตราการกดทันย้อนหลัง แล้วปรับเวลาและจำนวนตัวอักษรของ QTE |
 | Test coverage | เพิ่มขั้นตอนวัด coverage เข้าไปใน CI Pipeline |
 | เอกสารนำเสนอ | UML Class Diagram และสไลด์ 5 ส่วนตามที่รายวิชากำหนด |
@@ -297,8 +333,8 @@
 
 | # | เงื่อนไข | จะตรวจด้วย |
 |---|---|---|
-| 4.1 | เรียก AI ไม่ได้ต้องมีโหมดสำรอง เกมยังเล่นต่อได้ | `test_ai_quest` |
-| 4.2 | เควสต์ที่ได้ต้องตรวจสอบความสำเร็จได้จริงจากกระเป๋าปลา | `test_ai_quest` |
+| 4.1 | เรียก AI ไม่ได้ต้องมีโหมดสำรอง เกมยังเล่นต่อได้ | `test_ai_fishing` — ผ่านแล้วใน v0.7.0 |
+| 4.2 | เควสต์ที่ได้ต้องตรวจสอบความสำเร็จได้จริงจากกระเป๋าปลา | `test_ai_fishing` — ผ่านแล้วใน v0.7.0 |
 | 4.3 | ระบบปรับความยากต้องไม่ทำให้เวลาต่ำกว่าขั้นต่ำที่กำหนด | `test_difficulty` |
 | 4.4 | CI ต้องผ่านทั้ง lint และ test ทุก push | GitHub Actions |
 | 4.5 | มี UML Class Diagram ประกอบการนำเสนอ | ตรวจด้วยการรีวิวเอกสาร |
@@ -320,7 +356,9 @@ src/cli.py                 Application Layer — การไหลของเ�
    +--> src/game_state.py  Domain Layer        (เงิน กระเป๋า เลเวล และกฎการซื้อขาย)
    +--> src/fish.py        Domain Layer        (ปลาหนึ่งตัว + กฎน้ำหนักและราคา)
    +--> src/minigame.py    Domain Layer        (QTE — ตัวจับเวลาฉีดเข้ามาได้)
-   +--> src/gui/           Presentation Layer  (Tkinter — 4 หน้าจอ + presenter)
+   +--> src/ai_fishing.py  Domain Layer        (เควสต์ประจำวัน + Gemini แบบไม่บังคับ — v0.7.0)
+   +--> src/gui/           Presentation Layer  (Tkinter — presenter + 5 หน้าจอ)
+   |      pages/             หน้าละหนึ่งไฟล์ (dashboard · fishing · quest · shop · inventory)
    |      species_loader.py  โหลดข้อมูลปลาเบื้องหลัง ไม่ให้หน้าต่างค้าง
    +--> src/worms_api.py   Integration Layer   (WoRMS — แหล่งน้ำ + อนุกรมวิธาน)
    +--> src/openfisheries_api.py  Integration  (Open Fisheries — ชื่อสามัญ)
@@ -354,6 +392,7 @@ classDiagram
         +inventory: list~Fish~
         +bait_level: int
         +rod_level: int
+        +quest_data: dict
         +can_afford(cost)
         +add_fish(fish)
         +require_fish(fish)
@@ -409,7 +448,23 @@ classDiagram
         <<Exception>>
     }
 
+    class AIFishingAgent {
+        +state: GameState
+        +quests: list
+        +ai_checked: bool
+        +ai_connected: bool
+        +gemini_configured
+        +daily_quests(today)
+        +generate_local_quests(today)
+        +generate_gemini_quests(today, apply, force)
+        +record_catch(fish)
+        +claim_reward(quest_id)
+        +choose_species(api, location, rng)
+        +quest_description(quest)$
+    }
+
     GameState o-- Fish : ถือปลาในกระเป๋า
+    AIFishingAgent --> GameState : อ่านเลเวล เก็บเควสต์ จ่ายรางวัล
     GameState ..> NotEnoughMoneyError : เงินไม่พอ
     GameState ..> FishNotFoundError : อ้างถึงปลาที่ไม่มี
     GameState ..> FishProtectedError : ขายปลาที่เก็บไว้
@@ -474,6 +529,7 @@ classDiagram
         -api: SpeciesLoader
         -saver: SaveManager
         -clock: TkClock
+        -ai_agent: AIFishingAgent
         +game
         +show_frame(name)
         +autosave()
@@ -492,6 +548,7 @@ classDiagram
         +sell_all()
     }
     class FishingPresenter {
+        -ai_agent: AIFishingAgent
         +start(location)
         +press(key)
         +finish()
@@ -512,19 +569,27 @@ classDiagram
     class FishingFrame
     class ShopFrame
     class InventoryFrame
+    class QuestFrame {
+        +refresh_quests()
+        +check_ai_connection()
+        +claim_reward(quest_id)
+    }
 
-    FishingApp o-- BaseFrame : ถือ 4 เฟรม
+    FishingApp o-- BaseFrame : ถือ 5 เฟรม
     BaseFrame <|-- DashboardFrame
     BaseFrame <|-- FishingFrame
+    BaseFrame <|-- QuestFrame
     BaseFrame <|-- ShopFrame
     BaseFrame <|-- InventoryFrame
+    QuestFrame --> AIFishingAgent
     DashboardFrame --> DashboardPresenter
     FishingFrame --> FishingPresenter
     ShopFrame --> ShopPresenter
     InventoryFrame --> InventoryPresenter
 ```
 
-`presenter.py` ตัดสินใจ ส่วน `frames.py` วาด แยกกันเพื่อให้เทสต์รันบนเครื่องที่ไม่มีจอได้
+`presenter.py` ตัดสินใจ ส่วนไฟล์ใน `pages/` วาด แยกกันเพื่อให้เทสต์รันบนเครื่องที่ไม่มีจอได้
+`AIFishingAgent` อยู่ในชั้นโดเมน (ไม่ import tkinter) แผนผัง 10.3 แสดงไว้เพื่อให้เห็นว่าหน้าจอไหนเรียกใช้
 
 ---
 
@@ -541,6 +606,7 @@ classDiagram
 | `bait_level` | `int` | `1` | เลเวลเหยื่อ มีผลต่อน้ำหนักและราคาปลา |
 | `rod_level` | `int` | `1` | เลเวลคันเบ็ด มีผลต่อเวลาในมินิเกม |
 | `inventory` | `list[Fish]` | `[]` | ปลาในกระเป๋า |
+| `quest_data` | `dict` | `{}` | เควสต์ประจำวันและความคืบหน้า *(v0.7.0)* |
 
 **โครงสร้างของแต่ละรายการใน `inventory`**
 
@@ -572,6 +638,18 @@ classDiagram
 **ทุกฟิลด์มีค่า default** — `Fish.from_dict()` และ `GameState.from_dict()` ใช้ `.get()`
 ไฟล์เซฟรุ่นเก่าที่ยังไม่มีฟิลด์ `keep` จึงโหลดได้โดยไม่ crash
 
+**โครงสร้างของ `quest_data`** *(v0.7.0)*
+
+| ฟิลด์ | ชนิด | ความหมาย |
+|---|---|---|
+| `date` | `str` | วันที่ของชุดเควสต์ (`YYYY-MM-DD`) — ไม่ตรงกับวันนี้จะสุ่มชุดใหม่ |
+| `quests` | `list[dict]` | เควสต์ 1–5 รายการ — `id` · `kind` · `title` · `target` · `progress` · `reward` · `min_weight` · `claimed` |
+| `ai_checked` | `bool` | วันนี้ลองเชื่อม Gemini แล้วหรือยัง จะได้ไม่เรียกซ้ำทุกครั้งที่เปิดหน้า |
+| `ai_connected` | `bool \| null` | ชุดของวันนี้มาจาก Gemini หรือไม่ |
+
+ไฟล์เซฟรุ่นเก่าที่ไม่มี `quest_data` หรือมีแต่เสีย (ไม่ใช่ dict หรือเควสต์ขาดฟิลด์)
+จะได้ชุดเควสต์ใหม่แทน ไม่ crash
+
 ### 11.2 `data/fish_species.json` — ข้อมูลปลาสำรอง
 
 อ่านอย่างเดียว ใช้เมื่อเชื่อมต่อ API ไม่ได้ · 90 รายการ แหล่งน้ำละ 30
@@ -595,6 +673,7 @@ classDiagram
 | จับปลาได้ | `FishingFrame.finish()` → `app.autosave()` |
 | ซื้อของสำเร็จ | `ShopFrame.buy()` → `app.autosave()` |
 | ขาย · เปลี่ยนชื่อ · เก็บไว้ไม่ขาย | `InventoryFrame.after_change()` → `app.autosave()` |
+| รับรางวัลเควสต์ · ได้ชุดเควสต์ใหม่ | `QuestFrame` → `app.autosave()` *(v0.7.0)* |
 | ปิดหน้าต่าง | `FishingApp.on_close()` |
 
 โหมด CLI เป็นโหมดสำรองที่มีเฉพาะฟีเจอร์ของ Sprint 1-2 และเรียก `SaveManager.save()`
@@ -620,6 +699,7 @@ classDiagram
 | R8 | 3 | `FishingApp` ตั้ง property ชื่อ `state` | เปลี่ยนเป็น `game` | ชื่อไปทับเมธอด `tk.Tk.state()` ของไลบรารี |
 | R9 | 3 | เรียก `random_species()` ตรงๆ ตอนจับปลาได้ | เพิ่ม `SpeciesLoader` โหลดล่วงหน้าในเธรดเบื้องหลัง | หน้าต่างค้าง 34 วินาทีตอนจับปลาตัวแรก |
 | R10 | 3 | บันทึกไฟล์เฉพาะตอนปิดหน้าต่าง | `app.autosave()` ทุกครั้งที่สถานะเปลี่ยน | ปิดผิดปกติแล้วความคืบหน้าหาย ข้อมูลใน RAM ไม่ตรงกับไฟล์ |
+| R11 | 3 (v0.7.0) | `frames.py` ไฟล์เดียว 438 บรรทัด รวมทุกหน้าจอ | หน้าละหนึ่งไฟล์ใน `src/gui/pages/` · `frames.py` เหลือเป็นตัวชี้ | เพิ่มหน้าเควสต์แล้วไฟล์จะยาวเกินไป และหลายคนแก้ไฟล์เดียวกันจะชนกัน |
 
 ---
 
@@ -631,11 +711,12 @@ classDiagram
 | เรื่องที่ทดสอบยาก | วิธีที่ทีมใช้ |
 |---|---|
 | **การเรียก API** | ใส่ `FakeHttp` แทนโมดูล `requests` และใส่ `FakeWorms` · `FakeOpenFisheries` แทน API ทั้งสองตัว จึงทดสอบทุกสถานการณ์ได้โดยไม่ต่อเน็ต |
+| **การเรียก Gemini** *(v0.7.0)* | แทน `requests.post` ด้วย `FakePost` ที่ตอบตามลำดับ (เช่น 503 แล้วค่อย 200) ปิด `time.sleep` และลบ `GEMINI_API_KEY` ของเครื่องออกก่อนทุกเทสต์ |
 | **การจับเวลาของมินิเกม** | ฉีด `clock` เข้ามาทาง constructor ตอนทดสอบใช้นาฬิกาจำลอง จึงไม่ต้อง `sleep()` รอจริง |
 | **การเขียนไฟล์** | ใช้ `tmp_path` ของ pytest จึงไม่แตะไฟล์เซฟจริงของผู้เล่น |
 | **หน้าจอ** | แยก `ui.py` ให้มีแต่ `print()` แล้วทดสอบที่ `validators.py` แทน ไม่ต้อง mock `input()` |
 
-**ผลลัพธ์ของกลยุทธ์นี้** — ชุดทดสอบ 272 เคสรันเสร็จในเสี้ยววินาที ไม่พึ่งเครือข่าย ไม่พึ่งเวลาจริง ไม่เปิดหน้าต่างจริง
+**ผลลัพธ์ของกลยุทธ์นี้** — ชุดทดสอบ 316 เคสรันเสร็จในเสี้ยววินาที ไม่พึ่งเครือข่าย ไม่พึ่งเวลาจริง ไม่เปิดหน้าต่างจริง
 และไม่พึ่งไฟล์จริง จึงรันบน GitHub Actions ได้โดยไม่ต้องตั้งค่าอะไรเพิ่ม
 และจะใช้กลยุทธ์เดียวกันนี้ต่อได้ตอนแปลงเป็น GUI ใน Sprint 3
 
@@ -652,7 +733,8 @@ classDiagram
 | สปรินต์ | ไฟล์ทดสอบ | จำนวนเคส | สถานะ |
 |---|---|---|---|
 | Sprint 1 | `test_validators.py` | 29 | ผ่านทั้งหมด |
-| Sprint 2 | `test_game_state.py` 38 · `test_worms_api.py` 32 · `test_fish_api.py` 16 · `test_minigame.py` 14 · `test_openfisheries_api.py` 10 · `test_save_manager.py` 10 | 106 | ผ่านทั้งหมด |
-| Sprint 3 | `test_gui_logic.py` 77 · `test_species_loader.py` 17 · เพิ่มใน `test_game_state.py` 36 · เพิ่มใน `test_validators.py` 7 | 137 | ผ่านทั้งหมด |
-| Final Sprint | `test_ai_quest.py` · `test_difficulty.py` | วางแผนไว้ | — |
-| **รวมปัจจุบัน** | **9 ไฟล์** | **272** | **272 passed · flake8 0 issues** |
+| Sprint 2 | `test_game_state.py` 24 · `test_worms_api.py` 32 · `test_fish_api.py` 16 · `test_minigame.py` 14 · `test_openfisheries_api.py` 10 · `test_save_manager.py` 10 | 106 | ผ่านทั้งหมด |
+| Sprint 3 (v0.3.0) | `test_gui_logic.py` 77 · `test_species_loader.py` 17 · เพิ่มใน `test_game_state.py` 36 · เพิ่มใน `test_validators.py` 7 | 137 | ผ่านทั้งหมด |
+| Sprint 3 (v0.7.0) | `test_ai_fishing.py` 44 | 44 | ผ่านทั้งหมด |
+| Final Sprint | `test_difficulty.py` | วางแผนไว้ | — |
+| **รวมปัจจุบัน** | **10 ไฟล์** | **316** | **316 passed · flake8 0 issues** |

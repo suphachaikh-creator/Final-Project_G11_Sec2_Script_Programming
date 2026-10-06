@@ -59,11 +59,13 @@ HOW DO YOU FISH คือเกมตกปลาแบบ Desktop Application �
 ## 5. API(s) to Use
 
 โครงการนี้ใช้ **Public API สองตัวที่เติมเต็มกัน** ทั้งคู่เปิดให้เรียกฟรีและไม่ต้องใช้ API Key
+และตั้งแต่ v0.7.0 มี **Google Gemini API** เป็น API ตัวที่สามแบบไม่บังคับ ใช้สร้างเควสต์ประจำวัน
 
 | API | ให้ข้อมูลอะไร | ทำไมต้องใช้ |
 |---|---|---|
 | **WoRMS** | แหล่งที่อยู่ (น้ำจืด · น้ำเค็ม · น้ำกร่อย) และอนุกรมวิธาน | เป็น API เดียวที่บอกแหล่งน้ำได้ ใช้แยกสถานที่ตกปลา |
 | **Open Fisheries** | ชื่อสามัญภาษาอังกฤษ | ให้ผู้เล่นเห็น `Atlantic salmon` แทน `Salmo salar` |
+| **Google Gemini** *(ไม่บังคับ)* | ประเภทและชื่อเควสต์ประจำวันภาษาไทย | หัวข้อ AI Integration — ถ้าไม่มี key เกมสุ่มเควสต์ในเครื่องแทน |
 
 ### API ที่ 1 — WoRMS (World Register of Marine Species)
 
@@ -103,6 +105,21 @@ WoRMS มีสอง endpoint ที่ใช้ค้นได้ — `AphiaRe
 
 **ผลการทดสอบจริง** — เรียกสำเร็จได้ **11,562 รายการ** สร้างเป็นตารางจับคู่
 ชื่อวิทยาศาสตร์ → ชื่อสามัญ ได้ **8,672 คู่**
+
+### API ที่ 3 — Google Gemini (ไม่บังคับ · v0.7.0)
+
+| หัวข้อ | รายละเอียด |
+|---|---|
+| **API Name** | Google Gemini API |
+| **Documentation Link** | https://ai.google.dev/api |
+| **Endpoint** | `POST /v1beta/models/{GEMINI_MODEL}:generateContent` |
+| **Type of Data** | JSON ตาม `responseSchema` — รายการเควสต์ `id` + `title` (1–5 รายการ) |
+| **ไฟล์ในโปรเจกต์** | `src/ai_fishing.py` |
+
+**AI เลือกได้แค่ประเภทและตั้งชื่อ** — `id` ต้องอยู่ในรายการที่เกมรองรับ 5 แบบ ส่วนจำนวนเป้าหมาย
+น้ำหนักขั้นต่ำ และเงินรางวัลเกมคำนวณเองจากเลเวลอุปกรณ์ ถ้า Gemini ตอบผิดรูปแบบ ซ้ำ หรือเกิน 5 รายการ
+จะถูกปฏิเสธทั้งชุด ข้อผิดพลาดชั่วคราว (408 · 429 · 5xx · timeout) ลองซ้ำได้ 3 ครั้ง
+ส่วน 401 · 403 · 404 แจ้งสาเหตุทันทีโดยไม่ลองซ้ำ
 
 ### การรวมข้อมูลสอง API เข้าด้วยกัน
 
@@ -231,6 +248,7 @@ python tools/seed_fish_data.py --limit 30    # เก็บแหล่งน้
 | Fishing | เลือกสถานที่ 3 แหล่งน้ำ ปุ่มหย่อนเบ็ด แถบรอปลากินเบ็ด และมินิเกม QTE พร้อมแถบเวลา |
 | Shop | รายการอัปเกรดพร้อมราคา และปุ่มซื้อที่ปิดเองเมื่อเงินไม่พอ |
 | Inventory | ตารางปลาที่จับได้ ช่องค้นหา ตัวกรองแหล่งน้ำ และเรียงลำดับด้วยการคลิกหัวคอลัมน์ |
+| Quests *(v0.7.0)* | เควสต์ประจำวัน 1–5 การ์ด พร้อมแถบความคืบหน้า ปุ่มรับรางวัล และสถานะการเชื่อม Gemini |
 
 **คลาสหลักและการแบ่งเลเยอร์**
 
@@ -243,8 +261,9 @@ python tools/seed_fish_data.py --limit 30    # เก็บแหล่งน้
 | `SaveManager` | Data Access | บันทึกและโหลด `save_game.json` พร้อมดักไฟล์หายและไฟล์เสียหาย |
 | `GameState` | Domain | สถานะการเล่นทั้งหมด — เงิน เลเวลอุปกรณ์ กระเป๋าปลา และกฎการซื้อขาย |
 | `QTEMinigame` | Domain | ตรรกะมินิเกมล้วนๆ — สุ่มโจทย์ ตรวจคำตอบ คิดเวลาที่เหลือ โดยไม่รู้จัก Tkinter |
+| `AIFishingAgent` | Domain | เควสต์ประจำวัน ความคืบหน้า รางวัล การเรียก Gemini และการสุ่มปลาที่ให้น้ำหนักชนิดที่จับได้น้อย |
 | `FishingApp` | Presentation | หน้าต่างหลัก (`tk.Tk`) ควบคุมการสลับหน้าจอและวาดแถบสถานะ |
-| `DashboardFrame` · `FishingFrame` · `ShopFrame` · `InventoryFrame` | Presentation | แต่ละหน้าจอเป็นคลาสลูกของ `ttk.Frame` แยกไฟล์กันชัดเจน |
+| `DashboardFrame` · `FishingFrame` · `QuestFrame` · `ShopFrame` · `InventoryFrame` | Presentation | แต่ละหน้าจอเป็นคลาสลูกของ `ttk.Frame` หน้าละหนึ่งไฟล์ใน `src/gui/pages/` |
 
 **หลักการที่ยึด (Separation of Concerns)**
 
@@ -304,8 +323,8 @@ Debugger / QA & DevOps) ครบทุกคน 100%
 
 | สมาชิก | Sprint 1 | Sprint 2 | Sprint 3 |
 |---|---|---|---|
-| **นายศุภชัย คนเพียร** | `PLAN.md` · `README.md` | `tests/` · `.github/workflows/ci.yml` | `src/gui/app.py` |
-| **นายยศพล ถิรพงศชาติ** | `tests/` · `.flake8` · `.github/workflows/ci.yml` | `src/worms_api.py` · `src/openfisheries_api.py` · `src/fish_api.py` · `src/save_manager.py` | `src/gui/frames.py` |
+| **นายศุภชัย คนเพียร** | `PLAN.md` · `README.md` | `tests/` · `.github/workflows/ci.yml` | `src/gui/app.py` · v0.7.0: `src/ai_fishing.py` · `src/gui/pages/` |
+| **นายยศพล ถิรพงศชาติ** | `tests/` · `.flake8` · `.github/workflows/ci.yml` | `src/worms_api.py` · `src/openfisheries_api.py` · `src/fish_api.py` · `src/save_manager.py` | `src/gui/frames.py` · v0.7.0: `tests/test_ai_fishing.py` |
 | **นายภาวัต วงศ์มาลาสิทธิ์** | `src/ui.py` · `src/cli.py` · `main.py` | `src/fish.py` · `src/game_state.py` · `src/minigame.py` | `PLAN.md` · ผังหน้าจอ 4 Frame |
 | **นายธนภัทร สมบูรณ์** | `src/validators.py` | `PLAN.md` · `tools/seed_fish_data.py` | `tests/test_gui_logic.py` |
 
@@ -331,14 +350,13 @@ Debugger / QA & DevOps) ครบทุกคน 100%
 6. **ขายปลาได้ 3 แบบ** — ทีละตัว · ยกชนิด (เช่น ขาย Carp ทั้ง 3 ตัวรวดเดียว) · ทั้งกระเป๋า คลิกแถวในตารางเพื่อเลือกปลา ปุ่มขายยกชนิดบอกจำนวนให้เห็นก่อนกด
 7. **ตั้งชื่อเล่นให้ปลาและเก็บไว้ไม่ขาย** — เปลี่ยนชื่อปลาที่จับได้ในตาราง และทำเครื่องหมายดาวเพื่อกันไม่ให้ถูกขายทั้งจากการขายทีละตัว ยกชนิด และขายทั้งกระเป๋า
 8. **บันทึกและเล่นต่ออัตโนมัติ** — เก็บเงิน กระเป๋าปลา และเลเวลอุปกรณ์ลงไฟล์ JSON ทุกครั้งที่สถานะเปลี่ยน และโหลดคืนเมื่อเปิดโปรแกรมใหม่
+9. **เควสต์ประจำวันด้วย AI** *(v0.7.0)* — ทุกวันได้เควสต์ 1–5 รายการ (น้ำจืด · ทะเล · ปากแม่น้ำ · จับปลาทั่วไป · ปลาตัวหนัก) Gemini ตั้งชื่อเควสต์ให้เมื่อมี API key ถ้าไม่มีหรือเรียกไม่สำเร็จจะสุ่มในเครื่องแทน เป้าหมายและรางวัลเพิ่มตามเลเวลอุปกรณ์ ปลาหนึ่งตัวนับให้หลายเควสต์ได้ และการสุ่มปลาเพิ่มโอกาสให้ชนิดที่ยังจับได้น้อย
 
 ---
 
 ## 10. Stretch Features (Optional)
 
-- **เควสต์ประจำวันด้วย AI** — ส่งรายการปลาที่ผู้เล่นมีให้โมเดลภาษา แล้วให้สร้างภารกิจประจำวัน
-  เช่น *"จับปลาทะเลน้ำหนักเกิน 5 กิโลกรัมให้ได้ 3 ตัว"* ทำให้เกมมีเป้าหมายใหม่ทุกวัน
-  และตอบโจทย์หัวข้อ AI Integration ของรายวิชา
+- ~~**เควสต์ประจำวันด้วย AI**~~ — **ทำแล้วใน v0.7.0** ดู [Features ข้อ 9](#9-features)
 - **ปรับความยากอัตโนมัติ (Dynamic Difficulty)** — วิเคราะห์อัตราการพิมพ์ทันของผู้เล่นย้อนหลัง
   แล้วปรับเวลาและจำนวนตัวอักษรของมินิเกม QTE ให้ยากขึ้นหรือง่ายลงเอง
 - **สถิติการตกปลา** — เก็บประวัติการจับปลาแบบ append-only แล้วสรุปว่าปลาที่จับได้บ่อยที่สุดคือชนิดใด
@@ -351,7 +369,7 @@ Debugger / QA & DevOps) ครบทุกคน 100%
 | # | เกณฑ์ | สปรินต์ | สถานะ |
 |---|---|---|---|
 | 1 | Code follows PEP 8 (linted & clean) | Sprint 1 | เสร็จแล้ว |
-| 2 | Tests run (pytest) | Sprint 1 | เสร็จแล้ว — 272 เคส |
+| 2 | Tests run (pytest) | Sprint 1 | เสร็จแล้ว — 316 เคส |
 | 3 | CI/CD pipeline จริงบน GitHub Actions | Sprint 1 | เสร็จแล้ว |
 | 4 | README includes setup + usage instructions | Sprint 1 | เสร็จแล้ว |
 | 5 | Team roles documented | Sprint 1 | เสร็จแล้ว |
@@ -359,9 +377,10 @@ Debugger / QA & DevOps) ครบทุกคน 100%
 | 7 | Data persisted correctly (JSON file) | Sprint 2 | เสร็จแล้ว |
 | 8 | Search / Filter / Sort ทำงานได้ | Sprint 2–3 | เสร็จแล้ว |
 | 9 | UML Class Diagram | Sprint 3 | เสร็จแล้ว — [`PLAN.md` หัวข้อ 10](PLAN.md#10-uml-class-diagram) |
-| 10 | LICENSE · CONTRIBUTING.md | Final Sprint | ยังไม่ถึงกำหนด |
-| 11 | Test coverage ใน CI | Final Sprint | ยังไม่ถึงกำหนด |
-| 12 | สไลด์นำเสนอ 5 ส่วน | Final Sprint | ยังไม่ถึงกำหนด |
+| 10 | AI Integration | Sprint 3 (v0.7.0) | เสร็จแล้ว — เควสต์ประจำวันด้วย Gemini พร้อมโหมดสำรอง |
+| 11 | LICENSE · CONTRIBUTING.md | Final Sprint | ยังไม่ถึงกำหนด |
+| 12 | Test coverage ใน CI | Final Sprint | ยังไม่ถึงกำหนด |
+| 13 | สไลด์นำเสนอ 5 ส่วน | Final Sprint | ยังไม่ถึงกำหนด |
 
 > **หมายเหตุข้อ 6** — ทั้ง WoRMS และ Open Fisheries เป็น public API **แบบอ่านอย่างเดียว**
 > โครงการจึงใช้ `GET` เท่านั้น ซึ่งตรงกับตัวอย่างที่อาจารย์ให้มาในไฟล์เดียวกัน
@@ -377,8 +396,8 @@ Debugger / QA & DevOps) ครบทุกคน 100%
 |---|---|---|
 | **Sprint 1** | 12 | Front-End App Dev — วางหน้าจอ GUI ทั้งสี่หน้า (Dashboard, Fishing, Shop, Inventory) และการตรวจสอบอินพุต (ใช้ข้อมูลจำลอง) |
 | **Sprint 2** | 13 | Back-End App Dev — มินิเกม QTE, การคำนวณน้ำหนักและราคา, เชื่อมสอง Public API และไฟล์เซฟ |
-| **Sprint 3** | 14 | Full-Stack App Dev — แปลงเป็น Desktop GUI (Tkinter) 4 หน้าจอ พร้อมตารางค้นหา กรอง เรียงลำดับ · ขายปลา 3 แบบ · แก้ไขข้อมูลครบ CRUD · บันทึกทันทีที่สถานะเปลี่ยน |
-| **Final Sprint** | 15 | *(วางแผนไว้)* DevOps, CI/CD & AI — เควสต์ประจำวันด้วย AI, ปรับความยากอัตโนมัติ, coverage ใน CI, UML |
+| **Sprint 3** | 14 | Full-Stack App Dev — v0.3.0: แปลงเป็น Desktop GUI (Tkinter) 4 หน้าจอ พร้อมตารางค้นหา กรอง เรียงลำดับ · ขายปลา 3 แบบ · แก้ไขข้อมูลครบ CRUD · บันทึกทันทีที่สถานะเปลี่ยน · **v0.7.0: เควสต์ประจำวันด้วย Gemini AI และแยกหน้าจอเป็นไฟล์รายหน้า** |
+| **Final Sprint** | 15 | *(วางแผนไว้)* DevOps & CI/CD — ปรับความยากอัตโนมัติ, coverage ใน CI, LICENSE, สไลด์นำเสนอ |
 
 ---
 
@@ -404,7 +423,7 @@ python main.py --cli            # โหมด Terminal
 ### เปิดใช้การสร้างเควสต์ด้วย Gemini (ไม่บังคับ)
 
 1. สร้าง Gemini API key จาก [Google AI Studio](https://aistudio.google.com/apikey)
-2. เปิดไฟล์ `.env` ที่โฟลเดอร์หลักของโปรเจกต์ แล้วกำหนดค่า:
+2. สร้างไฟล์ `.env` ที่โฟลเดอร์หลักของโปรเจกต์ (ข้าง `main.py`) แล้วกำหนดค่า:
 
    ```dotenv
    GEMINI_API_KEY=วาง_API_key_ตรงนี้
@@ -417,9 +436,12 @@ python main.py --cli            # โหมด Terminal
 เกมยังใช้เควสต์ที่สุ่มในเครื่องต่อได้ ค่า `GEMINI_MODEL` เป็นตัวเลือก
 และมีค่าเริ่มต้นเป็น `gemini-3.8-flash`
 
-ปุ่ม **ทดสอบ Gemini API** แสดงอยู่ด้านบนของหน้าเควสต์ เปิด/ซ่อนได้ด้วยตัวแปร
-`ENABLE_GEMINI_TEST_BUTTON` ใน `src/gui/pages/quest.py` (ค่าเริ่มต้น `True`)
-เมื่อกดปุ่ม Gemini จะสร้างชุดเควสต์ใหม่และแทนที่ชุดปัจจุบันเมื่อสำเร็จ
+ระบบเรียก Gemini ในเธรดเบื้องหลัง หน้าต่างจึงไม่ค้าง และเรียกอัตโนมัติวันละครั้งตอนเปิดหน้าเควสต์
+ถ้าเริ่มทำเควสต์ของวันนั้นไปแล้วจะไม่ถูกแทนที่
+
+ปุ่ม **ทดสอบ API / สร้างเควสต์ใหม่** ใช้ตอนพัฒนา ซ่อนอยู่เป็นค่าเริ่มต้น เปิดได้ด้วยการตั้ง
+`ENABLE_GEMINI_TEST_BUTTON = True` ใน `src/gui/pages/quest.py`
+เมื่อกดจะสร้างชุดเควสต์ใหม่แทนชุดปัจจุบัน — จาก Gemini เมื่อสำเร็จ หรือสุ่มในเครื่องเมื่อเรียกไม่สำเร็จ
 
 ### รันชุดทดสอบและตรวจมาตรฐานโค้ด
 
@@ -452,7 +474,7 @@ flake8 .
 ├── reports/
 │   ├── sprint1_report.md       รายงาน Sprint 1 (Front-End) + ตาราง QA
 │   ├── sprint2_report.md       รายงาน Sprint 2 (Back-End) + ตาราง QA
-│   └── sprint3_report.md       รายงาน Sprint 3 (Full-Stack GUI) + ตาราง QA
+│   └── sprint3_report.md       รายงาน Sprint 3 (Full-Stack GUI · v0.3.0 และ v0.7.0) + ตาราง QA
 ├── tools/
 │   └── seed_fish_data.py       สคริปต์ดึงชนิดปลาจาก API มาสร้างไฟล์ข้อมูลสำรอง
 ├── src/
@@ -462,18 +484,26 @@ flake8 .
 │   ├── fish.py                 Domain       — ปลาหนึ่งตัว + กฎน้ำหนักและราคา
 │   ├── game_state.py           Domain       — เงิน กระเป๋า เลเวล และกฎการซื้อขาย
 │   ├── minigame.py             Domain       — มินิเกม QTE
+│   ├── ai_fishing.py           Domain       — เควสต์ประจำวัน + Gemini + การสุ่มปลาแบบถ่วงน้ำหนัก
 │   ├── gui/
 │   │   ├── presenter.py        Application  — ตรรกะหน้าจอ (ไม่ import tkinter)
 │   │   ├── species_loader.py   Application  — โหลดข้อมูลปลาเบื้องหลัง
 │   │   ├── theme.py            Presentation — ชุดสีและสไตล์ ttk
 │   │   ├── widgets.py          Presentation — การ์ด · แถบเวลา · คีย์แคป
 │   │   ├── app.py              Presentation — FishingApp (tk.Tk) + ตัวจับเวลา + autosave
-│   │   └── frames.py           Presentation — 4 หน้าจอ
+│   │   ├── frames.py           Presentation — คงไว้ให้ import แบบเดิมยังใช้ได้ (ชี้ไปที่ pages/)
+│   │   └── pages/              Presentation — หน้าละหนึ่งไฟล์
+│   │       ├── common.py           BaseFrame และค่าที่ทุกหน้าใช้ร่วมกัน
+│   │       ├── dashboard.py        หน้าแรก
+│   │       ├── fishing.py          ตกปลา + มินิเกม
+│   │       ├── quest.py            เควสต์ประจำวัน
+│   │       ├── shop.py             ร้านค้า
+│   │       └── inventory.py        คลังปลา
 │   ├── worms_api.py            Integration  — WoRMS (แหล่งน้ำ + อนุกรมวิธาน)
 │   ├── openfisheries_api.py    Integration  — Open Fisheries (ชื่อสามัญ)
 │   ├── fish_api.py             Integration  — ประสานสอง API + แคช + ระบบสำรอง
 │   └── save_manager.py         Data Access  — อ่าน/เขียนไฟล์เซฟ
-└── tests/                      ชุดทดสอบ 272 เคส · 9 ไฟล์
+└── tests/                      ชุดทดสอบ 316 เคส · 10 ไฟล์
     ├── test_validators.py          36   ตรวจอินพุต · ชื่อปลา
     ├── test_game_state.py          60   กฎการซื้อขาย · แก้ไขข้อมูล · ประสิทธิภาพ
     ├── test_fish_api.py            16   การประสานสอง API + ระบบสำรอง
@@ -482,6 +512,7 @@ flake8 .
     ├── test_minigame.py            14   มินิเกม QTE · นาฬิกาจำลอง
     ├── test_save_manager.py        10   บันทึก · โหลด · ไฟล์เสียหาย
     ├── test_gui_logic.py           77   ตรรกะหน้าจอ (ไม่สร้าง tk.Tk())
-    └── test_species_loader.py      17   การโหลดข้อมูลเบื้องหลัง
+    ├── test_species_loader.py      17   การโหลดข้อมูลเบื้องหลัง
+    └── test_ai_fishing.py          44   เควสต์ · รางวัล · Gemini ปลอม · ไฟล์เซฟเสีย
 ```
 

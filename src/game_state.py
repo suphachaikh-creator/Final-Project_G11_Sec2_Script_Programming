@@ -41,7 +41,8 @@ class GameState:
         self.inventory = list(inventory or [])
         self.bait_level = bait_level
         self.rod_level = rod_level
-        self.quest_data = dict(quest_data or {})
+        # ไฟล์เซฟเสียอาจเก็บค่าชนิดอื่นไว้ — ใช้ dict ว่างแทนเพื่อไม่ให้ crash
+        self.quest_data = dict(quest_data) if isinstance(quest_data, dict) else {}
 
     # ------------------------------------------------------------------ ราคา
     @property

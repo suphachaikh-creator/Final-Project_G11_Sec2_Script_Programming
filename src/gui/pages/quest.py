@@ -7,7 +7,7 @@ from src.gui.pages.common import BaseFrame
 from src.gui.theme import COLORS, PAD
 from src.gui.widgets import Card
 
-"""ตัวแปรควบคุมการทดสอบ Gemini API (เปิด True/ปิด False)"""
+# แสดงปุ่มทดสอบ Gemini API ด้านบนหน้าเควสต์ (True = แสดง · False = ซ่อน)
 ENABLE_GEMINI_TEST_BUTTON = False
 
 

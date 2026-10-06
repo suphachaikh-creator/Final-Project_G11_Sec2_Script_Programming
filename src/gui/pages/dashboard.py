@@ -50,4 +50,3 @@ class DashboardFrame(BaseFrame):
     def refresh_status(self):
         """อัปเดตแค่บรรทัดสถานะแหล่งข้อมูล ใช้ตอนโหลดเบื้องหลังเสร็จ"""
         self.api_label.config(text=self.presenter.api_status())
-

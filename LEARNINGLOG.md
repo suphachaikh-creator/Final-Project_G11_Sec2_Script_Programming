@@ -551,6 +551,46 @@ Presentation · Application · Validation · Domain · Integration · Data Acces
 - **บทเรียน:** เทสต์ที่ดีต้องมีเงื่อนไขที่ทำให้มัน fail ได้
   ถ้าคิดไม่ออกว่าอะไรจะทำให้เทสต์แดง แปลว่าเทสต์นั้นยังไม่ได้ทดสอบอะไร
 
+### 🔹 Prompt 21: กากบาทแดงบน GitHub แปลว่า push ไม่ขึ้นหรือเปล่า *(v0.7.0)*
+
+- **Student Prompt:**
+  ```text
+  หน้า commit บน GitHub ขึ้น ✕ 0/1 ทุก commit ของงานเควสต์
+  แบบนี้คืออัปงานไม่ติดใช่ไหม หรืออัปลงได้เรียบร้อย
+  ```
+- **AI Response Summary:**
+  commit ขึ้นไปอยู่บน `main` แล้ว ถ้า push ไม่ติดจะไม่เห็น commit ในหน้านั้นเลย
+  ✕ 0/1 คือ GitHub Actions รันการตรวจ 1 งานแล้วไม่ผ่าน ให้เปิด log ของ run ดูว่าขั้นไหนล้ม
+  ผลคือ `flake8` เจอ `W292` · `W391` 5 จุดท้ายไฟล์ใน `src/gui/` ส่วน `pytest` ไม่ได้พัง
+- **Verified Result:**
+  ```text
+  gh run view --log-failed → Lint (flake8) · exit code 1 · 5 issues
+  หลังแก้ท้ายไฟล์: flake8 . → 0 issues · pytest -q → 316 passed
+  ```
+- **บทเรียน:** push สำเร็จกับ CI ผ่านเป็นคนละเรื่องกัน ต้องรัน `flake8 .` และ `pytest`
+  ในเครื่องก่อน push ทุกครั้ง ไม่อย่างนั้นเพื่อนจะเจอ CI แดงแทนเรา
+
+### 🔹 Prompt 22: ทดสอบระบบที่เรียก AI โดยไม่ยิง AI จริง *(v0.7.0)*
+
+- **Student Prompt:**
+  ```text
+  ai_fishing.py เรียก Gemini ผ่าน requests.post มี retry และ time.sleep
+  จะเขียนเทสต์ยังไงให้ไม่ต้องมี API key ไม่ต้องต่อเน็ต และไม่ต้องรอจริง
+  ```
+- **AI Response Summary:**
+  ใช้ `monkeypatch` แทน `requests.post` ด้วยตัวปลอมที่คืนคำตอบตามลำดับ เช่น 503 แล้วค่อย 200
+  ปิด `time.sleep` และลบ `GEMINI_API_KEY` ของเครื่องผู้พัฒนาออกก่อนทุกเทสต์
+  แล้วทดสอบสิ่งที่เกมต้องการันตีจริง — AI ตอบผิดรูปแบบต้องถูกปฏิเสธ ·
+  AI ส่งตัวเลขมาเองต้องไม่ถูกใช้ · ข้อผิดพลาดชั่วคราวลองซ้ำ ข้อผิดพลาดถาวรไม่ลองซ้ำ
+  และไฟล์เซฟที่เควสต์เสียต้องไม่ทำให้เปิดเกมไม่ได้
+- **Verified Result:**
+  ```text
+  tests/test_ai_fishing.py 44 เคส ผ่านทั้งหมด
+  รันกับโค้ดก่อนแก้ → เคสไฟล์เซฟเสียและเคส 403/404/400 fail จริง
+  ```
+- **บทเรียน:** การเรียก AI ก็เป็นแค่การเรียก API อีกตัว ใช้กลยุทธ์ฉีดของปลอมแบบเดียวกับ WoRMS ได้
+  และควรรันเทสต์ใหม่กับโค้ดเดิมก่อนแก้หนึ่งครั้ง ถ้าไม่มีเคสไหนแดงแปลว่าเทสต์ยังจับบั๊กไม่ได้
+
 ---
 
 ## 3. Key Learning Outcomes
@@ -569,6 +609,9 @@ Presentation · Application · Validation · Domain · Integration · Data Acces
   จาก Terminal เป็น GUI โดยไม่ต้องแก้ไฟล์ตรรกะเลยสักไฟล์
 - **unit test ไม่ได้จับได้ทุกอย่าง** — บั๊กหน้าต่างค้าง 34 วินาที และบั๊ก `TclError`
   ตอนปิดหน้าต่าง เจอจาก smoke test ที่เปิดหน้าต่างจริงเท่านั้น
+- **ให้ AI ตัดสินใจเฉพาะส่วนที่ปลอดภัย** *(v0.7.0)* — Gemini เลือกประเภทและตั้งชื่อเควสต์
+  แต่ตัวเลขทุกตัวเกมคำนวณเอง และทุกเส้นทางที่ AI ล้มเหลวมีโหมดสำรองในเครื่อง
+- **push ผ่านไม่ได้แปลว่า CI ผ่าน** *(v0.7.0)* — ✕ บน GitHub คือผลตรวจของ Actions ไม่ใช่การอัปโหลด
 
 ---
 
@@ -593,6 +636,9 @@ Presentation · Application · Validation · Domain · Integration · Data Acces
   50 มิลลิวินาที ทำให้เป็นเทสต์ที่มีความหมาย ไม่ใช่แค่ assert ว่าไม่ crash
 - ทำ Custom Exception ให้**สืบทอดจาก `ValueError`** โค้ดและเทสต์เดิมที่ดัก `ValueError`
   จึงไม่ต้องแก้แม้แต่บรรทัดเดียว แต่ที่ที่ต้องแยกกรณีก็ดักคลาสเฉพาะได้
+- **v0.7.0 เพิ่มเควสต์ประจำวันด้วย Gemini โดยเทสต์หน้าจอเดิม 77 เคสไม่ต้องแก้** —
+  `FishingPresenter` รับ `ai_agent` แบบไม่บังคับ ถ้าไม่ส่งมาทุกอย่างทำงานเหมือนเดิม
+  เทสต์ทั้งโปรเจกต์เพิ่มเป็น **316 เคส**
 
 ### Whoops!
 
@@ -615,6 +661,8 @@ Presentation · Application · Validation · Domain · Integration · Data Acces
 - **บันทึกไฟล์เฉพาะตอนปิดหน้าต่าง** ทำให้ข้อมูลใน RAM ไม่ตรงกับไฟล์ตลอดช่วงที่เล่นอยู่
   ถ้าโปรแกรมถูกปิดผิดปกติจะเสียความคืบหน้าทั้งรอบ แก้โดยเพิ่ม `autosave()`
   ที่ถูกเรียกทุกจุดที่สถานะเปลี่ยน
+- **push งานเควสต์โดยไม่รัน `flake8` และ `pytest` ก่อน** *(v0.7.0)* — CI แดงอยู่ 2 วัน
+  ไฟล์ใหม่ 358 บรรทัดยังไม่มีเทสต์ และพบบั๊กไฟล์เซฟเสียทำให้ crash ตอนรีวิว ไม่ใช่ตอนเขียน
 
 ---
 
@@ -626,13 +674,13 @@ Presentation · Application · Validation · Domain · Integration · Data Acces
 | Presentation | [src/ui.py](./src/ui.py) |
 | Application | [src/cli.py](./src/cli.py) · [src/minigame.py](./src/minigame.py) |
 | Validation | [src/validators.py](./src/validators.py) |
-| Domain | [src/game_state.py](./src/game_state.py) · [src/fish.py](./src/fish.py) |
+| Domain | [src/game_state.py](./src/game_state.py) · [src/fish.py](./src/fish.py) · [src/ai_fishing.py](./src/ai_fishing.py) |
 | Integration | [src/worms_api.py](./src/worms_api.py) · [src/openfisheries_api.py](./src/openfisheries_api.py) · [src/fish_api.py](./src/fish_api.py) |
 | Data Access | [src/save_manager.py](./src/save_manager.py) |
 | เครื่องมือ | [tools/seed_fish_data.py](./tools/seed_fish_data.py) |
-| Presentation (GUI) | [src/gui/app.py](./src/gui/app.py) · [src/gui/frames.py](./src/gui/frames.py) · [src/gui/theme.py](./src/gui/theme.py) · [src/gui/widgets.py](./src/gui/widgets.py) |
+| Presentation (GUI) | [src/gui/app.py](./src/gui/app.py) · [src/gui/pages/](./src/gui/pages/) · [src/gui/theme.py](./src/gui/theme.py) · [src/gui/widgets.py](./src/gui/widgets.py) |
 | Application (GUI) | [src/gui/presenter.py](./src/gui/presenter.py) · [src/gui/species_loader.py](./src/gui/species_loader.py) |
-| ชุดทดสอบ 272 เคส | [tests/](./tests/) |
+| ชุดทดสอบ 316 เคส | [tests/](./tests/) |
 | CI Pipeline | [.github/workflows/ci.yml](./.github/workflows/ci.yml) |
 | แผนงาน | [PLAN.md](./PLAN.md) |
 | บันทึกเวอร์ชัน | [CHANGELOG.md](./CHANGELOG.md) |

@@ -33,4 +33,3 @@ class BaseFrame(ttk.Frame):
 
     def on_show(self):
         """เรียกทุกครั้งที่หน้าจอนี้ถูกเปิดขึ้นมา"""
-

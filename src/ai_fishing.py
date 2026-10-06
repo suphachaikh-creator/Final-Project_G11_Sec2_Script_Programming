@@ -76,6 +76,27 @@ class AIFishingAgent:
         self.quest_date = saved_quests.get("date")
         self.ai_checked = bool(saved_quests.get("ai_checked", False))
         self.ai_connected = saved_quests.get("ai_connected")
+        if not self._valid_quests(self.quests):
+            # ไฟล์เซฟเสียหรือมาจากรุ่นอื่น — ทิ้งแล้วสุ่มชุดใหม่แทนการ crash
+            self.quests = None
+            self.quest_date = None
+
+    @staticmethod
+    def _valid_quests(quests):
+        """True เมื่อเควสต์ที่อ่านจากไฟล์เซฟมีฟิลด์ครบและชนิดถูกต้อง"""
+        if not isinstance(quests, list) or not 1 <= len(quests) <= len(QUEST_TEMPLATES):
+            return False
+        numeric = ("target", "progress", "reward", "min_weight")
+        for quest in quests:
+            if not isinstance(quest, dict):
+                return False
+            if not {"id", "kind", "title", "claimed", *numeric} <= quest.keys():
+                return False
+            if not all(isinstance(quest[key], (int, float)) for key in numeric):
+                return False
+            if quest["kind"] == "location" and quest.get("location") not in QUEST_LABELS:
+                return False
+        return True
 
     def daily_quests(self, today=None):
         """คืนเควสต์ 1–5 รายการของวันนี้ โดยไม่สุ่มประเภทซ้ำกัน"""
@@ -184,6 +205,9 @@ class AIFishingAgent:
                     raise RuntimeError(
                         "เชื่อมต่อ Gemini ไม่ได้หลังลองใหม่ 3 ครั้ง"
                     ) from error
+            except requests.RequestException as error:
+                # ข้อผิดพลาดที่ลองซ้ำไปก็ไม่หาย เช่น URL ผิดรูปแบบ
+                raise RuntimeError(f"เรียก Gemini ไม่สำเร็จ ({error})") from error
             else:
                 if response.status_code not in GEMINI_RETRY_STATUSES:
                     break
@@ -197,7 +221,12 @@ class AIFishingAgent:
                         message = f"Gemini ขัดข้องชั่วคราว (HTTP {status})"
                     raise RuntimeError(message)
             time.sleep(2 ** attempt)
-        response.raise_for_status()
+        if response.status_code in (401, 403):
+            raise RuntimeError("Gemini ปฏิเสธ API key (ตรวจ GEMINI_API_KEY ใน .env)")
+        if response.status_code == 404:
+            raise RuntimeError(f"ไม่พบโมเดล {GEMINI_MODEL} (ตรวจ GEMINI_MODEL ใน .env)")
+        if not response.ok:
+            raise RuntimeError(f"Gemini ตอบกลับผิดพลาด (HTTP {response.status_code})")
         try:
             text = response.json()["candidates"][0]["content"]["parts"][0]["text"]
             payload = json.loads(text)
