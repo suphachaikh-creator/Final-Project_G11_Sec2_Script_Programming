@@ -615,7 +615,7 @@ Presentation · Application · Validation · Domain · Integration · Data Acces
 
 - **Student Prompt:**
   ```text
-  งาน Final ที่พักไว้มีระบบเควสต์ของตัวเอง แต่เพื่อนทำระบบเควสต์ด้วย Gemini
+  งาน Final มีระบบเควสต์ของตัวเอง แต่เพื่อนทำระบบเควสต์ด้วย Gemini
   เสร็จไปแล้วใน Sprint 3 จะเอางาน Final เข้า repo ยังไงให้เข้ากับของเพื่อน
   ```
 - **AI Response Summary:**
@@ -629,8 +629,8 @@ Presentation · Application · Validation · Domain · Integration · Data Acces
   358 passed · flake8 0 issues · smoke test: เควสต์และประวัติความยากอยู่ใน save_game.json เดียวกัน
   (ก่อนเพิ่มงาน catch_log ของธนภัทร — หลังเพิ่มเป็น 385 passed)
   ```
-- **บทเรียน:** งานที่ยังไม่เสร็จควรอยู่ใน branch บน GitHub ให้ทุกคนเห็น
-  ถ้าพักไว้ในเครื่องคนเดียว อีกคนจะทำเรื่องเดียวกันซ้ำโดยไม่รู้ตัว
+- **บทเรียน:** ก่อนเริ่มฟีเจอร์ใหม่ต้องบอกทีมว่าใครกำลังทำอะไร เช่นเปิด branch หรือ issue
+  บน GitHub ให้ทุกคนเห็น ไม่งั้นอีกคนจะทำเรื่องเดียวกันซ้ำโดยไม่รู้ตัว
 
 ### 🔹 Prompt 25: ประวัติที่ไม่หายเมื่อขายปลา *(v1.0.0)*
 

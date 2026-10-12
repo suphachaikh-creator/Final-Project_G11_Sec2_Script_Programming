@@ -308,7 +308,7 @@
 > **เควสต์ประจำวันด้วย AI ทำเสร็จแล้วใน Sprint 3 (v0.7.0)** ในชื่อไฟล์ `src/ai_fishing.py`
 > และ `tests/test_ai_fishing.py` แทน `src/ai_quest.py` · `tests/test_ai_quest.py` ที่วางแผนไว้
 > DoD 4.1 และ 4.2 จึงผ่านแล้ว งานของสปรินต์นี้คือส่วน DevOps และเอกสาร
-> งาน Final ที่เคยพัฒนาแยกไว้มีระบบเควสต์ของตัวเอง (`ai_quest.py` · `session_store.py`)
+> งาน Final เดิมมีระบบเควสต์ของตัวเองด้วย (`ai_quest.py` · `session_store.py`) ซึ่งซ้ำกับของ Sprint 3
 > ตอนผสานจึงตัดออกและใช้ระบบของ Sprint 3 แทน — รายละเอียดใน
 > [`final_report.md` หัวข้อ 7](reports/final_report.md)
 
