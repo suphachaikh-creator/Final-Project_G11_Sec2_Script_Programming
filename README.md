@@ -7,6 +7,116 @@
 
 ---
 
+## Roles & Responsibilities
+
+### 👥 รายชื่อสมาชิกในกลุ่มและบทบาทหน้าที่ (Team Members)
+
+1. **นายศุภชัย คนเพียร**
+   **รหัสนักศึกษา:** 663380576-0 
+2. **นายยศพล ถิรพงศชาติ**
+   **รหัสนักศึกษา:** 663380568-9 
+3. **นายภาวัต วงศ์มาลาสิทธิ์**
+   **รหัสนักศึกษา:** 663380636-8 
+4. **นายธนภัทร สมบูรณ์**
+   **รหัสนักศึกษา:** 663380347-5 
+
+---
+
+### 🔄 สมาชิกในทีมและการหมุนเวียนบทบาท (Role Rotation Matrix)
+
+เพื่อให้สมาชิกทุกคนในทีมได้ฝึกฝนทั้ง 3 บทบาทหลัก (Planner · Coder / Dev ·
+Debugger / QA & DevOps) ครบทุกคน 100%
+
+| สมาชิก | Sprint 1 : Front-End | Sprint 2 : Back-End | Sprint 3 : Full-Stack | Final Sprint : DevOps & AI |
+|---|---|---|---|---|
+| **นายศุภชัย คนเพียร** | Planner | Debugger | Coder | Coder |
+| **นายยศพล ถิรพงศชาติ** | Debugger | Coder | Coder | Planner |
+| **นายภาวัต วงศ์มาลาสิทธิ์** | Coder | Coder | Planner | Debugger |
+| **นายธนภัทร สมบูรณ์** | Coder | Planner | Debugger | Coder |
+
+**ทุกคนได้ครบทั้ง 3 บทบาท** — บทบาท Planner และ Debugger / QA หมุนครบทั้งสี่คนพอดีใน
+4 สปรินต์ ส่วนรอบที่ไม่ได้รับสองบทบาทนี้จะทำหน้าที่ Coder
+รายละเอียดว่าแต่ละคนทำอะไรในสปรินต์ไหนอยู่ในหัวข้อ "หน้าที่และผลงานของแต่ละคน"
+ของรายงานแต่ละฉบับใน [`reports/`](reports/)
+
+---
+
+### 🧰 ไฟล์ที่แต่ละคนดูแลในแต่ละสปรินต์
+
+ตารางนี้ตรงกับหัวข้อ "หน้าที่และผลงานของแต่ละคน" ในรายงานทั้งสี่ฉบับ
+
+| สมาชิก | Sprint 1 | Sprint 2 | Sprint 3 | Final Sprint |
+|---|---|---|---|---|
+| **นายศุภชัย คนเพียร** | `PLAN.md` · `README.md` | `tests/` · `.github/workflows/ci.yml` | `src/gui/app.py` · v0.7.0: `src/ai_fishing.py` · `src/gui/pages/` | `src/difficulty.py` · `ci.yml` (coverage) · `release.yml` · `src/update_checker.py` · `tools/release.py` · `LICENSE` · `CONTRIBUTING.md` |
+| **นายยศพล ถิรพงศชาติ** | `tests/` · `.flake8` · `.github/workflows/ci.yml` | `src/worms_api.py` · `src/openfisheries_api.py` · `src/fish_api.py` · `src/save_manager.py` | `src/gui/frames.py` · v0.7.0: `tests/test_ai_fishing.py` | `PLAN.md` · `CHANGELOG.md` · ผสานงาน Final กับ Sprint 3 |
+| **นายภาวัต วงศ์มาลาสิทธิ์** | `src/ui.py` · `src/cli.py` · `main.py` | `src/fish.py` · `src/game_state.py` · `src/minigame.py` | `PLAN.md` · ผังหน้าจอ 4 Frame | `tests/test_difficulty.py` · `docs/uml_class_diagram.md` |
+| **นายธนภัทร สมบูรณ์** | `src/validators.py` | `PLAN.md` · `tools/seed_fish_data.py` | `tests/test_gui_logic.py` | `src/catch_log.py` · `tests/test_catch_log.py` |
+
+---
+
+### 📊 การประเมินกลุ่ม & การประเมินรายบุคคล (Self-Assessment Report)
+
+#### Group Self-Assessment (0–10)
+
+| หัวข้อ | น้ำหนัก | คะแนนกลุ่ม (0–10) | เหตุผล |
+|---|:---:|:---:|---|
+| **บรรลุวัตถุประสงค์กลุ่ม** | 30% | **10** | ฟีเจอร์ครบ 12 ข้อตามที่วางไว้ใน 4 สปรินต์ (Terminal → Desktop GUI · สอง Public API · เควสต์ AI ด้วย Gemini · ปรับความยากอัตโนมัติ · สถิติตลอดการเล่น · แจ้งเวอร์ชันใหม่) ปล่อย **v1.0.0 บน GitHub Releases** ได้จริง และผ่าน Evaluation Checklist ครบ 15 ข้อ |
+| **ความสอดคล้องของเนื้อหาและมาตรฐานของงาน** | 30% | **9.5** | แยกชั้น Presentation · Application · Domain · Data Access · Integration ชัดเจน Sprint 3 เปลี่ยนหน้าจอทั้งระบบจาก Terminal เป็น GUI โดยไม่แก้ไฟล์ตรรกะ ฉีด `http` · `clock` · `rng` เข้ามาจากภายนอก และของเสริมทุกตัว (Open Fisheries · Gemini · GitHub) ล้มแล้วเกมยังเล่นได้ |
+| **ปริมาณ คุณภาพ และธรรมาภิบาลของงาน** | 30% | **9.5** | เทสต์ **437 เคส ผ่านทั้งหมด** · `flake8` 0 issues · coverage ส่วนที่ไม่ใช่หน้าจอ 95% · API key อยู่ใน `.env` ไม่ถูก commit · มี `LICENSE` · `CONTRIBUTING.md` · [`LEARNINGLOG.md`](LEARNINGLOG.md) หักคะแนนเพราะชั้นหน้าจอยังไม่มี unit test (ใช้ smoke test แทน) |
+| **ภาพรวมงานกลุ่มทั้งหมด** | 10% | **9.3** | ส่งตรงกำหนดทั้ง 4 สปรินต์ หมุนเวียนบทบาทครบทั้ง 3 บทบาททุกคน หักคะแนนเพราะเคยทำระบบเควสต์ซ้ำสองชุดจากการไม่ได้ประสานงานกันก่อน และ CI แดงอยู่ 2 วันใน v0.7.0 |
+| **รวม (ถ่วงน้ำหนัก)** | 100% | **≈ 9.5 / 10** | **เกมพร้อมใช้งานจริง มี CI/CD ครบตั้งแต่ตรวจโค้ดจนถึงปล่อยเวอร์ชันอัตโนมัติ** |
+
+#### Individual Self-Assessment (0–10)
+
+**ตารางสรุปคะแนนประเมินตนเองรายบุคคลแยกตามสปรินต์ (Sprint-by-Sprint Summary)**
+
+| ชื่อ - สกุล | Sprint 1 (Front-End) | Sprint 2 (Back-End) | Sprint 3 (Full-Stack) | Final Sprint (DevOps & AI) | คะแนนเฉลี่ยรวม |
+|---|:---:|:---:|:---:|:---:|:---:|
+| **นายศุภชัย คนเพียร**<br>• *Sprint 1:* Planner<br>• *Sprint 2:* Debugger / QA<br>• *Sprint 3:* Coder<br>• *Final:* Coder | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | **10 / 10** |
+| **นายยศพล ถิรพงศชาติ**<br>• *Sprint 1:* Debugger / QA<br>• *Sprint 2:* Coder<br>• *Sprint 3:* Coder<br>• *Final:* Planner | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | **10 / 10** |
+| **นายภาวัต วงศ์มาลาสิทธิ์**<br>• *Sprint 1:* Coder<br>• *Sprint 2:* Coder<br>• *Sprint 3:* Planner<br>• *Final:* Debugger / QA | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | **10 / 10** |
+| **นายธนภัทร สมบูรณ์**<br>• *Sprint 1:* Coder<br>• *Sprint 2:* Planner<br>• *Sprint 3:* Debugger / QA<br>• *Final:* Coder | 10 / 10 | 10 / 10 | 10 / 10 | 10 / 10 | **10 / 10** |
+
+**รายละเอียดคะแนนประเมินตนเองรายบุคคลแยกตามแต่ละสปรินต์**
+
+**Sprint 1: Front-End App Dev**
+
+| สมาชิก | บทบาทใน Sprint 1 | ด้านความรับผิดชอบ | ด้านการมีส่วนร่วม | ด้านการสื่อสาร | รวม Sprint 1 |
+|---|---|:---:|:---:|:---:|:---:|
+| นายศุภชัย คนเพียร | Planner | 10 | 10 | 10 | **10 / 10** |
+| นายยศพล ถิรพงศชาติ | Debugger / QA | 10 | 10 | 10 | **10 / 10** |
+| นายภาวัต วงศ์มาลาสิทธิ์ | Coder | 10 | 10| 10 | **10 / 10** |
+| นายธนภัทร สมบูรณ์ | Coder | 10 | 10 | 10 | **10 / 10** |
+
+**Sprint 2: Back-End App Dev**
+
+| สมาชิก | บทบาทใน Sprint 2 | ด้านความรับผิดชอบ | ด้านการมีส่วนร่วม | ด้านการสื่อสาร | รวม Sprint 2 |
+|---|---|:---:|:---:|:---:|:---:|
+| นายศุภชัย คนเพียร | Debugger / QA | 10 | 10 | 10 | **10 / 10** |
+| นายยศพล ถิรพงศชาติ | Coder | 10 | 10 | 10 | **10 / 10** |
+| นายภาวัต วงศ์มาลาสิทธิ์ | Coder | 10 | 10 | 10 | **10 / 10** |
+| นายธนภัทร สมบูรณ์ | Planner | 10 | 10 | 10 | **10 / 10** |
+
+**Sprint 3: Full-Stack App Dev**
+
+| สมาชิก | บทบาทใน Sprint 3 | ด้านความรับผิดชอบ | ด้านการมีส่วนร่วม | ด้านการสื่อสาร | รวม Sprint 3 |
+|---|---|:---:|:---:|:---:|:---:|
+| นายศุภชัย คนเพียร | Coder | 10 | 10 | 10 | **10 / 10** |
+| นายยศพล ถิรพงศชาติ | Coder | 10 | 10 | 10 | **10 / 10** |
+| นายภาวัต วงศ์มาลาสิทธิ์ | Planner | 10 | 10 | 10 | **10 / 10** |
+| นายธนภัทร สมบูรณ์ | Debugger / QA | 10| 10 | 10 | **10 / 10** |
+
+**Final Sprint: DevOps, CI/CD & AI Integration**
+
+| สมาชิก | บทบาทใน Final | ด้านความรับผิดชอบ | ด้านการมีส่วนร่วม | ด้านการสื่อสาร | รวม Final |
+|---|---|:---:|:---:|:---:|:---:|
+| นายศุภชัย คนเพียร | Coder | 10 | 10 | 10 | **10 / 10** |
+| นายยศพล ถิรพงศชาติ | Planner | 10 | 10 | 10 | **10 / 10** |
+| นายภาวัต วงศ์มาลาสิทธิ์ | Debugger / QA | 10 | 10 | 10 | **10 / 10** |
+| นายธนภัทร สมบูรณ์ | Coder | 10 | 10 | 10 | **10 / 10** |
+
+---
+
 ## 1. Project Title
 
 **HOW DO YOU FISH** — เกมจำลองการตกปลาแบบ Desktop GUI
@@ -298,64 +408,7 @@ python tools/seed_fish_data.py --limit 30    # เก็บแหล่งน้
 
 ---
 
-## 8. Roles & Responsibilities
-
-### 👥 รายชื่อสมาชิกในกลุ่มและบทบาทหน้าที่ (Team Members)
-
-1. **นายศุภชัย คนเพียร**
-   **รหัสนักศึกษา:** 663380576-0 
-2. **นายยศพล ถิรพงศชาติ**
-   **รหัสนักศึกษา:** 663380568-9 
-3. **นายภาวัต วงศ์มาลาสิทธิ์**
-   **รหัสนักศึกษา:** 663380636-8 
-4. **นายธนภัทร สมบูรณ์**
-   **รหัสนักศึกษา:** 663380347-5 
-
----
-
-### 🔄 สมาชิกในทีมและการหมุนเวียนบทบาท (Role Rotation Matrix)
-
-เพื่อให้สมาชิกทุกคนในทีมได้ฝึกฝนทั้ง 3 บทบาทหลัก (Planner · Coder / Dev ·
-Debugger / QA & DevOps) ครบทุกคน 100%
-
-| สมาชิก | Sprint 1 : Front-End | Sprint 2 : Back-End | Sprint 3 : Full-Stack | Final Sprint : DevOps & AI |
-|---|---|---|---|---|
-| **นายศุภชัย คนเพียร** | Planner | Debugger | Coder | Coder |
-| **นายยศพล ถิรพงศชาติ** | Debugger | Coder | Coder | Planner |
-| **นายภาวัต วงศ์มาลาสิทธิ์** | Coder | Coder | Planner | Debugger |
-| **นายธนภัทร สมบูรณ์** | Coder | Planner | Debugger | Coder |
-
-**ทุกคนได้ครบทั้ง 3 บทบาท** — บทบาท Planner และ Debugger / QA หมุนครบทั้งสี่คนพอดีใน
-4 สปรินต์ ส่วนรอบที่ไม่ได้รับสองบทบาทนี้จะทำหน้าที่ Coder
-รายละเอียดว่าแต่ละคนทำอะไรในสปรินต์ไหนอยู่ในหัวข้อ "หน้าที่และผลงานของแต่ละคน"
-ของรายงานแต่ละฉบับใน [`reports/`](reports/)
-
----
-
-### 🧰 ไฟล์ที่แต่ละคนดูแลในแต่ละสปรินต์
-
-ตารางนี้ตรงกับหัวข้อ "หน้าที่และผลงานของแต่ละคน" ในรายงานทั้งสี่ฉบับ
-
-| สมาชิก | Sprint 1 | Sprint 2 | Sprint 3 | Final Sprint |
-|---|---|---|---|---|
-| **นายศุภชัย คนเพียร** | `PLAN.md` · `README.md` | `tests/` · `.github/workflows/ci.yml` | `src/gui/app.py` · v0.7.0: `src/ai_fishing.py` · `src/gui/pages/` | `src/difficulty.py` · `ci.yml` (coverage) · `release.yml` · `src/update_checker.py` · `tools/release.py` · `LICENSE` · `CONTRIBUTING.md` |
-| **นายยศพล ถิรพงศชาติ** | `tests/` · `.flake8` · `.github/workflows/ci.yml` | `src/worms_api.py` · `src/openfisheries_api.py` · `src/fish_api.py` · `src/save_manager.py` | `src/gui/frames.py` · v0.7.0: `tests/test_ai_fishing.py` | `PLAN.md` · `CHANGELOG.md` · ผสานงาน Final กับ Sprint 3 |
-| **นายภาวัต วงศ์มาลาสิทธิ์** | `src/ui.py` · `src/cli.py` · `main.py` | `src/fish.py` · `src/game_state.py` · `src/minigame.py` | `PLAN.md` · ผังหน้าจอ 4 Frame | `tests/test_difficulty.py` · `docs/uml_class_diagram.md` |
-| **นายธนภัทร สมบูรณ์** | `src/validators.py` | `PLAN.md` · `tools/seed_fish_data.py` | `tests/test_gui_logic.py` | `src/catch_log.py` · `tests/test_catch_log.py` |
-
----
-
-### 📋 การเทียบกับบทบาทมาตรฐานของรายวิชา
-
-| บทบาทตามข้อกำหนด | ผู้รับผิดชอบหลัก |
-|---|---|
-| Project Manager / CI-CD Integrator | นายศุภชัย คนเพียร |
-| Automated Tester & QA | นายยศพล ถิรพงศชาติ |
-| Core Developer(s) | นายภาวัต วงศ์มาลาสิทธิ์ · นายธนภัทร สมบูรณ์ |
-
----
-
-## 9. Features
+## 8. Features
 
 วงเล็บท้ายชื่อคือเวอร์ชันที่ฟีเจอร์นั้นเริ่มมี การพัฒนาต่อในเวอร์ชันถัดมาบันทึกไว้ใน [`CHANGELOG.md`](CHANGELOG.md)
 
@@ -374,13 +427,13 @@ Debugger / QA & DevOps) ครบทุกคน 100%
 
 ---
 
-## 10. Stretch Features (Optional)
+## 9. Stretch Features (Optional)
 
-ฟีเจอร์เสริมที่วางแผนไว้ทำครบทุกข้อแล้ว และย้ายไปอยู่ใน [Features](#9-features) ข้อ 9–11
+ฟีเจอร์เสริมที่วางแผนไว้ทำครบทุกข้อแล้ว และย้ายไปอยู่ใน [Features](#8-features) ข้อ 9–11
 
 ---
 
-## 11. Evaluation Checklist
+## 10. Evaluation Checklist
 
 | # | เกณฑ์ | สปรินต์ | สถานะ |
 |---|---|---|---|
